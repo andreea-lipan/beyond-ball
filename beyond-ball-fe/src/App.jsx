@@ -1,35 +1,51 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import {BrowserRouter, Route, Routes} from "react-router-dom";
 import './App.css'
+import Layout from "./components/Layout.jsx";
+import WhiteboardsPage from "./pages/whiteboards/WhiteboardPage.jsx";
+import TeamPage from "./pages/TeamPage.jsx";
+import PlayerProfilePage from "./pages/PlayerProfilePage.jsx";
+import ClipsPage from "./pages/clips/ClipsPage.jsx";
+import QuizzesPage from "./pages/quizzes/QuizzesPage.jsx";
+import LoginPage from "./pages/auth/LoginPage.jsx";
+import TeamRegisterPage from "./pages/auth/TeamRegisterPage.jsx";
+import {ThemeProvider} from "@mui/material";
+import {theme} from "./theme";
 
 function App() {
-  const [count, setCount] = useState(0)
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    return (
+        <div className="App">
+            <ThemeProvider theme={theme}>
+                <BrowserRouter>
+                    {/*<ScrollToTop/> /!* This will scroll to the top whenever the route changes *!/*/}
+                    <Routes>
+
+                        {/* Public content */}
+                        <Route path="/" element={<LoginPage/>}/>
+                        <Route path="/register-team" element={<TeamRegisterPage/>}/>
+
+                        {/* Player & Staff content */}
+                        {/* The line below gets added after login is made */}
+                        {/*<Route path='/' element={<CustomRoute roles={['PLAYER', STAFF]}/>}>*/}
+                            <Route path="/whiteboards" element={<WhiteboardsPage/>}/>
+                            <Route path="/team" element={<TeamPage/>}/>
+                            <Route path="/profile" element={<PlayerProfilePage/>}/>
+                            <Route path="/clips" element={<ClipsPage/>}/>
+                            <Route path="/quizzes" element={<QuizzesPage/>}/>
+                        {/*</Route>*/}
+
+                        {/* Admin Content */}
+                        {/*<Route path='/' element={<CustomRoute roles={['ADMIN']}/>}>*/}
+                        {/*    /!* todo *!/*/}
+                        {/*</Route>*/}
+
+
+                    </Routes>
+                </BrowserRouter>
+            </ThemeProvider>
+
+        </div>
+    )
 }
 
 export default App
