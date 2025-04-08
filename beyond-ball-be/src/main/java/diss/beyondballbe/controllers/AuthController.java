@@ -27,13 +27,13 @@ public class AuthController {
         }
     }
 
-    @PostMapping("team-signup")
+    @PostMapping("/team-signup")
     public ResponseEntity<?> registerCompany(@RequestBody TeamDTO teamDTO) {
         try {
-            //todo sign-up logic
-            return ResponseEntity.ok().build();
+            authService.registerTeam(teamDTO);
+            return ResponseEntity.ok("Team registered successfully!");
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body("Registration failed: " + e.getMessage());
         }
     }
 }

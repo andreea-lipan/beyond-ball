@@ -4,9 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * We get this from frontend when we do team sign-up
-  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
