@@ -18,12 +18,13 @@ const logIn = (username, password) => {
 
 // See example of using this function in the LoginPage
 
-const registerCompany = (data) => {
-    return RequestInstance.post(AUTH_ENDPOINTS.TEAM_SIGNUP, data)
+const registerTeam = (team) => {
+    return RequestInstance.post(AUTH_ENDPOINTS.TEAM_SIGNUP, team)
+        .then(res => res.data)
 }
 
 const AuthService = {
-    registerCompany,
+    registerTeam,
     logIn
 }
 

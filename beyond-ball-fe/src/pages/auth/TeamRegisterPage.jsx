@@ -8,32 +8,44 @@ import {
 } from "@mui/material";
 import { Global } from "@emotion/react";
 import backgroundImage from "../../assets/background_01.jpg";
-import axios from "axios";
 import { useState } from "react";
+import authService from "../../APIs/AuthService.js";
+import {useNavigate} from "react-router-dom";
+import {LOGIN_PAGE} from "../../utils/UrlConstants.js";
+import TimedPopup from "../../components/popup/TimedPopup.jsx";
 
 const TeamRegisterPage = () => {
     const [teamName, setTeamName] = useState("");
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
 
-    const handleSubmit = async () => {
-        try {
-            const response = await axios.post("http://localhost:8080/auth/team-signup", {
-                teamName,
-                username,
-                password,
-            });
+    const [isPopupVisible, setIsPopupVisible] = useState(false)
+    const [popupMessage, setPopupMessage] = useState("")
+    const [popupMessageType, setPopupMessageType] = useState("")
 
-            alert("Team registered successfully!");
-            console.log(response.data);
-        } catch (error) {
-            console.error("Registration error:", error);
-            alert(error.response?.data?.message || "Registration failed");
-        }
+    const handleSubmit = async () => {
+        authService.registerTeam({teamName, username, password})
+            .then(res => {
+                console.log(res)
+                setPopupMessageType("success")
+                setPopupMessage("Team registered successfully")
+                setIsPopupVisible(true)
+            })
+            .catch(error => {
+                console.log(error);
+                // alert(error.response?.data?.message || "Registration failed");
+                //todo should show a more intuitive message here
+                // like if username is taken or password is too short
+                setPopupMessageType("error")
+                setPopupMessage("Registration failed")
+                setIsPopupVisible(true)
+            })
     };
 
     return (
         <>
+            {isPopupVisible && (<TimedPopup message={popupMessage} isVisible={isPopupVisible} setIsVisible={setIsPopupVisible}
+                                            messageType={popupMessageType} redirect={LOGIN_PAGE}></TimedPopup>)}
             <CssBaseline />
             <Global
                 styles={{
@@ -69,7 +81,7 @@ const TeamRegisterPage = () => {
                     sx={{
                         width: 350,
                         p: 4,
-                        bgcolor: "rgba(255, 255, 255, 0.9)",
+                        bgcolor: "rgba(255, 255, 255, 1)",
                         borderRadius: 2,
                         textAlign: "center",
                     }}
@@ -125,6 +137,7 @@ const TeamRegisterPage = () => {
                     <Button
                         variant="contained"
                         fullWidth
+                        disabled={isPopupVisible}
                         sx={{ borderRadius: 2 }}
                         onClick={handleSubmit}
                     >

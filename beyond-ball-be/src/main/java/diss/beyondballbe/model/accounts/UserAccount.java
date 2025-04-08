@@ -1,5 +1,6 @@
 package diss.beyondballbe.model.accounts;
 
+import diss.beyondballbe.model.Team;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,7 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "user_account")
-public abstract class UserAccount {
+public class UserAccount {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,4 +27,9 @@ public abstract class UserAccount {
 
     @Column(nullable = false)
     private String password;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "team_id")
+    private Team team;
+
 }
