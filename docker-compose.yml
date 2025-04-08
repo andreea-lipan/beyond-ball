@@ -8,8 +8,8 @@ services:
       - "8080:8080"
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/diss
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: postgras
+      SPRING_DATASOURCE_USERNAME:
+      SPRING_DATASOURCE_PASSWORD:
       SPRING_JPA_HIBERNATE_DDL_AUTO: create
     depends_on:
       - database
@@ -29,8 +29,8 @@ services:
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgras
+      POSTGRES_USER: 
+      POSTGRES_PASSWORD:
       POSTGRES_DB: diss
     volumes:
       - postgres_data:/var/lib/postgresql/data
