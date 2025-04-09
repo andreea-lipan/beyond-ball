@@ -1,5 +1,11 @@
 package diss.beyondballbe.services.impl;
 
+import diss.beyondballbe.exceptions.UsernameAlreadyExistsException;
+import diss.beyondballbe.model.DTOs.TeamDTO;
+import diss.beyondballbe.model.Team;
+import diss.beyondballbe.model.accounts.UserAccount;
+import diss.beyondballbe.model.accounts.UserRole;
+import diss.beyondballbe.persistence.TeamRepository;
 import diss.beyondballbe.persistence.UserAccountRepository;
 import diss.beyondballbe.services.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,5 +16,39 @@ public class AuthServiceImpl implements AuthService {
      @Autowired
      private UserAccountRepository userAccountRepository;
 
-    // todo add the needed functions
+     @Autowired
+     private TeamRepository teamRepository;
+
+     @Override
+     public void registerTeam(TeamDTO request) {
+
+          // Username check
+          if (userAccountRepository.existsByUsername(request.getUsername())) {
+               throw new UsernameAlreadyExistsException("Username '" + request.getUsername() + "' is already taken.");
+          }
+
+          // Team name length check
+          if (request.getTeamName() == null || request.getTeamName().length() < 2) {
+               throw new IllegalArgumentException("Team name must be at least 2 characters long.");
+          }
+
+          // Username length check (optional if not using annotations)
+          if (request.getUsername() == null || request.getUsername().length() < 2) {
+               throw new IllegalArgumentException("Username must be at least 2 characters long.");
+          }
+
+          // 1. Create and save the team first
+          Team team = new Team();
+          team.setTeamName(request.getTeamName());
+          team = teamRepository.save(team);
+
+          // 2. Create and assign the account
+          UserAccount account = new UserAccount();
+          account.setTeam(team);
+          account.setUsername(request.getUsername());
+          account.setRole(UserRole.ADMIN);
+          account.setPassword(request.getPassword());
+
+          userAccountRepository.save(account);
+     }
 }
