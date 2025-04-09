@@ -1,11 +1,10 @@
 package diss.beyondballbe.services.impl;
 
+import diss.beyondballbe.exceptions.UsernameAlreadyExistsException;
 import diss.beyondballbe.model.DTOs.TeamDTO;
 import diss.beyondballbe.model.Team;
-//import diss.beyondballbe.model.accounts.AdminAccount;
 import diss.beyondballbe.model.accounts.UserAccount;
 import diss.beyondballbe.model.accounts.UserRole;
-//import diss.beyondballbe.persistence.AdminAccountRepository;
 import diss.beyondballbe.persistence.TeamRepository;
 import diss.beyondballbe.persistence.UserAccountRepository;
 import diss.beyondballbe.services.AuthService;
@@ -22,8 +21,20 @@ public class AuthServiceImpl implements AuthService {
 
      @Override
      public void registerTeam(TeamDTO request) {
+
+          // Username check
           if (userAccountRepository.existsByUsername(request.getUsername())) {
-               throw new RuntimeException("Username already exists"); //srv exception
+               throw new UsernameAlreadyExistsException("Username '" + request.getUsername() + "' is already taken.");
+          }
+
+          // Team name length check
+          if (request.getTeamName() == null || request.getTeamName().length() < 2) {
+               throw new IllegalArgumentException("Team name must be at least 2 characters long.");
+          }
+
+          // Username length check (optional if not using annotations)
+          if (request.getUsername() == null || request.getUsername().length() < 2) {
+               throw new IllegalArgumentException("Username must be at least 2 characters long.");
           }
 
           // 1. Create and save the team first
@@ -39,7 +50,6 @@ public class AuthServiceImpl implements AuthService {
           account.setPassword(request.getPassword());
 
           userAccountRepository.save(account);
-
      }
-    // todo add the needed functions
+     // todo add the needed functions
 }

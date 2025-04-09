@@ -24,23 +24,27 @@ const TeamRegisterPage = () => {
     const [popupMessageType, setPopupMessageType] = useState("")
 
     const handleSubmit = async () => {
-        authService.registerTeam({teamName, username, password})
+        authService.registerTeam({ teamName, username, password })
             .then(res => {
-                console.log(res)
-                setPopupMessageType("success")
-                setPopupMessage("Team registered successfully")
-                setIsPopupVisible(true)
+                console.log(res);
+                setPopupMessageType("success");
+                setPopupMessage("Team registered successfully");
+                setIsPopupVisible(true);
             })
             .catch(error => {
                 console.log(error);
-                // alert(error.response?.data?.message || "Registration failed");
-                //todo should show a more intuitive message here
-                // like if username is taken or password is too short
-                setPopupMessageType("error")
-                setPopupMessage("Registration failed")
-                setIsPopupVisible(true)
-            })
-    };
+
+                // Extract meaningful error message from server response
+                const message =
+                    error.response?.data?.message ||
+                    error.response?.data?.error ||
+                    "Registration failed due to an unknown error.";
+
+                setPopupMessageType("error");
+                setPopupMessage(message);
+                setIsPopupVisible(true);
+            });
+        };
 
     return (
         <>
