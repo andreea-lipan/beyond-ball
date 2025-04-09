@@ -51,5 +51,4 @@ public class AuthServiceImpl implements AuthService {
 
           userAccountRepository.save(account);
      }
-     // todo add the needed functions
 }

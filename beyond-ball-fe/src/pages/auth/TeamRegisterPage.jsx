@@ -10,9 +10,10 @@ import { Global } from "@emotion/react";
 import backgroundImage from "../../assets/background_01.jpg";
 import { useState } from "react";
 import authService from "../../APIs/AuthService.js";
-import {useNavigate} from "react-router-dom";
 import {LOGIN_PAGE} from "../../utils/UrlConstants.js";
-import TimedPopup from "../../components/popup/TimedPopup.jsx";
+import {Popup} from "../../components/popup/Popup.jsx";
+import {MessageType} from "../../components/popup/MessageType.js";
+
 
 const TeamRegisterPage = () => {
     const [teamName, setTeamName] = useState("");
@@ -24,23 +25,22 @@ const TeamRegisterPage = () => {
     const [popupMessageType, setPopupMessageType] = useState("")
 
     const handleSubmit = async () => {
-        authService.registerTeam({ teamName, username, password })
+        authService.registerTeam({teamName, username, password})
             .then(res => {
-                console.log(res);
-                setPopupMessageType("success");
-                setPopupMessage("Team registered successfully");
-                setIsPopupVisible(true);
+                console.log(res)
+                setPopupMessageType(MessageType.success)
+                setPopupMessage("Team registered successfully")
+                setIsPopupVisible(true)
             })
             .catch(error => {
                 console.log(error);
-
                 // Extract meaningful error message from server response
                 const message =
                     error.response?.data?.message ||
                     error.response?.data?.error ||
                     "Registration failed due to an unknown error.";
 
-                setPopupMessageType("error");
+                setPopupMessageType(MessageType.error)
                 setPopupMessage(message);
                 setIsPopupVisible(true);
             });
@@ -48,8 +48,8 @@ const TeamRegisterPage = () => {
 
     return (
         <>
-            {isPopupVisible && (<TimedPopup message={popupMessage} isVisible={isPopupVisible} setIsVisible={setIsPopupVisible}
-                                            messageType={popupMessageType} redirect={LOGIN_PAGE}></TimedPopup>)}
+            {isPopupVisible && (<Popup message={popupMessage} isVisible={isPopupVisible} setIsVisible={setIsPopupVisible}
+                                            messageType={popupMessageType} redirect={LOGIN_PAGE}></Popup>)}
             <CssBaseline />
             <Global
                 styles={{
