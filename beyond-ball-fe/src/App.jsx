@@ -14,6 +14,7 @@ import MockPage from "./pages/MockPage.jsx";
 import Storage from "./utils/Storage.js";
 import AccessDeniedRedirect from "./components/AccessDeniedRedirect.jsx";
 import { useAuth } from "./components/AuthContext";
+import WhiteboardCreationPage from "./pages/whiteboards/WhiteboardCreationPage.jsx";
 
 
 function App() {
@@ -66,6 +67,17 @@ function App() {
                     })()
                   : <AccessDeniedRedirect />
               }
+            />
+            <Route
+                path="/whiteboards/creation"
+                element={
+                ["PLAYER", "STAFF"].includes(role)
+                    ? (() => {
+                        sessionStorage.setItem("lastValidPath", "/whiteboards/creation");
+                        return <WhiteboardCreationPage />;
+                    })()
+                    : <AccessDeniedRedirect />
+                }
             />
             <Route
               path="/profile"

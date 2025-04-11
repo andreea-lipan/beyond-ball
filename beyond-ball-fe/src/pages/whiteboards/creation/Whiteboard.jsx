@@ -1,6 +1,8 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, {useRef, useState, useEffect} from "react";
+import {Toolbar} from "./Toolbar.jsx";
+import {Box, Button, Modal, TextField} from "@mui/material";
 
-const COLORS = ["#000000", "#ff0000", "#007bff"];
+const COLORS = ["#43aaff", "#ff4949", "#d9dc7f"];
 const SHAPE_SIZE = 60;
 const BG_IMAGE_URL = "/field.png"; // Replace with your actual image path
 
@@ -9,10 +11,11 @@ export const Whiteboard = () => {
     const ctxRef = useRef(null);
     const [isDrawing, setIsDrawing] = useState(false);
     const [mode, setMode] = useState("free"); // 'free' | 'circle' | 'square'
-    const [color, setColor] = useState(COLORS[0]);
+    const [color, setColor] = useState(COLORS[2]);
     const [history, setHistory] = useState([]);
     const [redoStack, setRedoStack] = useState([]);
 
+    const isMobile = false;
 
 
     useEffect(() => {
@@ -21,8 +24,6 @@ export const Whiteboard = () => {
         const ctx = canvas.getContext("2d");
         ctx.lineCap = "round";
         ctx.lineWidth = 4;
-        ctx.strokeStyle = color;
-        ctx.fillStyle = color;
         ctxRef.current = ctx;
 
         const bgImage = new Image();
@@ -43,14 +44,14 @@ export const Whiteboard = () => {
     const startDrawing = (e) => {
         if (mode !== "free") return;
         setIsDrawing(true);
-        const { offsetX, offsetY } = e.nativeEvent;
+        const {offsetX, offsetY} = e.nativeEvent;
         ctxRef.current.beginPath();
         ctxRef.current.moveTo(offsetX, offsetY);
     };
 
     const draw = (e) => {
         if (!isDrawing || mode !== "free") return;
-        const { offsetX, offsetY } = e.nativeEvent;
+        const {offsetX, offsetY} = e.nativeEvent;
         ctxRef.current.lineTo(offsetX, offsetY);
         ctxRef.current.stroke();
     };
@@ -64,7 +65,7 @@ export const Whiteboard = () => {
 
     const drawShape = (e) => {
         if (mode === "free") return;
-        const { offsetX, offsetY } = e.nativeEvent;
+        const {offsetX, offsetY} = e.nativeEvent;
         const ctx = ctxRef.current;
         if (mode === "circle") {
             ctx.beginPath();
@@ -91,7 +92,7 @@ export const Whiteboard = () => {
     };
 
     const handleUndo = () => {
-        if (history.length <= 2) return;
+        if (history.length <= 1) return;
         const newHistory = [...history];
         const last = newHistory.pop();
         setRedoStack((prev) => [last, ...prev]);
@@ -117,6 +118,27 @@ export const Whiteboard = () => {
         setRedoStack(rest);
     };
 
+    const handleClear = () => {
+        const canvas = canvasRef.current;
+        const ctx = ctxRef.current;
+
+        // Clear the entire canvas
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Reset stacks
+        setHistory([]);
+        setRedoStack([]);
+
+        // Redraw background image
+        const bgImage = new Image();
+        bgImage.src = BG_IMAGE_URL;
+        bgImage.onload = () => {
+            ctx.drawImage(bgImage, 0, 0, canvas.width, canvas.height);
+            saveState();
+        };
+    };
+
+
     const saveImage = () => {
         const link = document.createElement("a");
         link.download = `whiteboard-${Date.now()}.png`;
@@ -124,33 +146,59 @@ export const Whiteboard = () => {
         link.click();
     };
 
+    const width = 1000
+    const height = width * 0.64
+
+    const [isOpen, setIsOpen] = useState(false);
+    const openModal = () => setIsOpen(true);
+    const onClose = () => setIsOpen(false);
+
     return (
-        <div className=" p-4">
-            <div className="flex gap-2 mb-4">
-                {COLORS.map((c) => (
-                    <button
-                        key={c}
-                        className={`w-8 h-8 rounded-full border-2 ${c === color ? "border-black" : "border-transparent"}`}
-                        style={{ backgroundColor: c }}
-                        onClick={() => setColor(c)}
-                    />
-                ))}
-                <button onClick={() => setMode("free")}>Free Draw</button>
-                <button onClick={() => setMode("circle")}>Circle</button>
-                <button onClick={() => setMode("cross")}>Cross</button>
-                <button onClick={handleUndo}>Undo</button>
-                <button onClick={handleRedo}>Redo</button>
-                <button onClick={saveImage}>Save</button>
+        <>
+            <Modal open={isOpen} onClose={onClose}>
+                <Box sx={{
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    width: 400,
+                    bgcolor: 'background.paper',
+                    border: '2px solid #000',
+                    boxShadow: 24,
+                    p: 4,
+                }}>
+                    <h2>Are you sure you want to clear the board?</h2>
+                    <div style={{display: "flex", gap: "1rem", justifyContent: "space-between"}}>
+                        <Button onClick={()=>{handleClear();onClose();}}>Yes</Button>
+                        <Button onClick={onClose}>No</Button>
+                    </div>
+                </Box>
+            </Modal>
+            <TextField style={{margin: "0.5rem", width: "50%", justifyContent: "center"}} placeholder={"Board Title"}/>
+            <div style={{display: "flex", flexDirection: isMobile ? "row" : "column"}}>
+                <Toolbar
+                    mode={mode}
+                    setMode={setMode}
+                    color={color}
+                    setColor={setColor}
+                    handleUndo={handleUndo}
+                    handleRedo={handleRedo}
+                    saveImage={saveImage}
+                    handleClear={openModal}
+                    vertical={isMobile}
+                />
+                <canvas
+                    ref={canvasRef}
+                    height={height}
+                    width={width}
+                    style={{
+                        borderRadius: "20px", boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)"
+                    }}
+                    onMouseDown={mode === "free" ? startDrawing : drawShape}
+                    onMouseMove={draw}
+                    onMouseUp={stopDrawing}
+                />
             </div>
-            <canvas
-                ref={canvasRef}
-                width={1200}
-                height={700}
-                style={{borderRadius: "20px", boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)"}}
-                onMouseDown={mode === "free" ? startDrawing : drawShape}
-                onMouseMove={draw}
-                onMouseUp={stopDrawing}
-            />
-        </div>
+        </>
     );
 }
