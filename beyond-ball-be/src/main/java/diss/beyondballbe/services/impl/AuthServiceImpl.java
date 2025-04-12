@@ -7,6 +7,7 @@ import diss.beyondballbe.model.accounts.UserAccount;
 import diss.beyondballbe.model.accounts.UserRole;
 import diss.beyondballbe.persistence.TeamRepository;
 import diss.beyondballbe.persistence.UserAccountRepository;
+import diss.beyondballbe.security.JwtUtil;
 import diss.beyondballbe.services.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,11 @@ public class AuthServiceImpl implements AuthService {
 
      @Autowired
      private TeamRepository teamRepository;
+
+     @Autowired
+     private JwtUtil jwtUtil;
+
+//     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
      @Override
      public void registerTeam(TeamDTO request) {
@@ -51,4 +57,23 @@ public class AuthServiceImpl implements AuthService {
 
           userAccountRepository.save(account);
      }
+
+     @Override
+     public String login(String username, String password) {
+          UserAccount user = userAccountRepository.findUserByUsername(username)
+                  .orElseThrow(() -> new RuntimeException("User not found"));
+
+          if (!passwordMatches(password, user)) {
+               throw new RuntimeException("Invalid password");
+          }
+
+          return jwtUtil.generateToken(user);
+     }
+
+    private boolean passwordMatches(String password, UserAccount user) {
+        return password.equals(user.getPassword());
+//        return encoder.matches(password, user.getPassword());
+    }
+
+
 }

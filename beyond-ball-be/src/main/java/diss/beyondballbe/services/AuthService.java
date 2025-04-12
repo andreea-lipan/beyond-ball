@@ -5,7 +5,5 @@ import diss.beyondballbe.model.DTOs.TeamDTO;
 public interface AuthService {
     void registerTeam(TeamDTO request);
 
-    //todo add the needed functions
-    // example:
-    // LoginResponse logIn(LoginRequest loginRequest);
+    String login(String username, String password);
 }

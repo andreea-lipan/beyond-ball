@@ -4,6 +4,7 @@ import diss.beyondballbe.model.accounts.UserAccount;
 import diss.beyondballbe.services.UserAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -25,6 +26,13 @@ public class UsersController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+    }
+
+    // Example secured method with team and role check
+    @PreAuthorize("@authValidator.belongsToTeam(#teamId) and hasRole('ADMIN')")
+    @GetMapping("/teams/{teamId}/players/mock")
+    public ResponseEntity<?> getPlayersForTeamMock(@PathVariable Long teamId) {
+        return ResponseEntity.ok("Test");
     }
 
 }
