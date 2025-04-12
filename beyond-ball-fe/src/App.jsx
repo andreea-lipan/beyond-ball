@@ -39,7 +39,6 @@ function App() {
               path="/register-team"
               element={
                 (() => {
-                //   sessionStorage.setItem("lastValidPath", "/register-team");
                   return <TeamRegisterPage />;
                 })()
               }

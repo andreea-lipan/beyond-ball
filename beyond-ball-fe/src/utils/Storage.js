@@ -22,21 +22,18 @@ const setUserRole = (role) => {
 }
 
 const setToken = (token) => {
-    //console.log("Storage setToken:", token);
     localStorage.setItem('token', token);
   };
   
 const getToken = () => {
-    //console.log("Storage getToken:", localStorage.getItem('token'));
     return localStorage.getItem('token');
   };
   
  const clearToken = () => {
-    //console.log("Storage clearToken:", localStorage.getItem('token'));
     localStorage.removeItem('token');
   };
 
-  const getDecodedToken = () => {
+ const getDecodedToken = () => {
     const token = getToken();
     if (!token) return null;
 
@@ -48,26 +45,26 @@ const getToken = () => {
     }
 };
 
-    const getTeamIdFromToken = () => {
-        const decoded = getDecodedToken();
-        return decoded?.teamId ?? null;
-    };
+const getTeamIdFromToken = () => {
+    const decoded = getDecodedToken();
+    return decoded?.teamId ?? null;
+};
 
-    const getRoleFromToken = () => {
-        const decoded = getDecodedToken();
-        return decoded?.role ?? null;
-    };
+const getRoleFromToken = () => {
+    const decoded = getDecodedToken();
+    return decoded?.role ?? null;
+};
 
-    const getUsernameFromToken = () => {
-        const decoded = getDecodedToken();
-        return decoded?.sub ?? null;
-    };
-  
-    const logout = () => {
-        console.log("Logging out...");
-        localStorage.clear();
-        sessionStorage.clear();
-    };
+const getUsernameFromToken = () => {
+    const decoded = getDecodedToken();
+    return decoded?.sub ?? null;
+};
+
+const logout = () => {
+    console.log("Logging out...");
+    localStorage.clear();
+    sessionStorage.clear();
+};
 
 const Storage = {
     getUserId,

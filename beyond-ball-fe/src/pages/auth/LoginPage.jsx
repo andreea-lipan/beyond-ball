@@ -1,8 +1,4 @@
 import Layout from "../../components/Layout.jsx";
-// import {useEffect, useState} from "react";
-// import {useNavigate} from "react-router-dom";
-// import {WHITEBOARDS_PAGE} from "../../utils/UrlConstants.js";
-// import authService from "../../APIs/AuthService.js";
 import {
     CssBaseline,
     Paper,
@@ -30,21 +26,6 @@ const LoginPage = () => {
     const navigate = useNavigate();
     const { refreshAuth } = useAuth();
 
-    // const handleLogin = async (e) => {
-    //     e.preventDefault();
-    //     try {
-    //         await authService.login(username, password); 
-    //         refreshAuth();
-    //         setPopupMessage("Login successful!");
-    //         setPopupType(MessageType.success);
-    //         setPopupOpen(true);
-    //     } catch (err) {
-    //         console.log("Caught error in handleLogin");
-    //         setPopupMessage("Login failed. Check your credentials.");
-    //         setPopupType(MessageType.error);
-    //         setPopupOpen(true);
-    //     }
-    // };
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
