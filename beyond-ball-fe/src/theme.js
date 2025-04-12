@@ -100,6 +100,12 @@ export function theme() {
                         '&:hover': {
                             backgroundColor: palette.secondary.dark,
                         },
+                    },
+                    outlined:{
+                        borderRadius: 13,
+                        '&:hover': {
+                            borderColor: palette.secondary.dark,
+                        },
                     }
                 }
             }

@@ -1,4 +1,3 @@
-// Toolbar.js
 import React from "react";
 import {Button, Divider, IconButton, useTheme} from "@mui/material";
 import {BrushIcon} from "../../../components/icons/whiteboard/BrushIcon.jsx";
