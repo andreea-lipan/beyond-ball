@@ -27,6 +27,15 @@ public class WhiteboardController {
         return whiteboardService.getAllWhiteboards();
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getWhiteboardById(@PathVariable String id) {
+        try {
+            return ResponseEntity.ok(whiteboardService.getWhiteboardById(id));
+        } catch (Exception e) {
+            return ResponseEntity.status(404).body("Whiteboard not found");
+        }
+    }
+
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<?> handleUpload(
             @RequestPart("file") MultipartFile file,

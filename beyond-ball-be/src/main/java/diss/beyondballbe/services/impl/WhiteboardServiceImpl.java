@@ -5,6 +5,7 @@ import diss.beyondballbe.model.DTOs.WhiteboardResponse;
 import diss.beyondballbe.model.Whiteboard;
 import diss.beyondballbe.persistence.WhiteboardRepository;
 import diss.beyondballbe.services.WhiteboardService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -50,6 +51,13 @@ public class WhiteboardServiceImpl implements WhiteboardService {
         whiteboard.setAuthor(null);
 
         return new WhiteboardResponse(whiteboardRepository.save(whiteboard));
+    }
+
+    @Override
+    public WhiteboardResponse getWhiteboardById(String id) {
+        return whiteboardRepository.findById(id)
+                .map(WhiteboardResponse::new)
+                .orElseThrow(() -> new EntityNotFoundException("Whiteboard not found"));
     }
 
 }

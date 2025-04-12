@@ -1,4 +1,4 @@
-import {FileRequestInstance} from "./RequestInstance.js";
+import {FileRequestInstance, RequestInstance} from "./RequestInstance.js";
 import {WHITEBOARD_ENDPOINTS} from "./Endpoints.js";
 
 
@@ -12,11 +12,21 @@ const uploadWhiteboard = (blob, player, title) => {
     }
     formData.append("data", JSON.stringify(data));
 
-    return FileRequestInstance.post(WHITEBOARD_ENDPOINTS.CREATE_BOARD, formData)
+    return FileRequestInstance.post(WHITEBOARD_ENDPOINTS.BOARDS, formData)
+}
+
+const getWhiteboard = (id) => {
+    return RequestInstance.get(WHITEBOARD_ENDPOINTS.BOARD(id))
+}
+
+const getWhiteboardImage = (filename) => {
+    return RequestInstance.get(WHITEBOARD_ENDPOINTS.BOARD_IMAGE(filename))
 }
 
 const WhiteboardService = {
     uploadWhiteboard,
+    getWhiteboard,
+    getWhiteboardImage,
 }
 
 export default WhiteboardService;

@@ -10,4 +10,5 @@ import java.util.List;
 public interface WhiteboardService {
     List<WhiteboardResponse> getAllWhiteboards();
     WhiteboardResponse createWhiteboard(WhiteboardCreationRequest whiteboardCreationRequest, MultipartFile file) throws IOException;
+    WhiteboardResponse getWhiteboardById(String id);
 }

@@ -2,6 +2,8 @@ import React, {useRef, useState, useEffect} from "react";
 import {Toolbar} from "./Toolbar.jsx";
 import {Box, Button, Modal, TextField} from "@mui/material";
 import whiteboardService from "../../../APIs/WhiteboardService.js";
+import {useNavigate} from "react-router-dom";
+import {WHITEBOARD_DETAILS} from "../../../utils/UrlConstants.js";
 
 const COLORS = ["#43aaff", "#ff4949", "#d9dc7f"];
 const SHAPE_SIZE = 60;
@@ -141,6 +143,8 @@ export const Whiteboard = () => {
         };
     };
 
+    const nav = useNavigate();
+
 
     const saveImage = () => {
         const canvas = canvasRef.current;
@@ -148,12 +152,50 @@ export const Whiteboard = () => {
             whiteboardService.uploadWhiteboard(blob, 1, title)
                 .then((res) => {
                     console.log(res)
+                    nav(WHITEBOARD_DETAILS(res.data.id))
                 })
                 .catch((err) => {
                     console.error(err);
                 });
         },"image/png");
     };
+
+
+    const getTouchPos = (touchEvent) => {
+        const canvas = canvasRef.current;
+        const rect = canvas.getBoundingClientRect();
+        const touch = touchEvent.touches[0];
+        return {
+            offsetX: touch.clientX - rect.left,
+            offsetY: touch.clientY - rect.top,
+        };
+    };
+
+    const startTouchDrawing = (e) => {
+        if (mode !== "free") return;
+        e.preventDefault();
+        setIsDrawing(true);
+        const { offsetX, offsetY } = getTouchPos(e);
+        ctxRef.current.beginPath();
+        ctxRef.current.moveTo(offsetX, offsetY);
+    };
+
+    const drawTouch = (e) => {
+        if (!isDrawing || mode !== "free") return;
+        e.preventDefault();
+        const { offsetX, offsetY } = getTouchPos(e);
+        ctxRef.current.lineTo(offsetX, offsetY);
+        ctxRef.current.stroke();
+    };
+
+    const stopTouchDrawing = (e) => {
+        if (!isDrawing) return;
+        e.preventDefault();
+        ctxRef.current.closePath();
+        setIsDrawing(false);
+        saveState();
+    };
+
 
     const width = 1000
     const height = width * 0.64
@@ -204,11 +246,14 @@ export const Whiteboard = () => {
                     height={height}
                     width={width}
                     style={{
-                        borderRadius: "20px", boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)"
+                        borderRadius: "20px", boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",  touchAction:"none"
                     }}
                     onMouseDown={mode === "free" ? startDrawing : drawShape}
                     onMouseMove={draw}
                     onMouseUp={stopDrawing}
+                    onTouchStart={mode === "free" ? startTouchDrawing : drawShape}
+                    onTouchMove={drawTouch}
+                    onTouchEnd={stopTouchDrawing}
                 />
             </div>
         </>
