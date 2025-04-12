@@ -68,7 +68,7 @@ public class SecurityConfig {
 
                     if (username != null && role != null && teamId != null) {
                         UserDetails userDetails = User.withUsername(username)
-                                .password("") // password isn't needed here
+                                .password("")
                                 .roles(role)
                                 .build();
 
@@ -80,10 +80,9 @@ public class SecurityConfig {
                     }
 
                 } catch (JwtException e) {
-                    // Optional: Add logging
+
                     System.out.println("Invalid JWT token: " + e.getMessage());
 
-                    // Clear context just to be safe
                     SecurityContextHolder.clearContext();
                     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                     return;
