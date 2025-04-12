@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -53,7 +54,7 @@ public class SecurityConfig {
         }
 
         @Override
-        protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+        protected void doFilterInternal(HttpServletRequest request, @NonNull HttpServletResponse response,@NonNull FilterChain filterChain)
                 throws ServletException, IOException {
             String header = request.getHeader("Authorization");
 
@@ -61,7 +62,6 @@ public class SecurityConfig {
                 String token = header.substring(7);
                 try {
                     var claims = jwtUtil.extractAllClaims(token);
-                    Long userId = claims.get("userId", Long.class);
                     String role = claims.get("role", String.class);
                     Long teamId = claims.get("teamId", Long.class);
                     String username = claims.getSubject();
