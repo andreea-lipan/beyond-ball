@@ -1,12 +1,14 @@
 import React, {useRef, useState, useEffect} from "react";
 import {Toolbar} from "./Toolbar.jsx";
 import {Box, Button, Modal, TextField} from "@mui/material";
+import whiteboardService from "../../../APIs/WhiteboardService.js";
 
 const COLORS = ["#43aaff", "#ff4949", "#d9dc7f"];
 const SHAPE_SIZE = 60;
 const BG_IMAGE_URL = "/field.png"; // Replace with your actual image path
 
 export const Whiteboard = () => {
+
     const canvasRef = useRef(null);
     const ctxRef = useRef(null);
     const [isDrawing, setIsDrawing] = useState(false);
@@ -16,6 +18,7 @@ export const Whiteboard = () => {
     const [redoStack, setRedoStack] = useState([]);
 
     const isMobile = false;
+    const [title, setTitle] = useState("");
 
 
     useEffect(() => {
@@ -140,10 +143,16 @@ export const Whiteboard = () => {
 
 
     const saveImage = () => {
-        const link = document.createElement("a");
-        link.download = `whiteboard-${Date.now()}.png`;
-        link.href = canvasRef.current.toDataURL();
-        link.click();
+        const canvas = canvasRef.current;
+        canvas.toBlob((blob) => {
+            whiteboardService.uploadWhiteboard(blob, 1, title)
+                .then((res) => {
+                    console.log(res)
+                })
+                .catch((err) => {
+                    console.error(err);
+                });
+        },"image/png");
     };
 
     const width = 1000
@@ -169,12 +178,15 @@ export const Whiteboard = () => {
                 }}>
                     <h2>Are you sure you want to clear the board?</h2>
                     <div style={{display: "flex", gap: "1rem", justifyContent: "space-between"}}>
-                        <Button onClick={()=>{handleClear();onClose();}}>Yes</Button>
+                        <Button onClick={() => {
+                            handleClear();
+                            onClose();
+                        }}>Yes</Button>
                         <Button onClick={onClose}>No</Button>
                     </div>
                 </Box>
             </Modal>
-            <TextField style={{margin: "0.5rem", width: "50%", justifyContent: "center"}} placeholder={"Board Title"}/>
+            <TextField style={{margin: "0.5rem", width: "50%", justifyContent: "center"}} placeholder={"Board Title"} value={title} onChange={(e) => setTitle(e.target.value)} />
             <div style={{display: "flex", flexDirection: isMobile ? "row" : "column"}}>
                 <Toolbar
                     mode={mode}

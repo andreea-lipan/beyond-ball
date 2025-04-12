@@ -10,9 +10,9 @@ export const AUTH_ENDPOINTS = {
 }
 
 // add as many categories as necessary
-
+const WHITEBOARD_URL = `${BASE_URL}/whiteboards`
 export const WHITEBOARD_ENDPOINTS = {
-    //todo
+    CREATE_BOARD: `${WHITEBOARD_URL}`,
 }
 
 export const PLAYERS_ENDPOINTS = {
