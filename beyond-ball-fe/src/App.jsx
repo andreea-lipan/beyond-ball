@@ -10,37 +10,112 @@ import LoginPage from "./pages/auth/LoginPage.jsx";
 import TeamRegisterPage from "./pages/auth/TeamRegisterPage.jsx";
 import {ThemeProvider} from "@mui/material";
 import {theme} from "./theme";
+import MockPage from "./pages/MockPage.jsx";
+import Storage from "./utils/Storage.js";
+import AccessDeniedRedirect from "./components/AccessDeniedRedirect.jsx";
+import { useAuth } from "./components/AuthContext";
+
 
 function App() {
+    const { role, teamId } = useAuth();
 
     return (
         <div className="App">
             <ThemeProvider theme={theme}>
                 <BrowserRouter>
                     {/*<ScrollToTop/> /!* This will scroll to the top whenever the route changes *!/*/}
-                    <Routes>
+                    <Routes key={role}>
+            {/* Public routes */}
+            <Route
+              path="/"
+              element={
+                (() => {
+                  sessionStorage.setItem("lastValidPath", "/");
+                  return <LoginPage />;
+                })()
+              }
+            />
+            <Route
+              path="/register-team"
+              element={
+                (() => {
+                //   sessionStorage.setItem("lastValidPath", "/register-team");
+                  return <TeamRegisterPage />;
+                })()
+              }
+            />
 
-                        {/* Public content */}
-                        <Route path="/" element={<LoginPage/>}/>
-                        <Route path="/register-team" element={<TeamRegisterPage/>}/>
+            {/* Player & Staff routes */}
+            <Route
+              path="/team"
+              element={
+                ["PLAYER", "STAFF"].includes(role)
+                  ? (() => {
+                      sessionStorage.setItem("lastValidPath", "/team");
+                      return <TeamPage />;
+                    })()
+                  : <AccessDeniedRedirect />
+              }
+            />
+            <Route
+              path="/whiteboards"
+              element={
+                ["PLAYER", "STAFF"].includes(role)
+                  ? (() => {
+                      sessionStorage.setItem("lastValidPath", "/whiteboards");
+                      return <WhiteboardsPage />;
+                    })()
+                  : <AccessDeniedRedirect />
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                ["PLAYER", "STAFF"].includes(role)
+                  ? (() => {
+                      sessionStorage.setItem("lastValidPath", "/profile");
+                      return <PlayerProfilePage />;
+                    })()
+                  : <AccessDeniedRedirect />
+              }
+            />
+            <Route
+              path="/clips"
+              element={
+                ["PLAYER", "STAFF"].includes(role)
+                  ? (() => {
+                      sessionStorage.setItem("lastValidPath", "/clips");
+                      return <ClipsPage />;
+                    })()
+                  : <AccessDeniedRedirect />
+              }
+            />
+            <Route
+              path="/quizzes"
+              element={
+                ["PLAYER", "STAFF"].includes(role)
+                  ? (() => {
+                      sessionStorage.setItem("lastValidPath", "/quizzes");
+                      return <QuizzesPage />;
+                    })()
+                  : <AccessDeniedRedirect />
+              }
+            />
 
-                        {/* Player & Staff content */}
-                        {/* The line below gets added after login is made */}
-                        {/*<Route path='/' element={<CustomRoute roles={['PLAYER', STAFF]}/>}>*/}
-                            <Route path="/whiteboards" element={<WhiteboardsPage/>}/>
-                            <Route path="/team" element={<TeamPage/>}/>
-                            <Route path="/profile" element={<PlayerProfilePage/>}/>
-                            <Route path="/clips" element={<ClipsPage/>}/>
-                            <Route path="/quizzes" element={<QuizzesPage/>}/>
-                        {/*</Route>*/}
+            {/* Admin-only route */}
+            <Route
+              path="/mock"
+              element={
+                role === "ADMIN"
+                  ? (() => {
+                      sessionStorage.setItem("lastValidPath", "/mock");
+                      return <MockPage />;
+                    })()
+                  : <AccessDeniedRedirect />
+              }
+            />
+          </Routes>
 
-                        {/* Admin Content */}
-                        {/*<Route path='/' element={<CustomRoute roles={['ADMIN']}/>}>*/}
-                        {/*    /!* todo *!/*/}
-                        {/*</Route>*/}
-
-
-                    </Routes>
                 </BrowserRouter>
             </ThemeProvider>
 

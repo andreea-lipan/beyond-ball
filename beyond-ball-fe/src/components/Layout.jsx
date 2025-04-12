@@ -22,6 +22,8 @@ import {TeamIcon} from "./icons/TeamIcon.jsx";
 import {ProfileIcon} from "./icons/ProfileIcon.jsx";
 import {ClipsIcon} from "./icons/ClipsIcon.jsx";
 import {QuizzesIcon} from "./icons/QuizzesIcon.jsx";
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import Storage from "../utils/Storage";
 
 const drawerWidth = 240
 
@@ -114,6 +116,37 @@ const Layout = ({children}) => {
                             </ListItemButton>
                         </ListItem>
                     ))}
+
+                    {/* Logout Button */}
+                    <ListItem disablePadding
+                              sx={[{ display: 'block' }, { ":hover": { backgroundColor: theme.palette.secondary.main } }]}>
+                        <ListItemButton
+                            sx={[
+                                { minHeight: 48, px: 2.5 },
+                                open ? { justifyContent: 'initial' } : { justifyContent: 'center' }
+                            ]}
+                            onClick={() => {
+                                Storage.logout();
+                                navigator("/");
+                            }}
+                        >
+                            <Tooltip title="Logout" placement="right">
+                                <ListItemIcon
+                                    sx={[
+                                        { minWidth: 0, justifyContent: 'center' },
+                                        open ? { mr: 3 } : { mr: 'auto' }
+                                    ]}
+                                >
+                                    <ExitToAppIcon color={BtnsColour} />
+                                </ListItemIcon>
+                            </Tooltip>
+                            <ListItemText
+                                primary="Logout"
+                                sx={[open ? { opacity: 1 } : { opacity: 0 }]}
+                            />
+                        </ListItemButton>
+                    </ListItem>
+
                 </List>
             </Drawer>
 
