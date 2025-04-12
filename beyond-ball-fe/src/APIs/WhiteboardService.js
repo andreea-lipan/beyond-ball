@@ -23,10 +23,15 @@ const getWhiteboardImage = (filename) => {
     return RequestInstance.get(WHITEBOARD_ENDPOINTS.BOARD_IMAGE(filename))
 }
 
+const getWhiteboards = () => {
+    return RequestInstance.get(WHITEBOARD_ENDPOINTS.BOARDS)
+}
+
 const WhiteboardService = {
     uploadWhiteboard,
     getWhiteboard,
     getWhiteboardImage,
+    getWhiteboards
 }
 
 export default WhiteboardService;

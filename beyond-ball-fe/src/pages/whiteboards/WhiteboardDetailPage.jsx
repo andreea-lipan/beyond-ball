@@ -18,6 +18,7 @@ const WhiteboardDetailPage = () => {
         })
     })
 
+    //TODO: this is just a way to use the backend response, needs to look like the design, including the comments
     return (
         <Layout>
             <img src={image} alt="Whiteboard" style={{width: "100%", height: "auto"}}/>
