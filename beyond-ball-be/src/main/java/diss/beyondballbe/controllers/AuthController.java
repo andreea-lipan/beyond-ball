@@ -18,14 +18,11 @@ public class AuthController {
     @Autowired
     private AuthService authService;
 
-    @PostMapping("login")
-    public ResponseEntity<?> logIn(/*@RequestBody LoginRequest loginRequest*/) {
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody Map<String, String> body) {
         try {
-            //todo login logic
-            // example:
-            // LoginResponse response = authService.logIn(loginRequest);
-            // return ResponseEntity.ok().body(response);
-            return ResponseEntity.ok().build();
+            String token = authService.login(body.get("username"), body.get("password"));
+            return ResponseEntity.ok(Map.of("token", token));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

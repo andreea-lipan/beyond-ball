@@ -6,15 +6,30 @@ import Storage from "../utils/Storage";
 // There should be a different service for each type of object
 // All services should use RequestInstance
 
-const logIn = (username, password) => {
-    return RequestInstance.post(AUTH_ENDPOINTS.LOGIN, {username, password})
-        .then(res => res.data)
-        .then(data => {
-            Storage.setUserId(data.id)
-            Storage.setUserRole(data.role)
-            return data
-        })
-}
+const login = async (username, password) => {
+    Storage.clearToken();
+
+    try {
+        const response = await RequestInstance.post(AUTH_ENDPOINTS.LOGIN, {
+            username,
+            password
+        });
+
+        const data = response.data;
+        Storage.setToken(data.token);
+        return data;
+
+    } catch (error) {
+        // forward the message to the caller
+        console.log("Caught error in AuthService.js");
+
+        const message =
+            error.response?.data?.message ||
+            error.response?.data?.error ||
+            "Login failed due to an unknown error.";
+        throw new Error(message);
+    }
+};
 
 // See example of using this function in the LoginPage
 
@@ -25,7 +40,7 @@ const registerTeam = (team) => {
 
 const AuthService = {
     registerTeam,
-    logIn
+    login
 }
 
 export default AuthService

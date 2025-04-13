@@ -18,3 +18,7 @@ export const WHITEBOARD_ENDPOINTS = {
 export const PLAYERS_ENDPOINTS = {
     //todo
 }
+
+export const USER_ENDPOINTS = {
+    MOCK: `${BASE_URL}/users/teams/{teamId}/players/mock`
+}
