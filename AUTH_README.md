@@ -1,6 +1,6 @@
 # Login & Access Overview
 
-Text etxt
+This README describes how authentication and role-based access control are implemented for the backend and frontend, including login flow, route protection, and token handling.
 
 # BE
 
@@ -15,7 +15,7 @@ Text etxt
 
 **Role & team-based access:**
 
-- Spring Security with expression-based access checks. Example:
+- Use Spring Security with expression-based access checks on the controller methods. Example:
 
 ```js
 @PreAuthorize("@authValidator.belongsToTeam(#teamId) and hasRole('ADMIN')")
