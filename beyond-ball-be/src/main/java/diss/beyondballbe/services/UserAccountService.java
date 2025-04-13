@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface UserAccountService {
     List<UserAccount> getAllAccounts();
+    UserAccount getAccountById(Long id);
 }

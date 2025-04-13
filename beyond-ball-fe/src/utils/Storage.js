@@ -5,22 +5,6 @@ import { jwtDecode } from "jwt-decode";
 // we would only have to change it here
 
 
-const getUserId = () => {
-    return localStorage.getItem('userId');
-}
-
-const getUserRole = () => {
-    return localStorage.getItem('role');
-}
-
-const setUserId = (userId) => {
-    localStorage.setItem('userId', userId);
-}
-
-const setUserRole = (role) => {
-    localStorage.setItem('role', role);
-}
-
 const setToken = (token) => {
     localStorage.setItem('token', token);
   };
@@ -45,8 +29,14 @@ const getToken = () => {
     }
 };
 
+ const getUserIdFromToken = () => {
+    const decoded = getDecodedToken();
+    return decoded?.userId ?? null;
+ }
+
 const getTeamIdFromToken = () => {
     const decoded = getDecodedToken();
+    console.log(decoded)
     return decoded?.teamId ?? null;
 };
 
@@ -67,10 +57,6 @@ const logout = () => {
 };
 
 const Storage = {
-    getUserId,
-    getUserRole,
-    setUserId,
-    setUserRole,
     setToken,
     getToken,
     clearToken,
@@ -78,6 +64,7 @@ const Storage = {
     getTeamIdFromToken,
     getRoleFromToken,
     getUsernameFromToken,
+    getUserIdFromToken,
     logout
 }
 
