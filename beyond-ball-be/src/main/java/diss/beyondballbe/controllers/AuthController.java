@@ -21,9 +21,7 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Map<String, String> body) {
         try {
-            System.out.println("Hit /auth/login endpoint");
             String token = authService.login(body.get("username"), body.get("password"));
-            System.out.println("Got token");
             return ResponseEntity.ok(Map.of("token", token));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
