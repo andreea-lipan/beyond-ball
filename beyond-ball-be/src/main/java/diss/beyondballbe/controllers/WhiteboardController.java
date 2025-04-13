@@ -6,6 +6,7 @@ import diss.beyondballbe.services.WhiteboardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,12 +22,13 @@ public class WhiteboardController {
     private WhiteboardService whiteboardService;
 
 
-    //TODO change to be team specific
+    @PreAuthorize("hasAnyRole('STAFF', 'PLAYER', 'ADMIN')")
     @GetMapping
     public List<WhiteboardResponse> getAllWhiteboards() {
         return whiteboardService.getAllWhiteboards();
     }
 
+    @PreAuthorize("hasAnyRole('STAFF', 'PLAYER', 'ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity<?> getWhiteboardById(@PathVariable String id) {
         try {
@@ -36,14 +38,15 @@ public class WhiteboardController {
         }
     }
 
+    @PreAuthorize("hasAnyRole('STAFF', 'PLAYER', 'ADMIN')")
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<?> handleUpload(
+    public ResponseEntity<?> createWhiteboard(
             @RequestPart("file") MultipartFile file,
             @RequestPart("data") String metadataJson
     ) {
         try {
             return ResponseEntity.ok(whiteboardService.createWhiteboard(new WhiteboardCreationRequest(metadataJson), file));
-        } catch (IOException e) {
+        } catch (Exception e) {
             return ResponseEntity.status(500).body("Error saving file: " + e.getMessage());
         }
     }

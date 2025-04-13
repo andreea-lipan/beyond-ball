@@ -1,7 +1,6 @@
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import './App.css'
-import Layout from "./components/Layout.jsx";
-import WhiteboardsPage from "./pages/whiteboards/WhiteboardPage.jsx";
+import WhiteboardsPage from "./pages/whiteboards/WhiteboardsPage.jsx";
 import TeamPage from "./pages/TeamPage.jsx";
 import PlayerProfilePage from "./pages/PlayerProfilePage.jsx";
 import ClipsPage from "./pages/clips/ClipsPage.jsx";
@@ -11,7 +10,6 @@ import TeamRegisterPage from "./pages/auth/TeamRegisterPage.jsx";
 import {ThemeProvider} from "@mui/material";
 import {theme} from "./theme";
 import MockPage from "./pages/MockPage.jsx";
-import Storage from "./utils/Storage.js";
 import AccessDeniedRedirect from "./components/AccessDeniedRedirect.jsx";
 import { useAuth } from "./components/AuthContext";
 import WhiteboardCreationPage from "./pages/whiteboards/WhiteboardCreationPage.jsx";
@@ -61,7 +59,7 @@ function App() {
             <Route
               path="/whiteboards"
               element={
-                ["PLAYER", "STAFF"].includes(role)
+                ["PLAYER", "STAFF", "ADMIN"].includes(role)
                   ? (() => {
                       sessionStorage.setItem("lastValidPath", "/whiteboards");
                       return <WhiteboardsPage />;
@@ -72,7 +70,7 @@ function App() {
             <Route
                 path="/whiteboards/creation"
                 element={
-                ["PLAYER", "STAFF"].includes(role)
+                ["PLAYER", "STAFF", "ADMIN"].includes(role)
                     ? (() => {
                         sessionStorage.setItem("lastValidPath", "/whiteboards/creation");
                         return <WhiteboardCreationPage />;
@@ -83,7 +81,7 @@ function App() {
             <Route
                 path="/whiteboards/:id"
                 element={
-                    ["PLAYER", "STAFF"].includes(role)
+                    ["PLAYER", "STAFF", "ADMIN"].includes(role)
                         ? (() => {
                             sessionStorage.setItem("lastValidPath", "/whiteboards/:id");
                             return <WhiteboardDetailPage />;

@@ -8,6 +8,7 @@ import useHistory from "./hooks/useHistory.js";
 import useModal from "../../../components/modals/useModal.js";
 import {ConfirmationModal} from "../../../components/modals/ConfirmationModal.jsx";
 import {Popup} from "../../../components/popup/Popup.jsx";
+import {MessageType} from "../../../components/popup/MessageType.js";
 
 const COLORS = ["#43aaff", "#ff4949", "#d9dc7f"];
 
@@ -46,8 +47,8 @@ export const Whiteboard = () => {
                 .then((res) => {
                     console.log(res)
 
-                    setMessage("Whiteboard saved successfully!");
-                    setMessageType("success");
+                    setMessage("Whiteboard saved successfully! Redirecting...");
+                    setMessageType(MessageType.success);
                     setWhiteboardURL(WHITEBOARD_DETAILS(res.data.id));
                     setIsVisible(true);
 
@@ -55,7 +56,7 @@ export const Whiteboard = () => {
                 .catch((err) => {
                     console.error(err);
                     setMessage("Failed to save whiteboard.");
-                    setMessageType("error");
+                    setMessageType(MessageType.error);
                     setIsVisible(true);
                 });
         }, "image/png");
@@ -74,7 +75,7 @@ export const Whiteboard = () => {
     return (
         <>
             <Popup message={message} messageType={messageType} isVisible={isVisible} setIsVisible={setIsVisible}
-                   redirect={whiteboardURL}/>
+                   redirect={whiteboardURL} duration={messageType === MessageType.success? 2000 : 4000}/>
             <ConfirmationModal handleConfirm={handleClear} message={"Are you sure you want to clear the board?"}
                                state={clearModal}/>
             <ConfirmationModal handleConfirm={saveImage}

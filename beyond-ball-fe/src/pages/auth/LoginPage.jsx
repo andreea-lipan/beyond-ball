@@ -44,7 +44,7 @@ const LoginPage = () => {
                 } else {
                     navigate("/whiteboards");
                 }
-            }, 1000); // matches popup duration
+            }, 100); // matches popup duration
     
         } catch (err) {
             setPopupMessage("Login failed. Check your credentials.");
@@ -131,7 +131,7 @@ const LoginPage = () => {
     setIsVisible={setPopupOpen}
     message={popupMessage}
     messageType={popupType}
-    duration={popupType === MessageType.success ? 1000 : 3000} // closes after 1 second on success, 3 on fail
+    duration={popupType === MessageType.success ? 100 : 3000} // closes after 1 second on success, 3 on fail
     />
     )}
 

@@ -13,15 +13,16 @@ const WhiteboardDetailPage = () => {
     useEffect(() => {
         whiteboardService.getWhiteboard(id).then((response) => {
             console.log(response);
-            setImage(WHITEBOARD_ENDPOINTS.BOARD_IMAGE(response.data.imageUrl));
-            console.log(image)
+            whiteboardService.getWhiteboardImage(response.data.imageUrl).then((response) => {
+                setImage(response)
+            })
         })
-    })
+    },[]);
 
     //TODO: this is just a way to use the backend response, needs to look like the design, including the comments
     return (
         <Layout>
-            <img src={image} alt="Whiteboard" style={{width: "100%", height: "auto"}}/>
+            {image? <img src={image} alt="Whiteboard" style={{width: "100%", height: "auto"}}/> : <p>Loading...</p>}
             <TestComponent text={`WhiteboardDetail ${id}`}/>
         </Layout>
     )

@@ -23,6 +23,6 @@ public class WhiteboardResponse {
         this.title = whiteboard.getTitle();
         this.creationDate = whiteboard.getCreationDate();
         this.imageUrl = "/uploads/" + whiteboard.getImageUrl();
-//        this.author = whiteboard.getAuthor().getUsername();
+        this.author = whiteboard.getAuthor().getUsername();
     }
 }

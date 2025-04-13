@@ -26,7 +26,7 @@ export const Toolbar = ({
 
     return (
         <div style={{display:"flex",flexDirection: vertical ? "column" : "row", backgroundColor: theme.palette.primary.main, borderRadius:"16px", padding: "8px", justifyContent: "space-evenly"}} >
-            <Button onClick={saveImage} style={{borderRadius:"50%"}} > <SaveIcon/> </Button>
+            <Button title="Save Board" onClick={saveImage} style={{borderRadius:"50%"}} > <SaveIcon/> </Button>
             <Divider flexItem orientation={vertical?"horizontal":"vertical"}/>
                 {COLORS.map((c) => (
                     <IconButton
@@ -35,12 +35,12 @@ export const Toolbar = ({
                         onClick={() => setColor(c)}
                     />
                 ))}
-            <Button onClick={() => setMode("free")} style={{borderRadius:"50%", borderColor: mode === "free" ? "black" : "transparent", borderWidth: "2px", borderStyle: "dashed"}}> <BrushIcon/> </Button>
-            <Button onClick={() => setMode("circle")} style={{borderRadius:"50%", borderColor: mode === "circle" ? "black" : "transparent", borderWidth: "2px", borderStyle: "dashed"}}> <CircleIcon/> </Button>
-            <Button onClick={() => setMode("cross")} style={{borderRadius:"50%", borderColor: mode === "cross" ? "black" : "transparent", borderWidth: "2px", borderStyle: "dashed"}}> <CrossIcon/> </Button>
-            <Button onClick={handleUndo} style={{borderRadius:"50%"}}> <UndoIcon/> </Button>
-            <Button onClick={handleRedo} style={{borderRadius:"50%"}}> <RedoIcon/> </Button>
-            <Button onClick={handleClear} style={{borderRadius:"50%"}}> <ClearIcon/> </Button>
+            <Button title="Free Draw" onClick={() => setMode("free")} style={{borderRadius:"50%", borderColor: mode === "free" ? "black" : "transparent", borderWidth: "2px", borderStyle: "dashed"}}> <BrushIcon/> </Button>
+            <Button title="Circle" onClick={() => setMode("circle")} style={{borderRadius:"50%", borderColor: mode === "circle" ? "black" : "transparent", borderWidth: "2px", borderStyle: "dashed"}}> <CircleIcon/> </Button>
+            <Button title="Cross" onClick={() => setMode("cross")} style={{borderRadius:"50%", borderColor: mode === "cross" ? "black" : "transparent", borderWidth: "2px", borderStyle: "dashed"}}> <CrossIcon/> </Button>
+            <Button title="Undo" onClick={handleUndo} style={{borderRadius:"50%"}}> <UndoIcon/> </Button>
+            <Button title="Redo" onClick={handleRedo} style={{borderRadius:"50%"}}> <RedoIcon/> </Button>
+            <Button title="Clear Board" onClick={handleClear} style={{borderRadius:"50%"}}> <ClearIcon/> </Button>
         </div>
     );
 };

@@ -2,7 +2,6 @@ import * as React from 'react';
 import Snackbar from '@mui/material/Snackbar';
 import {Alert} from "@mui/material";
 import {useNavigate} from "react-router-dom";
-import {useEffect} from "react";
 
 
 //messageType = "success" | "info" | "warning" | "error";
