@@ -24,7 +24,6 @@ const attachAuthInterceptor = (instance) => {
         const token = Storage.getToken();
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
-            console.log(config.headers.Authorization);
         }
         return config;
     });

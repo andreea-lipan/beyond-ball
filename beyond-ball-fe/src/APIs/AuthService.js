@@ -8,7 +8,6 @@ import Storage from "../utils/Storage";
 
 const login = async (username, password) => {
     Storage.clearToken();
-    console.log('In login in AuthService.js');
 
     try {
         const response = await RequestInstance.post(AUTH_ENDPOINTS.LOGIN, {
@@ -17,8 +16,6 @@ const login = async (username, password) => {
         });
 
         const data = response.data;
-        console.log('Accessing data from be in AuthService.js');
-        console.log(data);
         Storage.setToken(data.token);
         return data;
 
