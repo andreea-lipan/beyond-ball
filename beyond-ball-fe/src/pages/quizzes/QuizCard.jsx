@@ -1,4 +1,4 @@
-import {Box, Card, CardContent, CardHeader, Icon, Typography} from "@mui/material";
+import {Button, Card, CardContent, CardHeader, Icon, Typography} from "@mui/material";
 import {
     ChecklistIcon,
     IdeaIcon,
@@ -8,6 +8,7 @@ import {
 } from "../../components/icons/quiz/quizIcons.jsx";
 import {TimerIcon} from "../../components/icons/quiz/TimerIcon.jsx";
 import {QuestionsIcon} from "../../components/icons/quiz/QuestionsIcon.jsx";
+import {CardActions} from "@mui/joy";
 
 const iconComponents = [
     QuizSheetIcon,
@@ -25,14 +26,20 @@ export const QuizCard = ({quiz, index}) => {
 
     const Icon = iconComponents[(index * getRandomInt(100)) % iconComponents.length];
 
+    const handleDownload = () => {
+
+    }
+
     return (
         <Card
             key={quiz.id}
             sx={{
                 width: "17vw",
                 height: "45vh",
-                p: "2vw",
+                p: "1.5vw",
                 borderRadius: "20px",
+                display: "flex",
+                flexDirection: "column", // Stack children vertically
             }}
         >
             {/* Icon in Top Left */}
@@ -55,9 +62,28 @@ export const QuizCard = ({quiz, index}) => {
                 }
             />
 
-            <CardContent>
-                <Typography variant="body2">{quiz.description}</Typography>
+            <CardContent style={{overflow:"hidden"}}>
+                <Typography
+                    variant="body2"
+                    sx={{
+                        display: '-webkit-box',
+                        WebkitBoxOrient: 'vertical',
+                        WebkitLineClamp: {
+                            xs: 2,
+                            sm: 3,
+                            md: 4,
+                            lg: 5
+                        },
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                    }}
+                >
+                    {quiz.description}{quiz.description}{quiz.description}{quiz.description}{quiz.description}</Typography>
             </CardContent>
+
+            <CardActions sx={{ mt: "auto", mr: "auto"}}>
+                <Button onClick={handleDownload}> Download answers</Button>
+            </CardActions>
         </Card>
     );
 }
