@@ -1,8 +1,9 @@
 import {Button, Paper, TextField} from "@mui/material";
-
+import Storage from "../../utils/Storage";
 
 export const TopBar = ({handleSearch, handleAddQuiz})=>{
-
+const role = Storage.getRoleFromToken(); // Get role from token
+ const showAddButton = role === "STAFF" || role === "ADMIN"; // Check permission
     return (
         <Paper
             elevation={3}
@@ -26,6 +27,7 @@ export const TopBar = ({handleSearch, handleAddQuiz})=>{
                 sx={{ minWidth: 400, backgroundColor: "background.main", borderRadius: "5px" }}
             />
 
+            {showAddButton && (
             <Button
                 variant="contained"
                 onClick={handleAddQuiz}
@@ -33,6 +35,7 @@ export const TopBar = ({handleSearch, handleAddQuiz})=>{
             >
                 Add Quiz
             </Button>
+            )}
         </Paper>
     )
 }

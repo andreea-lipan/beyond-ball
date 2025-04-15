@@ -25,7 +25,8 @@ function getRandomInt(max) {
 export const QuizCard = ({quiz, index}) => {
 
     const Icon = iconComponents[(index * getRandomInt(100)) % iconComponents.length];
-
+    const role = Storage.getRoleFromToken();
+    const canDownload = role === "STAFF" || role === "ADMIN";
     const handleDownload = () => {
 
     }
@@ -80,10 +81,11 @@ export const QuizCard = ({quiz, index}) => {
                 >
                     {quiz.description}{quiz.description}{quiz.description}{quiz.description}{quiz.description}</Typography>
             </CardContent>
-
+            {canDownload && (
             <CardActions sx={{ mt: "auto", mr: "auto"}}>
                 <Button onClick={handleDownload}> Download answers</Button>
             </CardActions>
+            )}
         </Card>
     );
 }
