@@ -12,6 +12,9 @@ import java.util.List;
 @AllArgsConstructor
 public class Quiz {
     private Long id;
+    private String title;
+    private String description;
+    private Long estimatedDuration; // in minutes
     private List<QuizQuestion> questions; // ordered list to allign it with the answers
     private UserAccount author; // UserAccount or StaffAccount
 
