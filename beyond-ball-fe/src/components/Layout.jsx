@@ -16,12 +16,12 @@ import MuiDrawer from '@mui/material/Drawer';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import {useNavigate} from "react-router-dom";
 import {CLIPS_PAGE, PROFILE_PAGE, QUIZZES_PAGE, TEAM_PAGE, WHITEBOARDS_PAGE} from "../utils/UrlConstants.js";
-import {MenuIcon} from "./icons/MenuIcon.jsx";
-import {WhiteboardIcon} from "./icons/WhiteboardIcon.jsx";
-import {TeamIcon} from "./icons/TeamIcon.jsx";
-import {ProfileIcon} from "./icons/ProfileIcon.jsx";
-import {ClipsIcon} from "./icons/ClipsIcon.jsx";
-import {QuizzesIcon} from "./icons/QuizzesIcon.jsx";
+import {MenuIcon} from "./icons/sidebar/MenuIcon.jsx";
+import {WhiteboardIcon} from "./icons/sidebar/WhiteboardIcon.jsx";
+import {TeamIcon} from "./icons/sidebar/TeamIcon.jsx";
+import {ProfileIcon} from "./icons/sidebar/ProfileIcon.jsx";
+import {ClipsIcon} from "./icons/sidebar/ClipsIcon.jsx";
+import {QuizzesIcon} from "./icons/sidebar/QuizzesIcon.jsx";
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import Storage from "../utils/Storage";
 

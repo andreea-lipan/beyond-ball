@@ -17,6 +17,12 @@ export const WHITEBOARD_ENDPOINTS = {
     BOARD_IMAGE: (filename) => `${BASE_URL}${filename}`,
 }
 
+const QUIZ_URL = `${BASE_URL}/quizzes`;
+
+export const QUIZ_ENDPOINTS = {
+    QUIZZES: `${QUIZ_URL}`,
+};
+
 export const PLAYERS_ENDPOINTS = {
     //todo
 }

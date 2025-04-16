@@ -4,4 +4,5 @@ export const TEAM_PAGE = "/team"
 export const PROFILE_PAGE = "/profile"
 export const CLIPS_PAGE = "/clips"
 export const QUIZZES_PAGE = "/quizzes"
+export const QUIZ_TAKING_PAGE = (id) => `/quizzes/${id}`
 export const LOGIN_PAGE = "/"
