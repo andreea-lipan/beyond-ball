@@ -3,6 +3,9 @@ import Layout from "../../components/Layout.jsx";
 import { Typography } from "@mui/material";
 import { TopBar } from "./TopBar.jsx";
 import { QuizContainer } from "./QuizContainer.jsx";
+import {Popup} from "../../components/popup/Popup.jsx";
+import quizService from "../../APIs/QuizService.js";
+import {MessageType} from "../../components/popup/MessageType.js";
 
 const QuizzesPage = () => {
   const [page, setPage] = useState(0);
@@ -11,10 +14,12 @@ const QuizzesPage = () => {
   const [quizzes, setQuizzes] = useState([]);
   const [rawSearchTerm, setRawSearchTerm] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
-  // 🆕 Debounce search term
+  const [isVisible, setIsVisible] = useState(false);
+  const [message, setMessage] = useState("");
+  const [messageType, setMessageType] = useState("");
+
+  // Debounce search term
   useEffect(() => {
     const delay = setTimeout(() => {
       setSearchTerm(rawSearchTerm);
@@ -25,21 +30,16 @@ const QuizzesPage = () => {
   }, [rawSearchTerm]);
 
   useEffect(() => {
-    fetch("http://localhost:8080/quizzes")
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Failed to fetch quizzes");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        setQuizzes(data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        setError(err.message);
-
-      });
+    quizService.getQuizzes()
+        .then(response => {
+            setQuizzes(response.data);
+        })
+        .catch(error => {
+          console.log(error);
+          setIsVisible(true);
+          setMessage("Failed to fetch quizzes.");
+          setMessageType(MessageType.error);
+        })
   }, []);
 
   const filteredQuizzes = quizzes.filter((quiz) =>
@@ -55,15 +55,14 @@ const QuizzesPage = () => {
   const handlePrev = () => setPage((prev) => Math.max(prev - 1, 0));
   const handleNext = () => setPage((prev) => Math.min(prev + 1, maxPage - 1));
 
-  const handleSearch = (e) => setRawSearchTerm(e.target.value); // 🆕
+  const handleSearch = (e) => setRawSearchTerm(e.target.value);
 
   const handleAddQuiz = () => console.log("Add Quiz clicked");
 
-  if (loading) return <p>Loading quizzes...</p>;
-  if (error) return <p>Error: {error}</p>;
 
   return (
     <Layout>
+      <Popup isVisible={isVisible} setIsVisible={setIsVisible} message={message} messageType={messageType} />
       <Typography variant="h1" sx={{ mb: 7 }}>
         Quizzes
       </Typography>

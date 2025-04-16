@@ -25,7 +25,7 @@ public class Quiz {
     @Column(name = "duration", columnDefinition = "TEXT")
     private Long estimatedDuration; // in minutes
     @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_account_id")
+    @JoinColumn(name = "question_id")
     private List<QuizQuestion> questions; // ordered list to allign it with the answers
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_account_id")

@@ -1,4 +1,4 @@
-import {Box, IconButton} from "@mui/material";
+import {Box, IconButton, Typography} from "@mui/material";
 import {ArrowBackIos, ArrowForwardIos} from "@mui/icons-material";
 import {QuizCard} from "./QuizCard.jsx";
 
@@ -32,17 +32,21 @@ export const QuizContainer = ({quizzes, handleNext, handlePrev, page, maxPage}) 
                     mt: 2,
                 }}
             >
-                {quizzes.map((quiz, index) => {
+                {quizzes.length > 0 ?
+                    quizzes.map((quiz, index) => {
 
-                    return (
-                        <QuizCard quiz={quiz} index={index} />
-                    );
-                })}
+                        return (
+                            <QuizCard quiz={quiz} index={index} />
+                        );
+                    })
+                    :
+                    <Typography variant="h2" sx={{fontWeight:700}} gutterBottom> No Quizzes found. Create one, or ask someone to create one. </Typography>
+                }
             </Box>
 
             <IconButton disableRipple
                         onClick={handleNext}
-                        disabled={page === maxPage - 1}
+                        disabled={page >= maxPage - 1}
                         sx={{
                             fontSize: 36, width: "3.5vw"
                         }}
