@@ -29,13 +29,21 @@ const getWhiteboardImage = (filename) => {
 
 const getWhiteboards = () => {
     return RequestInstance.get(WHITEBOARD_ENDPOINTS.BOARDS)
+        .then((response) => response.data);
+};
+
+
+const getWhiteboardsByTitle = (title) => {
+    return RequestInstance.get(WHITEBOARD_ENDPOINTS.FILTER(title));
 }
+
 
 const WhiteboardService = {
     uploadWhiteboard,
     getWhiteboard,
     getWhiteboardImage,
-    getWhiteboards
+    getWhiteboards,
+    getWhiteboardsByTitle
 }
 
 export default WhiteboardService;
