@@ -37,7 +37,7 @@ export const QuizCard = ({quiz, index}) => {
     }
 
     const handleClick = () => {
-        if (role === "STAFF") {
+        if (role === "PLAYER") {
             navigate(QUIZ_TAKING_PAGE(quiz.id));
         }
     }
