@@ -28,9 +28,9 @@ export const WhiteboardListItem = ({whiteboard}) => {
     //TODO: this is just a way to use the backend response, needs to look like the design
 
     return (
-        <Card sx={{  display:"flex", justifyContent:"space-arround", mt:5  }}>
+        <Card sx={{  display:"flex", justifyContent:"space-arround", mt:5, maxWidth:280, borderRadius:5 }}>
           <CardActionArea>
-            <CardMedia
+            <CardMedia sx ={{ objectFit:"contain"}}
               component="img"
               image={image}
             />

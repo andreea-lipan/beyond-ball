@@ -6,7 +6,9 @@ import {Box, IconButton, InputAdornment, TextField} from "@mui/material";
 import {WhiteboardListItem} from "./display/WhiteboardListItem.jsx";
 import { mockWhiteboards } from "../../utils/whiteboard.js";
 import Storage from "../../utils/Storage.js";
-import {SaveIcon} from "../../components/icons/whiteboard/SaveIcon.jsx";
+import {SearchIcon} from "../../components/icons/SearchIcon.jsx";
+import {PlusIcon} from "../../components/icons/PlusIcon.jsx";
+
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
@@ -19,7 +21,6 @@ const WhiteboardsPage = () => {
     const [whiteboards, setWhiteboards] = useState([]);
     const [filteredWhiteboards, setFilteredWhiteboards] = useState([]);
     const [inputValue, setInputValue] = useState("");
-
 
     useEffect(() => {
         whiteboardService.getWhiteboards().then((response) => {
@@ -55,7 +56,7 @@ const WhiteboardsPage = () => {
                     endAdornment:(
                         <InputAdornment>
                         <IconButton onClick={()=>{handleChange(inputValue)}}>
-                            <SaveIcon/>
+                            <SearchIcon/>
                         </IconButton>
                         </InputAdornment>
                     )
@@ -63,14 +64,15 @@ const WhiteboardsPage = () => {
                 </TextField>
                 </Box>
                 <Box sx={{display: "flex", flexWrap: "wrap", justifyContent: "space-evenly", backgroundColor:"#A3B18A", borderBottomRightRadius:"10px",borderBottomLeftRadius:"10px", pb:5}}>
-                    <Card sx={{ display:"flex", justifyContent:"space-arround", mt:5 , minWidth:"20%"}}>
+                    <Card sx={{ display:"flex", flexDirection:"column", justifyContent:"space-between" , mt:5, maxWidth:280, borderRadius:5}}>
                         <CardActionArea>
-                            <CardMedia
+                            <CardMedia sx ={{objectFit:"contains"}}
                             component="img"
+                            image="https://static.vecteezy.com/system/resources/previews/043/723/815/non_2x/football-field-line-filled-greyscale-icon-design-vector.jpg"
                             />
                         <CardContent>
                         <Typography component="div">
-                            adauga
+                            <PlusIcon/>
                         </Typography>
                     
                         </CardContent>
