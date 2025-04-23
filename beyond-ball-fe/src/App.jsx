@@ -14,6 +14,8 @@ import AccessDeniedRedirect from "./components/AccessDeniedRedirect.jsx";
 import { useAuth } from "./components/AuthContext";
 import WhiteboardCreationPage from "./pages/whiteboards/WhiteboardCreationPage.jsx";
 import WhiteboardDetailPage from "./pages/whiteboards/WhiteboardDetailPage.jsx";
+import QuizDetailPage from "./pages/quizzes/QuizDetailPage.jsx";
+
 
 
 function App() {
@@ -44,18 +46,18 @@ function App() {
               }
             />
 
-            {/* Player & Staff routes */}
-            <Route
-              path="/team"
-              element={
-                ["PLAYER", "STAFF"].includes(role)
-                  ? (() => {
-                      sessionStorage.setItem("lastValidPath", "/team");
-                      return <TeamPage />;
-                    })()
-                  : <AccessDeniedRedirect />
-              }
-            />
+<Route
+  path="/team"
+  element={
+    role === "ADMIN"
+      ? (() => {
+          sessionStorage.setItem("lastValidPath", "/team");
+          return <TeamPage />;
+        })()
+      : <AccessDeniedRedirect />
+  }
+/>
+           
             <Route
               path="/whiteboards"
               element={
@@ -112,6 +114,30 @@ function App() {
               }
             />
             <Route
+<<<<<<< HEAD
+  path="/quizzes"
+  element={
+    role === "PLAYER"
+      ? (() => {
+          sessionStorage.setItem("lastValidPath", "/quizzes");
+          return <QuizzesPage />;
+        })()
+      : <AccessDeniedRedirect />
+  }
+/>
+<Route
+  path="/quizzes/:id"
+  element={
+    role === "PLAYER"
+      ? (() => {
+          sessionStorage.setItem("lastValidPath", "/quizzes");
+          return <QuizDetailPage />;
+        })()
+      : <AccessDeniedRedirect />
+  }
+/>
+
+=======
               path="/quizzes"
               element={
                 ["PLAYER", "STAFF", "ADMIN"].includes(role)
@@ -122,6 +148,7 @@ function App() {
                   : <AccessDeniedRedirect />
               }
             />
+>>>>>>> 839adf591e1afdef4edc002684a74b094f23e6d6
 
             {/* Admin-only route */}
             <Route

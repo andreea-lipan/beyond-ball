@@ -41,7 +41,8 @@ After login in [LoginPage.jsx](https://github.com/andreea-lipan/beyond-ball/blob
 
 ```js
 if (role === "ADMIN") {
-    navigate("/mock");
+    navigate("/team");
+
 } else {
     navigate("/whiteboards");
 }
