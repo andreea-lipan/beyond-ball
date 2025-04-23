@@ -67,6 +67,12 @@ export function theme() {
                 fontSize: '0.875rem',
                 fontWeight: 400,
                 color: alpha(palette.text.primary, 0.7)
+            },
+            // smaller text
+            subtitle2: {
+                fontSize: '0.8rem',
+                fontWeight: 400,
+                color: alpha(palette.text.primary, 0.7)
             }
         },
         components: {

@@ -114,6 +114,7 @@ function App() {
               }
             />
             <Route
+<<<<<<< HEAD
   path="/quizzes"
   element={
     role === "PLAYER"
@@ -136,6 +137,18 @@ function App() {
   }
 />
 
+=======
+              path="/quizzes"
+              element={
+                ["PLAYER", "STAFF", "ADMIN"].includes(role)
+                  ? (() => {
+                      sessionStorage.setItem("lastValidPath", "/quizzes");
+                      return <QuizzesPage />;
+                    })()
+                  : <AccessDeniedRedirect />
+              }
+            />
+>>>>>>> 839adf591e1afdef4edc002684a74b094f23e6d6
 
             {/* Admin-only route */}
             <Route
