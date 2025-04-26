@@ -14,7 +14,8 @@ import AccessDeniedRedirect from "./components/AccessDeniedRedirect.jsx";
 import { useAuth } from "./components/AuthContext";
 import WhiteboardCreationPage from "./pages/whiteboards/WhiteboardCreationPage.jsx";
 import WhiteboardDetailPage from "./pages/whiteboards/WhiteboardDetailPage.jsx";
-import QuizDetailPage from "./pages/quizzes/QuizDetailPage.jsx";
+import TeamAdminPage from "./pages/TeamAdminPage.jsx";
+
 
 
 
@@ -46,17 +47,18 @@ function App() {
               }
             />
 
-<Route
-  path="/team"
-  element={
-    role === "ADMIN"
-      ? (() => {
-          sessionStorage.setItem("lastValidPath", "/team");
-          return <TeamPage />;
-        })()
-      : <AccessDeniedRedirect />
-  }
-/>
+  {/* Player & Staff routes */}
+  <Route
+               path="/team"
+               element={
+                 ["PLAYER", "STAFF"].includes(role)
+                   ? (() => {
+                       sessionStorage.setItem("lastValidPath", "/team");
+                       return <TeamPage />;
+                     })()
+                   : <TeamAdminPage />
+               }
+             />
            
             <Route
               path="/whiteboards"
@@ -113,43 +115,17 @@ function App() {
                   : <AccessDeniedRedirect />
               }
             />
-            <Route
-<<<<<<< HEAD
-  path="/quizzes"
-  element={
-    role === "PLAYER"
-      ? (() => {
-          sessionStorage.setItem("lastValidPath", "/quizzes");
-          return <QuizzesPage />;
-        })()
-      : <AccessDeniedRedirect />
-  }
-/>
-<Route
-  path="/quizzes/:id"
-  element={
-    role === "PLAYER"
-      ? (() => {
-          sessionStorage.setItem("lastValidPath", "/quizzes");
-          return <QuizDetailPage />;
-        })()
-      : <AccessDeniedRedirect />
-  }
-/>
-
-=======
-              path="/quizzes"
-              element={
-                ["PLAYER", "STAFF", "ADMIN"].includes(role)
-                  ? (() => {
-                      sessionStorage.setItem("lastValidPath", "/quizzes");
-                      return <QuizzesPage />;
-                    })()
-                  : <AccessDeniedRedirect />
-              }
-            />
->>>>>>> 839adf591e1afdef4edc002684a74b094f23e6d6
-
+           <Route
+               path="/quizzes"
+               element={
+                 ["PLAYER", "STAFF"].includes(role)
+                   ? (() => {
+                       sessionStorage.setItem("lastValidPath", "/quizzes");
+                       return <QuizzesPage />;
+                     })()
+                   : <AccessDeniedRedirect />
+               }
+             />
             {/* Admin-only route */}
             <Route
               path="/mock"
