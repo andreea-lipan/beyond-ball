@@ -1,10 +1,8 @@
 import {RequestInstance} from "./RequestInstance";
 import {AUTH_ENDPOINTS} from "./Endpoints";
 import Storage from "../utils/Storage";
+import axios from "axios"; 
 
-// Example of using RequestInstance
-// There should be a different service for each type of object
-// All services should use RequestInstance
 
 const login = async (username, password) => {
     Storage.clearToken();
@@ -20,9 +18,7 @@ const login = async (username, password) => {
         return data;
 
     } catch (error) {
-        // forward the message to the caller
         console.log("Caught error in AuthService.js");
-
         const message =
             error.response?.data?.message ||
             error.response?.data?.error ||
@@ -31,11 +27,10 @@ const login = async (username, password) => {
     }
 };
 
-// See example of using this function in the LoginPage
-
 const registerTeam = (team) => {
-    return RequestInstance.post(AUTH_ENDPOINTS.TEAM_SIGNUP, team)
-        .then(res => res.data)
+    const PublicRequest = axios.create(); 
+    return PublicRequest.post(AUTH_ENDPOINTS.TEAM_SIGNUP, team)
+        .then(res => res.data);
 }
 
 const AuthService = {
@@ -43,4 +38,4 @@ const AuthService = {
     login
 }
 
-export default AuthService
+export default AuthService;

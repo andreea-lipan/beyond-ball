@@ -1,13 +1,15 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Layout from "../../components/Layout.jsx";
 import { Typography } from "@mui/material";
 import { TopBar } from "./TopBar.jsx";
 import { QuizContainer } from "./QuizContainer.jsx";
-import {Popup} from "../../components/popup/Popup.jsx";
+import { Popup } from "../../components/popup/Popup.jsx";
 import quizService from "../../APIs/QuizService.js";
-import {MessageType} from "../../components/popup/MessageType.js";
+import { MessageType } from "../../components/popup/MessageType.js";
 
 const QuizzesPage = () => {
+  const navigate = useNavigate(); 
   const [page, setPage] = useState(0);
   const quizzesPerPage = 3;
 
@@ -19,27 +21,27 @@ const QuizzesPage = () => {
   const [message, setMessage] = useState("");
   const [messageType, setMessageType] = useState("");
 
-  // Debounce search term
+
   useEffect(() => {
     const delay = setTimeout(() => {
       setSearchTerm(rawSearchTerm);
-      setPage(0); // Reset page when search term changes
-    }, 300); // Delay in ms
+      setPage(0); 
+    }, 300); 
 
-    return () => clearTimeout(delay); // Cleanup
+    return () => clearTimeout(delay); 
   }, [rawSearchTerm]);
 
   useEffect(() => {
     quizService.getQuizzes()
-        .then(response => {
-            setQuizzes(response.data);
-        })
-        .catch(error => {
-          console.log(error);
-          setIsVisible(true);
-          setMessage("Failed to fetch quizzes.");
-          setMessageType(MessageType.error);
-        })
+      .then(response => {
+        setQuizzes(response.data);
+      })
+      .catch(error => {
+        console.log(error);
+        setIsVisible(true);
+        setMessage("Failed to fetch quizzes.");
+        setMessageType(MessageType.error);
+      });
   }, []);
 
   const filteredQuizzes = quizzes.filter((quiz) =>
@@ -57,12 +59,18 @@ const QuizzesPage = () => {
 
   const handleSearch = (e) => setRawSearchTerm(e.target.value);
 
-  const handleAddQuiz = () => console.log("Add Quiz clicked");
-
+  const handleAddQuiz = () => {
+    navigate("/create-quiz"); 
+  };
 
   return (
     <Layout>
-      <Popup isVisible={isVisible} setIsVisible={setIsVisible} message={message} messageType={messageType} />
+      <Popup
+        isVisible={isVisible}
+        setIsVisible={setIsVisible}
+        message={message}
+        messageType={messageType}
+      />
       <Typography variant="h1" sx={{ mb: 7 }}>
         Quizzes
       </Typography>
@@ -80,4 +88,4 @@ const QuizzesPage = () => {
   );
 };
 
-export default QuizzesPage;
+export default QuizzesPage;
