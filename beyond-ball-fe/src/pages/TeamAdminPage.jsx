@@ -14,6 +14,7 @@ import {
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SearchIcon from "@mui/icons-material/Search";
+import { Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/material";
 import Layout from "../components/Layout.jsx";
 import { useAuth } from "../components/AuthContext";
 import UserService from "../APIs/UserService.js";
@@ -23,6 +24,15 @@ const TeamAdminPage = () => {
   const { role } = useAuth();
   const teamId = Storage.getTeamIdFromToken(); // or useAuth().teamId;
   const [team, setTeam] = useState([]);
+
+  const [openDialog, setOpenDialog] = useState(false);
+  const [newPlayer, setNewPlayer] = useState({
+    firstName: "",
+    lastName: "",
+    position: "",
+    email: "",
+  });
+
   const [teamName, setTeamName] = useState("");
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("PLAYER");
@@ -42,6 +52,34 @@ const TeamAdminPage = () => {
       console.error("Failed to fetch team data", error);
     }
   };
+
+  const handleOpenDialog = () => {
+    setOpenDialog(true);
+  }
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+    setNewPlayer({fistName: "", lastName: "", position: "", email: ""});
+  }
+
+  const handleAddPlayer = () => {
+    const newId = mockTeam.length + 1;
+    const fullName = `${newPlayer.firstName} ${newPlayer.lastName}`;
+
+    const newMember = {
+      id: newId,
+      name: fullName,
+      role: "Player", // maybe add a dropdown here to select the type? player/staff
+      position: "Bench",
+      goals: 0,
+      assists: 0,
+      active: true,
+    };
+
+    setTeam((prevTeam) => [...prevTeam, newMember]);
+    setNewPlayer({ firstName: "", lastName: "", position: "", email: ""})
+    handleCloseDialog();
+  }
 
   const handleToggleActive = (id) => {
     setTeam(prev =>
@@ -102,7 +140,9 @@ const TeamAdminPage = () => {
       <Box sx={{ backgroundColor: "#d1d5db", padding: 3, borderRadius: "0 0 16px 16px", marginX: 4 }}>
         <Grid container spacing={3} justifyContent="center">
           <Grid item xs={12} sm={6} md={4} lg={3}>
-            <Card sx={{
+            <Card
+            onClick={handleOpenDialog}
+            sx={{
               backgroundColor: "#ffffff",
               borderRadius: "16px",
               boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
@@ -147,6 +187,106 @@ const TeamAdminPage = () => {
           ))}
         </Grid>
       </Box>
+      <Dialog
+        open={openDialog}
+        onClose={handleCloseDialog}
+        sx={{
+          '& .MuiDialog-paper': {
+            borderRadius: '20px',
+            padding: '32px 24px',
+            backgroundColor: '#f3f4f6',
+            width: '100%',
+            maxWidth: '400px',
+            boxShadow: '0px 8px 24px rgba(0, 0, 0, 0.15)',
+            textAlign: 'center',
+          }
+        }}
+        >
+        <DialogTitle sx= {{ mb: 1, fontWeight: 600, fontSize: '1.2rem', color: '#374151'}}>
+          Add a<br /><span style={{ fontWeight: 700, fontSize: '1.6rem'}}>New Player</span></DialogTitle>
+
+        <DialogContent>
+          <Typography sx = {{ fontSize: '0.8rem', color: '#6b7280', mb: 3}}>
+            Here you can create an account for one of your players
+          </Typography>
+
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2}}>
+            <TextField
+              placeholder="Player First Name"
+              value={newPlayer.firstName}
+              onChange={(e) => setNewPlayer({ ...newPlayer, firstName: e.target.value })}
+              variant="outlined"
+              fullWidth
+              InputProps={{
+                style: {
+                  borderRadius: 12,
+                  backgroundColor: '#cbd5e1',
+                  textAlign: 'center',
+                  height: '48px',
+                  fontSize: '0.9rem'
+                }
+              }}
+              inputProps={{ style: { textAlign: 'center' } }}
+            />
+
+            <TextField
+              placeholder="Player Last Name"
+              value={newPlayer.lastName}
+              onChange={(e) => setNewPlayer({ ...newPlayer, lastName: e.target.value })}
+              variant="outlined"
+              fullWidth
+              InputProps={{
+                style: {
+                  borderRadius: 12,
+                  backgroundColor: '#cbd5e1',
+                  textAlign: 'center',
+                  height: '48px',
+                  fontSize: '0.9rem'
+                }
+              }}
+              inputProps={{ style: { textAlign: 'center' } }}
+            />
+
+            <TextField
+              placeholder="Player Email"
+              value={newPlayer.email}
+              onChange={(e) => setNewPlayer({ ...newPlayer, email: e.target.value })}
+              variant="outlined"
+              fullWidth
+              InputProps={{
+                style: {
+                  borderRadius: 12,
+                  backgroundColor: '#cbd5e1',
+                  textAlign: 'center',
+                  height: '48px',
+                  fontSize: '0.9rem'
+                }
+              }}
+              inputProps={{ style: { textAlign: 'center' } }}
+            />
+          </Box>
+          <Typography sx={{ mt: 3, fontSize: '0.75rem', color: '#4b5563'}}>
+            Their credentials will be automatically<br /> created and sent via the given email.
+          </Typography>
+
+        </DialogContent>
+
+        <DialogActions sx={{ justifyContent: 'center', mt: 2}}>
+          <Button
+            onClick={handleAddPlayer}
+            variant='contained'
+            sx={{
+              backgroundColor: '#4b5563',
+              textTransform: 'none',
+              fontWeight: 500,
+              borderRadius: 16,
+              px: 4,
+              py: 1.5,
+              '&:hover': { backgroundColor: '#374151'}}}>
+            Create player account
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Layout>
   );
 };
