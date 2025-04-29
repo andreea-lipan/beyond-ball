@@ -1,4 +1,3 @@
-import {WHITEBOARD_ENDPOINTS} from "../../../APIs/Endpoints.js";
 import {useEffect, useState} from "react";
 import whiteboardService from "../../../APIs/WhiteboardService.js";
 import Card from '@mui/material/Card';
@@ -15,9 +14,9 @@ export const WhiteboardListItem = ({whiteboard}) => {
         whiteboardService.getWhiteboardImage(whiteboard.imageUrl).then((response) => {
             setImage(response)
         })
-        .catch(()=>{
-            setImage(whiteboard.imageUrl)
-        })
+            .catch(() => {
+                setImage(whiteboard.imageUrl)
+            })
     }, []);
 
     const formatDate = (isoString) => {
@@ -28,21 +27,24 @@ export const WhiteboardListItem = ({whiteboard}) => {
     //TODO: this is just a way to use the backend response, needs to look like the design
 
     return (
-        <Card sx={{  display:"flex", justifyContent:"space-arround", mt:5, maxWidth:280, borderRadius:5 }}>
-          <CardActionArea>
-            <CardMedia sx ={{ objectFit:"contain"}}
-              component="img"
-              image={image}
-            />
-            <CardContent>
-            <Typography component="div">
-            {whiteboard.title}
-          </Typography>
-              <Typography variant="body2">
-                {formatDate(whiteboard.creationDate)}
-              </Typography>
-            </CardContent>
-          </CardActionArea>
+        <Card sx={{display: "flex", justifyContent: "space-arround", mt: 5, maxWidth: 280, borderRadius: 5}}>
+            <CardActionArea>
+                <CardMedia sx={{objectFit: "contain"}}
+                           component="img"
+                           image={image}
+                />
+                <CardContent>
+                    <Typography component="div">
+                        {whiteboard.title}
+                    </Typography>
+                    <Typography variant="body2">
+                        {formatDate(whiteboard.creationDate)}
+                    </Typography>
+                    <Typography variant="body2">
+                        Author: {whiteboard.author ?? "Unknown"}
+                    </Typography>
+                </CardContent>
+            </CardActionArea>
         </Card>
-      );
+    );
 }

@@ -7,6 +7,8 @@ import {mockWhiteboards} from "../../utils/whiteboard.js";
 import Storage from "../../utils/Storage.js";
 import {SearchIcon} from "../../components/icons/SearchIcon.jsx";
 import {PlusIcon} from "../../components/icons/PlusIcon.jsx";
+import {useNavigate} from "react-router-dom";
+
 
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -20,6 +22,7 @@ const WhiteboardsPage = () => {
     const [whiteboards, setWhiteboards] = useState([]);
     const [filteredWhiteboards, setFilteredWhiteboards] = useState([]);
     const [inputValue, setInputValue] = useState("");
+    const navigate = useNavigate();
 
 
     const fetchFilteredWhiteboards = (text) => {
@@ -122,8 +125,8 @@ const WhiteboardsPage = () => {
                         maxWidth: 280,
                         borderRadius: 5
                     }}>
-                        <CardActionArea>
-                            <CardMedia sx={{objectFit: "contains"}}
+                        <CardActionArea onClick={() => navigate("/whiteboards/creation")}>
+                            <CardMedia sx={{objectFit: "contain"}}
                                        component="img"
                                        image="https://static.vecteezy.com/system/resources/previews/043/723/815/non_2x/football-field-line-filled-greyscale-icon-design-vector.jpg"
                             />
