@@ -120,7 +120,6 @@ const WhiteboardsPage = () => {
                     <Card sx={{
                         display: "flex",
                         flexDirection: "column",
-                        justifyContent: "space-between",
                         mt: 5,
                         maxWidth: 280,
                         borderRadius: 5
@@ -128,7 +127,7 @@ const WhiteboardsPage = () => {
                         <CardActionArea onClick={() => navigate("/whiteboards/creation")}>
                             <CardMedia sx={{objectFit: "contain"}}
                                        component="img"
-                                       image="https://static.vecteezy.com/system/resources/previews/043/723/815/non_2x/football-field-line-filled-greyscale-icon-design-vector.jpg"
+                                       image="/field.png"
                             />
                             <CardContent>
                                 <Typography component="div">

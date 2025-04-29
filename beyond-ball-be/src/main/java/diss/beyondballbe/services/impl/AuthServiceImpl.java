@@ -59,6 +59,20 @@ public class AuthServiceImpl implements AuthService {
      }
 
      @Override
+     public void registerTeamMember(String username, String password, Long teamId, UserRole role) {
+          Team team = teamRepository.findById(teamId)
+                  .orElseThrow(() -> new RuntimeException("Team not found"));
+
+          UserAccount account = new UserAccount();
+          account.setTeam(team);
+          account.setUsername(username);
+          account.setRole(role);
+          account.setPassword(password);
+
+          userAccountRepository.save(account);
+     }
+
+     @Override
      public String login(String username, String password) {
           UserAccount user = userAccountRepository.findUserByUsername(username)
                   .orElseThrow(() -> new RuntimeException("User not found"));

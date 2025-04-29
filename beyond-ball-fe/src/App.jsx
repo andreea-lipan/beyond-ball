@@ -118,7 +118,7 @@ function App() {
            <Route
                path="/quizzes"
                element={
-                 ["PLAYER", "STAFF"].includes(role)
+                 ["PLAYER", "STAFF","ADMIN"].includes(role)
                    ? (() => {
                        sessionStorage.setItem("lastValidPath", "/quizzes");
                        return <QuizzesPage />;

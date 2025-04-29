@@ -10,7 +10,7 @@ import {
   Button,
   ToggleButton,
   ToggleButtonGroup,
-  Box,
+  Box, useTheme,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SearchIcon from "@mui/icons-material/Search";
@@ -27,6 +27,7 @@ const mockTeam = [
 
 const TeamAdminPage = () => {
 
+  const theme = useTheme();
   const [openDialog, setOpenDialog] = useState(false);
   const [newPlayer, setNewPlayer] = useState({
     firstName: "",
@@ -44,8 +45,8 @@ const TeamAdminPage = () => {
   useEffect(() => {
     const fetchTeamName = async () => {
       const fakeDatabase = {
-        1: "muimui",
-        2: "admin",
+        1: "Buzz",
+        2: "Buzz",
       };
       if (teamId) {
         setTeamName(fakeDatabase[teamId] || "Unknown Team");
@@ -106,7 +107,7 @@ const TeamAdminPage = () => {
       </Typography>
 
       <Box sx={{
-        backgroundColor: "#9ca3af",
+        backgroundColor: theme.palette.secondary.main,
         padding: 3,
         borderRadius: "16px 16px 0 0",
         marginX: 4,
@@ -162,14 +163,14 @@ const TeamAdminPage = () => {
       </Box>
 
       <Box sx={{
-        backgroundColor: "#d1d5db",
+        backgroundColor: theme.palette.primary.main,
         padding: 3,
         borderRadius: "0 0 16px 16px",
         marginX: 4,
       }}>
         <Grid container spacing={3} justifyContent="center">
           <Grid item xs={12} sm={6} md={4} lg={3}>
-            <Card 
+            <Card
             onClick={handleOpenDialog}
             sx={{
               backgroundColor: "#ffffff",
@@ -224,8 +225,8 @@ const TeamAdminPage = () => {
           ))}
         </Grid>
       </Box>
-      <Dialog 
-        open={openDialog} 
+      <Dialog
+        open={openDialog}
         onClose={handleCloseDialog}
         sx={{
           '& .MuiDialog-paper': {
@@ -241,7 +242,7 @@ const TeamAdminPage = () => {
         >
         <DialogTitle sx= {{ mb: 1, fontWeight: 600, fontSize: '1.2rem', color: '#374151'}}>
           Add a<br /><span style={{ fontWeight: 700, fontSize: '1.6rem'}}>New Player</span></DialogTitle>
-        
+
         <DialogContent>
           <Typography sx = {{ fontSize: '0.8rem', color: '#6b7280', mb: 3}}>
             Here you can create an account for one of your players
@@ -256,8 +257,9 @@ const TeamAdminPage = () => {
               fullWidth
               InputProps={{
                 style: {
+                  color: theme.palette.secondary.dark,
                   borderRadius: 12,
-                  backgroundColor: '#cbd5e1',
+                  backgroundColor: theme.palette.primary.main,
                   textAlign: 'center',
                   height: '48px',
                   fontSize: '0.9rem'
@@ -274,8 +276,9 @@ const TeamAdminPage = () => {
               fullWidth
               InputProps={{
                 style: {
+                  color: theme.palette.secondary.dark,
                   borderRadius: 12,
-                  backgroundColor: '#cbd5e1',
+                  backgroundColor: theme.palette.primary.main,
                   textAlign: 'center',
                   height: '48px',
                   fontSize: '0.9rem'
@@ -292,8 +295,9 @@ const TeamAdminPage = () => {
               fullWidth
               InputProps={{
                 style: {
+                  color: theme.palette.secondary.dark,
                   borderRadius: 12,
-                  backgroundColor: '#cbd5e1',
+                  backgroundColor: theme.palette.primary.main,
                   textAlign: 'center',
                   height: '48px',
                   fontSize: '0.9rem'
@@ -309,17 +313,17 @@ const TeamAdminPage = () => {
         </DialogContent>
 
         <DialogActions sx={{ justifyContent: 'center', mt: 2}}>
-          <Button 
+          <Button
             onClick={handleAddPlayer}
             variant='contained'
-            sx={{ 
-              backgroundColor: '#4b5563',
+            sx={{
+              backgroundColor: theme.palette.secondary.main,
               textTransform: 'none',
               fontWeight: 500,
               borderRadius: 16,
               px: 4,
               py: 1.5,
-              '&:hover': { backgroundColor: '#374151'}}}>
+              '&:hover': { backgroundColor: theme.palette.secondary.dark}}}>
             Create player account
           </Button>
         </DialogActions>

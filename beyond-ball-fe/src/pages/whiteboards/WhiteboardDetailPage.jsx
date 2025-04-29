@@ -4,6 +4,7 @@ import {useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import whiteboardService from "../../APIs/WhiteboardService.js";
 import {WHITEBOARD_ENDPOINTS} from "../../APIs/Endpoints.js";
+import {Typography} from "@mui/material";
 
 const WhiteboardDetailPage = () => {
 
@@ -22,8 +23,8 @@ const WhiteboardDetailPage = () => {
     //TODO: this is just a way to use the backend response, needs to look like the design, including the comments
     return (
         <Layout>
+            <Typography variant="h1" gutterBottom>Whiteboard {id}</Typography>
             {image? <img src={image} alt="Whiteboard" style={{width: "100%", height: "auto"}}/> : <p>Loading...</p>}
-            <TestComponent text={`WhiteboardDetail ${id}`}/>
         </Layout>
     )
 
