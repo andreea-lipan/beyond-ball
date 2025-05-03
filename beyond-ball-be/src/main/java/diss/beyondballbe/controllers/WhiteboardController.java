@@ -10,7 +10,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
 
 @CrossOrigin
@@ -49,5 +48,15 @@ public class WhiteboardController {
         } catch (Exception e) {
             return ResponseEntity.status(500).body("Error saving file: " + e.getMessage());
         }
+    }
+
+    @PreAuthorize("hasAnyRole('STAFF', 'PLAYER', 'ADMIN')")
+    @GetMapping("/filter")
+    public ResponseEntity<List<WhiteboardResponse>> getWhiteboardsByTitle(@RequestParam String title) {
+        List<WhiteboardResponse> whiteboards = whiteboardService.getWhiteboardsByTitle(title);
+        if (whiteboards.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(whiteboards);
     }
 }

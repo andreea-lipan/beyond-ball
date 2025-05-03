@@ -8,7 +8,6 @@ import diss.beyondballbe.services.UserAccountService;
 import diss.beyondballbe.services.WhiteboardService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -50,7 +49,7 @@ public class WhiteboardServiceImpl implements WhiteboardService {
 
         String id = UUID.randomUUID().toString();
 
-        String filename = id + "_" + file.getOriginalFilename()+".png";
+        String filename = id + "_" + file.getOriginalFilename() + ".png";
         Path savePath = Paths.get("uploads", filename); // this resolves to /app/uploads/ in Docker
 
         Files.createDirectories(savePath.getParent());
@@ -77,6 +76,20 @@ public class WhiteboardServiceImpl implements WhiteboardService {
                 })
                 .map(WhiteboardResponse::new)
                 .orElseThrow(() -> new EntityNotFoundException("Whiteboard not found"));
+    }
+
+    @Override
+    public List<WhiteboardResponse> getWhiteboardsByTitle(String title) {
+        return whiteboardRepository.findByTitleContainingIgnoreCase(title)
+                .stream()
+                .filter(whiteboard -> {
+                    if (whiteboard.getAuthor() == null) {
+                        return false;
+                    }
+                    return belongsToTeam(whiteboard.getAuthor().getTeam().getId());
+                })
+                .map(WhiteboardResponse::new)
+                .toList();
     }
 
     private boolean belongsToTeam(Long teamId) {
