@@ -33,6 +33,7 @@ const TeamAdminPage = () => {
     lastName: "",
     position: "",
     email: "",
+    role: "Player"
   });
 
   const [team, setTeam] = useState(mockTeam);
@@ -40,6 +41,8 @@ const TeamAdminPage = () => {
   const [filter, setFilter] = useState("Player");
   const { role, teamId } = useAuth();
   const [teamName, setTeamName] = useState("");
+  const [credentials, setCredentials] = useState({username: "", password: ""});
+  const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
 
   useEffect(() => {
     const fetchTeamName = async () => {
@@ -65,22 +68,33 @@ const TeamAdminPage = () => {
   }
 
   const handleAddPlayer = () => {
-    const newId = mockTeam.length + 1;
-    const fullName = `${newPlayer.firstName} ${newPlayer.lastName}`;
+    const newId = team.length + 1
+    const fullName = `${newPlayer.firstName} ${newPlayer.lastName}`
+
+    const randomTwoDigit = Math.floor(10 + Math.random() * 90)
+    const username = (newPlayer.firstName + newPlayer.lastName + randomTwoDigit).toLowerCase().replace(/\s/g, "")
+
+    const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+    let password = ""
+    for (let i = 0; i < 8; i++) {
+      password += characters.charAt(Math.floor(Math.random() * characters.length))
+    }
+
+    setCredentials({ username, password })
 
     const newMember = {
       id: newId,
       name: fullName,
-      role: "Player", // maybe add a dropdown here to select the type? player/staff
-      position: "Bench",
+      role: newPlayer.role,
+      position: newPlayer.position || "Bench",
       goals: 0,
       assists: 0,
       active: true,
-    };
+    }
 
-    setTeam((prevTeam) => [...prevTeam, newMember]);
-    setNewPlayer({ firstName: "", lastName: "", position: "", email: ""})
-    handleCloseDialog();
+    setTeam((prevTeam) => [...prevTeam, newMember])
+    setOpenDialog(false)
+    setOpenConfirmDialog(true) // Open confirmation dialog
   }
 
   const handleToggleActive = (id) => {
@@ -99,6 +113,11 @@ const TeamAdminPage = () => {
     member.role === filter && member.name.toLowerCase().includes(search.toLowerCase())
   );
 
+  const handleCloseConfirmDialog = () => {
+    setOpenConfirmDialog(false)
+    setNewPlayer({ firstName: "", lastName: "", position: "", email: "" })
+  }
+  
   return (
     <Layout>
       <Typography variant="h3" align="center" gutterBottom sx={{ color: "#2e7d32", mt: 3 }}>
@@ -301,6 +320,24 @@ const TeamAdminPage = () => {
               }}
               inputProps={{ style: { textAlign: 'center' } }}
             />
+            <ToggleButtonGroup
+              value={newPlayer.role}
+              exclusive
+              onChange={(e, value) => {
+                if (value) setNewPlayer({ ...newPlayer, role: value });
+              }}
+              sx={{ justifyContent: "center" }}
+            >
+              <ToggleButton value="Player">Player</ToggleButton>
+              <ToggleButton value="Technical Staff">Technical Staff</ToggleButton>
+            </ToggleButtonGroup>
+            <TextField
+              label={newPlayer.role === "Player" ? "Player Position" : "Staff Role"}
+              value={newPlayer.position}
+              onChange={(e) => setNewPlayer({ ...newPlayer, position: e.target.value })}
+              fullWidth
+              margin="normal"
+            />
           </Box>
           <Typography sx={{ mt: 3, fontSize: '0.75rem', color: '#4b5563'}}>
             Their credentials will be automatically<br /> created and sent via the given email.
@@ -320,10 +357,76 @@ const TeamAdminPage = () => {
               px: 4,
               py: 1.5,
               '&:hover': { backgroundColor: '#374151'}}}>
-            Create player account
+            Create account
           </Button>
         </DialogActions>
       </Dialog>
+      <Dialog
+  open={openConfirmDialog}
+  onClose={handleCloseConfirmDialog}
+  sx={{
+    "& .MuiDialog-paper": {
+      borderRadius: "20px",
+      padding: "32px 24px",
+      backgroundColor: "#f3f4f6",
+      width: "100%",
+      maxWidth: "400px",
+      boxShadow: "0px 8px 24px rgba(0, 0, 0, 0.15)",
+      textAlign: "center",
+    },
+  }}
+>
+  <DialogTitle sx={{ mb: 1, fontWeight: 600, fontSize: "1.2rem", color: "#374151" }}>
+    Player Added Successfully
+  </DialogTitle>
+
+  <DialogContent>
+    <Typography sx={{ fontSize: "0.9rem", color: "#6b7280", mb: 3 }}>
+      The player has been added to your team. Here are their login credentials:
+    </Typography>
+
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        gap: 2,
+        backgroundColor: "#e5e7eb",
+        padding: 3,
+        borderRadius: 2,
+        mb: 2,
+      }}
+    >
+      <Typography sx={{ fontWeight: 600 }}>
+        Username: <span style={{ color: "#2e7d32" }}>{credentials.username}</span>
+      </Typography>
+      <Typography sx={{ fontWeight: 600 }}>
+        Password: <span style={{ color: "#2e7d32" }}>{credentials.password}</span>
+      </Typography>
+    </Box>
+
+    <Typography sx={{ fontSize: "0.75rem", color: "#4b5563" }}>
+      Please save or share these credentials with the player. They will need them to log in to their account.
+    </Typography>
+  </DialogContent>
+
+  <DialogActions sx={{ justifyContent: "center", mt: 2 }}>
+    <Button
+      onClick={handleCloseConfirmDialog}
+      variant="contained"
+      sx={{
+        backgroundColor: "#4b5563",
+        textTransform: "none",
+        fontWeight: 500,
+        borderRadius: 16,
+        px: 4,
+        py: 1.5,
+        "&:hover": { backgroundColor: "#374151" },
+      }}
+    >
+      Close
+    </Button>
+  </DialogActions>
+</Dialog>
     </Layout>
   );
 };
