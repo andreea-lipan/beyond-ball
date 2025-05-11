@@ -28,6 +28,9 @@ public class UserAccount {
     @Column(nullable = false)
     private String password;
 
+    @Column
+    private String email;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "team_id")
     private Team team;

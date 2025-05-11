@@ -30,3 +30,7 @@ export const PLAYERS_ENDPOINTS = {
 export const USER_ENDPOINTS = {
     MOCK: `${BASE_URL}/users/teams/{teamId}/players/mock`
 }
+
+export const EMAIL_ENDPOINTS = {
+    EMAIL_RESEND: `${BASE_URL}/email/resend`
+}
