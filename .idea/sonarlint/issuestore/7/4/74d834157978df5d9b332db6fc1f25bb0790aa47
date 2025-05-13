@@ -1,10 +1,7 @@
 
-<
-java:S1452"&Remove usage of generic wildcard type.(Ì«´î
-V	java:S125"<This block of commented-out lines of code should be removed.(Åš°‚üÿÿÿÿ
-M
-java:S1135"2Complete the task associated to this TODO comment.(“Øþÿÿÿÿ
-A
-java:S1452"&Remove usage of generic wildcard type.(‹Ëíþÿÿÿÿ
+c
+java:S1192("FDefine a constant instead of duplicating this literal "error" 3 times.(Ž÷½‘8Å‡÷éã2
 H
-java:S1135!"2Complete the task associated to this TODO comment.(Ž«ð–
+java:S1452"&Remove usage of generic wildcard type.(•Ç¡ßýÿÿÿÿ8€ˆ÷éã2
+H
+java:S1452 "&Remove usage of generic wildcard type.(‹Ëíþÿÿÿÿ8“µùéã2
