@@ -80,4 +80,4 @@ const QuizzesPage = () => {
   );
 };
 
-export default QuizzesPage;
+export default QuizzesPage;

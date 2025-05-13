@@ -3,6 +3,7 @@ package diss.beyondballbe.services.impl;
 import diss.beyondballbe.model.DTOs.WhiteboardCreationRequest;
 import diss.beyondballbe.model.DTOs.WhiteboardResponse;
 import diss.beyondballbe.model.Whiteboard;
+import diss.beyondballbe.model.accounts.UserAccount;
 import diss.beyondballbe.persistence.WhiteboardRepository;
 import diss.beyondballbe.services.UserAccountService;
 import diss.beyondballbe.services.WhiteboardService;
@@ -47,10 +48,13 @@ public class WhiteboardServiceImpl implements WhiteboardService {
     @Override
     public WhiteboardResponse createWhiteboard(WhiteboardCreationRequest whiteboardCreationRequest, MultipartFile file) throws IOException {
 
+        UserAccount author = userAccountService.getAccountById(whiteboardCreationRequest.getPlayer());
+        String teamId = author.getTeam().getId().toString();
+
         String id = UUID.randomUUID().toString();
 
         String filename = id + "_" + file.getOriginalFilename() + ".png";
-        Path savePath = Paths.get("uploads", filename); // this resolves to /app/uploads/ in Docker
+        Path savePath = Paths.get("uploads", teamId, "whiteboards", filename); // this resolves to /app/uploads/teamId/whiteboards in Docker
 
         Files.createDirectories(savePath.getParent());
         Files.write(savePath, file.getBytes());
@@ -60,7 +64,7 @@ public class WhiteboardServiceImpl implements WhiteboardService {
         whiteboard.setTitle(whiteboardCreationRequest.getTitle());
         whiteboard.setCreationDate(LocalDateTime.now());
         whiteboard.setImageUrl(filename);
-        whiteboard.setAuthor(userAccountService.getAccountById(whiteboardCreationRequest.getPlayer()));
+        whiteboard.setAuthor(author);
 
         return new WhiteboardResponse(whiteboardRepository.save(whiteboard));
     }

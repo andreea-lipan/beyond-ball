@@ -3,7 +3,7 @@ import {WHITEBOARD_ENDPOINTS} from "./Endpoints.js";
 import Storage from "../utils/Storage";
 
 
-const uploadWhiteboard = (blob, player, title) => {
+const uploadWhiteboard = (blob, title) => {
     const formData = new FormData();
     formData.append("file", blob);
 

@@ -43,7 +43,7 @@ export const Whiteboard = () => {
         if (isVisible) return
         const canvas = canvasRef.current;
         canvas.toBlob((blob) => {
-            whiteboardService.uploadWhiteboard(blob, 1, title)
+            whiteboardService.uploadWhiteboard(blob,  title)
                 .then((res) => {
                     console.log(res)
 
