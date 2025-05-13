@@ -295,7 +295,7 @@ const ClipsPage = () => {
                             <Box sx={{
                                 padding: "20px 0 20px 0",
                                 overflowX: 'auto',
-                                
+
                                 // WebKit (Chrome, Safari, etc) scrollbar styling
                                 '&::-webkit-scrollbar': {
                                     height: '8px',
@@ -317,10 +317,10 @@ const ClipsPage = () => {
                                     scrollbarWidth: 'thin',
                                     scrollbarColor: `${theme.palette.secondary.main} ${theme.palette.primary.main}`,
                                 }
-                            
+
                             }}>
                                 {/* todo make it hoverable */}
-                                <RichTreeView 
+                                <RichTreeView
                                     items={FOOTBALL_CLIP_FOLDERS}
                                     sx={{
                                         '& .MuiTreeItem-label': {
