@@ -15,6 +15,8 @@ export const WHITEBOARD_ENDPOINTS = {
     BOARDS: `${WHITEBOARD_URL}`,
     BOARD: (id) => `${WHITEBOARD_URL}/${id}`,
     BOARD_IMAGE: (filename) => `${BASE_URL}${filename}`,
+    FILTER: (title) => `${WHITEBOARD_URL}/filter?title=${encodeURIComponent(title)}`,
+
 }
 
 const QUIZ_URL = `${BASE_URL}/quizzes`;
