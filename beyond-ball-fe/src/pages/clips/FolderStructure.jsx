@@ -42,7 +42,6 @@ const FolderStructure = () => {
     
     return (
         <>
-            <h1>Folder Structure</h1>
             <TextField style={{margin: "0.5rem", width: "50%", justifyContent: "center"}} placeholder={"Folder Title"}
                        value={name} onChange={(e) => setName(e.target.value)}/>
             <Button onClick={createFolder} variant="contained">Create folder</Button>
@@ -51,6 +50,26 @@ const FolderStructure = () => {
                 defaultCollapseIcon={<span>-</span>}
                 defaultExpandIcon={<span>+</span>}
                 onItemSelectionToggle={handleItemSelectionToggle}
+                expansionTrigger="iconContainer"
+                sx={{
+                    '& .MuiTreeItem-content': {
+                        '&.Mui-selected': {
+                            backgroundColor: 'rgba(0, 0, 0, 0.08)',
+                        },
+                        borderRadius: '4px',
+                        '&:hover': {
+                            background: 'rgba(0, 0, 0, 0.08)',
+                        }
+                    },
+                    '& .MuiTreeItem-label': {
+                        textAlign: 'left',
+                        // whiteSpace: 'nowrap',
+                        minWidth: 'max-content'
+                    },
+                    '& .MuiTreeItem-root': {
+                        minWidth: 'max-content'
+                    }
+                }}
             >
                 {folderTree?.map((folder) => (
                     <FolderItem folder={folder} key={folder.id}/>

@@ -18,6 +18,7 @@ import React, {useState} from "react";
 import {AddClipIcon} from "../../components/icons/clips/AddClipIcon.jsx";
 import {AddFolderIcon} from "../../components/icons/clips/AddFolderIcon.jsx";
 import {RichTreeView, SimpleTreeView, TreeItem} from "@mui/x-tree-view";
+import FolderStructure from "./FolderStructure.jsx";
 
 const ClipsPage = () => {
     const [search, setSearch] = useState("");
@@ -320,21 +321,11 @@ const ClipsPage = () => {
 
                             }}>
                                 {/* todo make it hoverable */}
-                                <RichTreeView
-                                    items={FOOTBALL_CLIP_FOLDERS}
-                                    sx={{
-                                        '& .MuiTreeItem-label': {
-                                            textAlign: 'left',
-                                            // whiteSpace: 'nowrap',
-                                            minWidth: 'max-content'
-                                        },
-                                        '& .MuiTreeItem-root': {
-                                            minWidth: 'max-content'
-                                        }
-                                    }}
-                                />
+                                <FolderStructure/>
                             </Box>
                         </Grid>
+
+                        {/*todo make divider adjustable*/}
                         <Divider orientation="vertical" sx={{border: "20px"}}/>
                         <Grid size={{ xs: 2, sm: 9, md: 10, lg: 7, w1400: 8, xl:10 }} sx={{ //todo fix this aaaa
                             display: 'flex',
