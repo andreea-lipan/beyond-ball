@@ -42,6 +42,8 @@ Same for:
 
 `Intellij > Settings > Build, Execution, Deployment > Compiler > Annotation Processors > Annotation profile for beyond-ball-be`
 
+Before running, go to `Intelij > Run > Edit Configuration > Modify options > Environment variables checked > in the new box Environment variables enter: MAIL_USERNAME=beyondball.noreplay@gmail.com;MAIL_PASSWORD=znwz wpkk aoel dcvv` 
+
 # FE
 
 For the FE, you will need the node_modules, so run:
