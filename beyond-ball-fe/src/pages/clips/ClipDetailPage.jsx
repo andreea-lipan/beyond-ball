@@ -1,36 +1,35 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
+import React from 'react';
+import ClipService from "../../APIs/ClipService.js";
+import {useParams} from "react-router-dom";
 
 const ClipDetailPage = () => {
-    const [file, setFile] = useState(null);
-    const [filename, setFilename] = useState(null);
 
-    const handleUpload = () => {
-        ClipService.uploadClip(file,"asda")
-            .then((response) => {
-                ClipService.getClipVideo(response.data.clipUrl)
-                    .then((clip) => {
-                        setFilename(clip);
-                    });
-            });
-    };
+    const {id} = useParams();
+
+    const [filename, setFilename] = useState(null);
+    const [clip, setClip] = useState(null);
+
+    useEffect(() => {
+        ClipService.getClip(id).then((response) => {
+            console.log(response);
+            setClip(response);
+            ClipService.getClipVideo(response.clipUrl).then((response) => {
+                setFilename(response);
+            })
+        })
+    })
+
 
     return (
         <div>
-            <input type="file" accept="video/*" onChange={e => setFile(e.target.files[0])} />
-            <button onClick={handleUpload}>Upload</button>
-
             {filename && <VideoPlayer videoUrl={filename} />}
         </div>
     );
 }
 
-import React from 'react';
-import ClipService from "../../APIs/ClipService.js";
-import {CLIP_ENDPOINTS} from "../../APIs/Endpoints.js";
-
 const VideoPlayer = ({ videoUrl }) => {
 
-    console.log(videoUrl);
     return (
         <div>
             <h2>Video Preview</h2>

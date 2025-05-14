@@ -8,5 +8,6 @@ import java.util.List;
 
 public interface FolderService {
     Folder createFolder(FolderCreationRequest folderCreationRequest);
+    Folder getFolderById(Long id);
     List<FolderDTO> getFolderTree();
 }

@@ -16,7 +16,7 @@ public class ClipDTO {
     private LocalDateTime creationDate;
     private String clipUrl;
     private String author;
-
+    private Long folderId;
 
     public ClipDTO(Clip clip) {
         String teamId = clip.getAuthor().getTeam().getId().toString();
@@ -26,5 +26,10 @@ public class ClipDTO {
         this.creationDate = clip.getCreationDate();
         this.clipUrl = "/uploads/" + teamId + "/clips/" + clip.getClipUrl();
         this.author = clip.getAuthor().getUsername();
+        if (clip.getFolder() != null) {
+            this.folderId = clip.getFolder().getId();
+        } else {
+            this.folderId = null;
+        }
     }
 }

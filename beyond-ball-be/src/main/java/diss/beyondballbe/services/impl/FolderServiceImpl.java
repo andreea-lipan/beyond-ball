@@ -51,6 +51,11 @@ public class FolderServiceImpl implements FolderService {
         return savedFolder;
     }
 
+    @Override
+    public Folder getFolderById(Long id) {
+        return folderRepository.findById(id).orElse(null);
+    }
+
     public List<FolderDTO> getFolderTree() {
         return folderRepository.findFoldersByIsRoot(true).stream()
                 .filter(folder -> authValidator.belongsToTeam(folder.getTeam().getId()))

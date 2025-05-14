@@ -12,13 +12,15 @@ public class UploadClipRequest {
 
     private String title;
     private Long player;
+    private Long folderId;
 
     public UploadClipRequest(String metadata){
         ObjectMapper objectMapper = new ObjectMapper();
         try {
-            WhiteboardCreationRequest request = objectMapper.readValue(metadata, WhiteboardCreationRequest.class);
+            UploadClipRequest request = objectMapper.readValue(metadata, UploadClipRequest.class);
             this.title = request.getTitle();
             this.player = request.getPlayer();
+            this.folderId = request.getFolderId();
         } catch (Exception e) {
             throw new RuntimeException("Failed to parse metadata", e);
         }

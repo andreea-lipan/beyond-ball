@@ -22,6 +22,7 @@ export const WHITEBOARD_ENDPOINTS = {
 const CLIP_URL = `${BASE_URL}/clips`
 export const CLIP_ENDPOINTS = {
     CLIPS: `${CLIP_URL}`,
+    CLIPS_BY_FOLDER: (folderId) => `${CLIP_URL}/folder/${folderId}`,
     CLIP: (id) => `${CLIP_URL}/${id}`,
     CLIP_VIDEO: (filename) => `${BASE_URL}${filename}`,
 }

@@ -14,11 +14,14 @@ import {
 import {TestComponent} from "../../components/TestComponent.jsx";
 import SearchIcon from "@mui/icons-material/Search";
 import DeleteIcon from "@mui/icons-material/Delete";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {AddClipIcon} from "../../components/icons/clips/AddClipIcon.jsx";
 import {AddFolderIcon} from "../../components/icons/clips/AddFolderIcon.jsx";
 import {RichTreeView, SimpleTreeView, TreeItem} from "@mui/x-tree-view";
 import FolderStructure from "./FolderStructure.jsx";
+import FolderService from "../../APIs/FolderService.js";
+import ClipsContainer from "./ClipsContainer.jsx";
+import ClipService from "../../APIs/ClipService.js";
 
 const ClipsPage = () => {
     const [search, setSearch] = useState("");
@@ -194,6 +197,32 @@ const ClipsPage = () => {
         },
     ];
 
+    const [folderTree, setFolderTree] = useState([]);
+    const [selectedFolderId, setSelectedFolderId] = useState(null);
+
+    const createFolder = (folderName) => {
+        FolderService.createFolder(folderName,selectedFolderId).then(fetchFolderTree)
+    }
+
+    const uploadClip = (file, title) => {
+        ClipService.uploadClip(file,title,selectedFolderId)
+    };
+
+
+    const fetchFolderTree = () => {
+        FolderService.getFolderTree()
+            .then((response) => {
+                setFolderTree(response);
+            })
+            .catch((error) => {
+                console.error("Error fetching folder tree:", error);
+            });
+    }
+
+    useEffect(() => {
+        fetchFolderTree();
+    }, []);
+
     // todo figure out how to stop the extra scroll on mac
     return (
         <Layout>
@@ -321,7 +350,7 @@ const ClipsPage = () => {
 
                             }}>
                                 {/* todo make it hoverable */}
-                                <FolderStructure/>
+                                <FolderStructure folderTree={folderTree} setSelectedFolderId={setSelectedFolderId}/>
                             </Box>
                         </Grid>
 
@@ -342,7 +371,7 @@ const ClipsPage = () => {
                             }}>
                                 <AddClipIcon color={BtnsColour}/>
                             </Box>
-                            <NoClipsMessage></NoClipsMessage>
+                            <ClipsContainer selectedFolderId={selectedFolderId}/>
                         </Grid>
                     </Grid>
                 </Box>
@@ -352,19 +381,5 @@ const ClipsPage = () => {
 
 }
 
-const NoClipsMessage = () => {
-    return (
-        <>
-            <Typography variant='h2'
-                        sx={{
-                            display: 'flex',
-                            margin: 'auto',
-                            padding: '1em'
-            }}>
-                No clips added yet. <br/>Add one by clicking the icon above!
-            </Typography>
-        </>
-    );
-}
 
 export default ClipsPage;

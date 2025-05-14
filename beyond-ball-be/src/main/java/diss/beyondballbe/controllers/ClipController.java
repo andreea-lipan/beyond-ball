@@ -32,4 +32,26 @@ public class ClipController {
         }
     }
 
+    @PreAuthorize("hasAnyRole('STAFF', 'PLAYER', 'ADMIN')")
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getClipById(@PathVariable String id) {
+        try {
+            return ResponseEntity.ok(clipService.getClipById(id));
+        } catch (Exception e) {
+            return ResponseEntity.status(404).body("Clip not found");
+        }
+    }
+
+    @PreAuthorize("hasAnyRole('STAFF', 'PLAYER', 'ADMIN')")
+    @GetMapping
+    public ResponseEntity<?> getAllClips() {
+        return ResponseEntity.ok(clipService.getAllClips());
+    }
+
+    @PreAuthorize("hasAnyRole('STAFF', 'PLAYER', 'ADMIN')")
+    @GetMapping("/folder/{folderId}")
+    public ResponseEntity<?> getClipsByFolder(@PathVariable Long folderId) {
+        return ResponseEntity.ok(clipService.getClipsByFolder(folderId));
+    }
+
 }
