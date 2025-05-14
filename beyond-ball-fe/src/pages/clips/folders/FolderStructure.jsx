@@ -1,5 +1,5 @@
 import { SimpleTreeView } from '@mui/x-tree-view/SimpleTreeView';
-import React from "react";
+import React, {useEffect} from "react";
 import FolderItem from "./FolderItem.jsx";
 
 
@@ -12,6 +12,13 @@ const FolderStructure = ({setSelectedFolderId, folderTree}) => {
         }
     };
 
+    // Set the first folder as selected when the component loads
+    useEffect(() => {
+        if (folderTree && folderTree.length > 0) {
+            setSelectedFolderId(folderTree[0].id);
+        }
+    }, [folderTree, setSelectedFolderId]);
+
     return (
         <>
             <SimpleTreeView
@@ -20,16 +27,23 @@ const FolderStructure = ({setSelectedFolderId, folderTree}) => {
                 defaultExpandIcon={<span>+</span>}
                 onItemSelectionToggle={handleItemSelectionToggle}
                 expansionTrigger="iconContainer"
+                // by default, the first folder is selected
+                defaultSelected={folderTree && folderTree.length > 0 ? folderTree[0].id : undefined}
                 sx={{
                     '& .MuiTreeItem-content': {
-                        '&.Mui-selected': {
-                            backgroundColor: 'rgba(0, 0, 0, 0.2)',
-                        },
                         borderRadius: '4px',
+                        '&:hover': {
+                            backgroundColor: 'rgba(0, 0, 0, 0.08)',
+                        },
+                        '&.Mui-selected': {
+                            backgroundColor: 'rgba(0, 0, 0, 0.2) !important',
+                        },
+                        '&.Mui-selected:hover': {
+                            backgroundColor: 'rgba(0, 0, 0, 0.25) !important',
+                        }
                     },
                     '& .MuiTreeItem-label': {
                         textAlign: 'left',
-                        // whiteSpace: 'nowrap',
                         minWidth: 'max-content'
                     },
                     '& .MuiTreeItem-root': {

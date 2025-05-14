@@ -45,8 +45,8 @@ public class ClipServiceImpl implements ClipService {
         String teamId = author.getTeam().getId().toString();
 
         String id = UUID.randomUUID().toString();
-
-        if (!validateClipExtensions(file.getName())) {
+        System.out.println(file.getOriginalFilename());
+        if (!validateClipExtensions(file.getOriginalFilename())) {
             throw new IOException("Invalid file type. Allowed types: mp4, avi, mov, mkv");
         }
         String filename = id + "_" + file.getOriginalFilename();

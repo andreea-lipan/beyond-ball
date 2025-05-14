@@ -1,41 +1,32 @@
-import React, {useEffect, useState} from "react";
-import ClipService from "../../APIs/ClipService.js";
-import {Typography} from "@mui/material";
+import {Box, Typography} from "@mui/material";
 import ClipsList from "./ClipsList.jsx";
 
-const ClipsContainer = ({selectedFolderId}) => {
-
-    const [clips, setClips] = useState([]);
-
-    useEffect(() => {
-        ClipService.getClipsByFolder(selectedFolderId).then((response) => {
-            console.log(response);
-            setClips(response);
-        })
-    }, [selectedFolderId]);
+const ClipsContainer = ({clips}) => {
 
     return (
-        (clips.length > 0 ?
+        clips.length > 0 ?
                 <ClipsList clips={clips}/>
                 :
                 <NoClipsMessage/>
-        )
     );
 }
 
-
 const NoClipsMessage = () => {
     return (
-        <>
+        <Box sx={{
+            height: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+        }}>
             <Typography variant='h2'
                         sx={{
-                            display: 'flex',
-                            margin: 'auto',
+                            textAlign: 'center',
                             padding: '1em'
                         }}>
                 No clips added yet. <br/>Add one by clicking the icon above!
             </Typography>
-        </>
+        </Box>
     );
 }
 

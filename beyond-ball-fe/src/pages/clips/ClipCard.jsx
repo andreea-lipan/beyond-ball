@@ -7,9 +7,9 @@ import CardActionArea from '@mui/material/CardActionArea';
 import ClipService from "../../APIs/ClipService.js";
 import {useNavigate} from "react-router-dom";
 import {CLIP_DETAILS} from "../../utils/UrlConstants.js";
+import {Box} from "@mui/material";
 
 export const ClipCard = ({clip}) => {
-
     const [filename, setFilename] = useState(null);
     const navigate = useNavigate();
 
@@ -25,14 +25,33 @@ export const ClipCard = ({clip}) => {
         return date.toLocaleDateString("de-DE")
     }
 
-
     return (
-        <Card sx={{display: "flex", justifyContent: "space-arround", mt: 5, maxWidth: 280, borderRadius: 5}}>
+        <Card sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            borderRadius: 2,
+            overflow: 'hidden'
+        }}>
             <CardActionArea onClick={() => navigate(CLIP_DETAILS(clip.id))}>
-                <CardMedia sx={{objectFit: "contain"}}
-                           component="video"
-                           image={filename}
-                />
+                <Box sx={{
+                    position: 'relative',
+                    width: '100%',
+                    paddingTop: '56.25%', // 16:9 Aspect Ratio
+                    backgroundColor: 'black'
+                }}>
+                    <CardMedia 
+                        component="video"
+                        image={filename}
+                        sx={{
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            width: '100%',
+                            height: '100%',
+                            objectFit: 'contain'
+                        }}
+                    />
+                </Box>
                 <CardContent>
                     <Typography component="div">
                         {clip.title}
@@ -48,6 +67,5 @@ export const ClipCard = ({clip}) => {
         </Card>
     );
 }
-
 
 export default ClipCard;

@@ -18,10 +18,13 @@ import React, {useEffect, useState} from "react";
 import {AddClipIcon} from "../../components/icons/clips/AddClipIcon.jsx";
 import {AddFolderIcon} from "../../components/icons/clips/AddFolderIcon.jsx";
 import {RichTreeView, SimpleTreeView, TreeItem} from "@mui/x-tree-view";
-import FolderStructure from "./FolderStructure.jsx";
+import FolderStructure from "./folders/FolderStructure.jsx";
 import FolderService from "../../APIs/FolderService.js";
 import ClipsContainer from "./ClipsContainer.jsx";
 import ClipService from "../../APIs/ClipService.js";
+import useModal from "../../components/modals/useModal.js";
+import {AddFolderModal} from "./modals/AddFolderModal.jsx";
+import {AddClipModal} from "./modals/AddClipModal.jsx";
 
 const ClipsPage = () => {
     const [search, setSearch] = useState("");
@@ -200,12 +203,25 @@ const ClipsPage = () => {
     const [folderTree, setFolderTree] = useState([]);
     const [selectedFolderId, setSelectedFolderId] = useState(null);
 
+    const [clips, setClips] = useState([]);
+
+    useEffect(() => {
+        fetchClips()
+    }, [selectedFolderId]);
+
+    const fetchClips = () => {
+        ClipService.getClipsByFolder(selectedFolderId).then((response) => {
+            console.log(response);
+            setClips(response);
+        })
+    }
+
     const createFolder = (folderName) => {
         FolderService.createFolder(folderName,selectedFolderId).then(fetchFolderTree)
     }
 
     const uploadClip = (file, title) => {
-        ClipService.uploadClip(file,title,selectedFolderId)
+        ClipService.uploadClip(file,title,selectedFolderId).then(fetchClips)
     };
 
 
@@ -223,39 +239,41 @@ const ClipsPage = () => {
         fetchFolderTree();
     }, []);
 
+    const addFolderModal = useModal(false);
+    const addClipModal = useModal(false);
+
     // todo figure out how to stop the extra scroll on mac
     return (
         <Layout>
-            <Typography variant="h3" align="center" gutterBottom sx={{ color: "#2e7d32", mt: 3 }}>
+            <AddFolderModal
+                state={addFolderModal}
+                handleConfirm={createFolder}
+            />
+            <AddClipModal
+                state={addClipModal}
+                handleConfirm={uploadClip}
+            />
+            <Typography variant="h3" align="center" gutterBottom sx={{ color: "#2e7d32", mt: 3, mb: 3 }}>
                 Clips
             </Typography>
 
             <Box sx={{
-                // minHeight: "60vh",
-                // height: "auto",
                 width: {
                     xs: '100%',    // mobile
                     sm: '90vw',   // tablet
-                    // myTablet: '680px',
-                    // md: '800px',
-                    // lg: '1100px',
                     xl: '80vw',
                     xxl: '1900px',
                 },
+                display: 'flex',
+                flexDirection: 'column',
+                minHeight: 'calc(100vh - 200px)', // Account for header and title
             }}>
                 <Box sx={{
                     backgroundColor: theme.palette.secondary.main,
                     padding: 3,
                     borderRadius: "16px 16px 0 0",
-
-                    // marginX: 4,
-                    // marginTop: 4,
                 }}>
                     <Box sx={{
-                        // display: 'flex',
-                        // justifyContent: 'space-between',
-                        // alignItems: 'center',
-                        // flexWrap: 'wrap',
                         margin: 'auto',
                         width: {
                             xs: '100%',    // full width on mobile
@@ -271,7 +289,6 @@ const ClipsPage = () => {
                             value={search}
                             onChange={e => setSearch(e.target.value)}
                             sx={{
-                                // minWidth: '150px',
                                 width: '100%',
                                 backgroundColor: theme.palette.primary.main,
                                 borderRadius: 5,
@@ -300,17 +317,17 @@ const ClipsPage = () => {
                     backgroundColor: theme.palette.primary.main,
                     padding: "24px 5px 24px 5px",
                     borderRadius: "0 0 16px 16px",
-                    // height: 'calc(100% - 104px)',
-                    minHeight: '55vh',
-                    height: "auto",
+                    flex: 1,
+                    display: 'flex',
+                    flexDirection: 'column',
                 }}>
                     <Grid container sx={{
-                        // height: '100%',
-                        minHeight: 'inherit'
+                        flex: 1,
+                        minHeight: 0, // Important for proper flex behavior
                     }}>
                         <Grid size={{ xs: 2, sm: 3, md: 2, lg:5, w1400: 4, xl:2 }} sx={{
-                            height: '100%',
-                            minHeight: 'inherit',
+                            display: 'flex',
+                            flexDirection: 'column',
                             borderRight: 1
                         }}>
                             <Box sx={{
@@ -320,11 +337,27 @@ const ClipsPage = () => {
                                 flexDirection: 'column',
                                 paddingRight: '1em'
                             }}>
-                                <AddFolderIcon color={BtnsColour}/>
+                                <Button
+                                    onClick={addFolderModal.openModal}
+                                    sx={{
+                                        minWidth: 'auto',
+                                        padding: 0,
+                                        '&:focus': {
+                                            outline: 'none'
+                                        },
+                                        '&:hover': {
+                                            backgroundColor: 'transparent'
+                                        }
+                                    }}
+                                >
+                                    <AddFolderIcon color={BtnsColour}/>
+                                </Button>
                             </Box>
                             <Box sx={{
                                 padding: "20px 0 20px 0",
                                 overflowX: 'auto',
+                                flex: 1,
+                                minHeight: 0,
 
                                 // WebKit (Chrome, Safari, etc) scrollbar styling
                                 '&::-webkit-scrollbar': {
@@ -355,23 +388,44 @@ const ClipsPage = () => {
                         </Grid>
 
                         {/*todo make divider adjustable*/}
-                        <Divider orientation="vertical" sx={{border: "20px"}}/>
+                        <Divider orientation="vertical" 
+                            sx={{
+                                border: "20px"
+                            }}/>
+
                         <Grid size={{ xs: 2, sm: 9, md: 10, lg: 7, w1400: 8, xl:10 }} sx={{ //todo fix this aaaa
                             display: 'flex',
                             flexDirection: 'column',
-                            height: '100%',
-                            minHeight: 'inherit'
+                            flex: 1,
+                            minHeight: 0
                         }}>
                             <Box sx={{
                                 height: '30px',
                                 display:'flex',
                                 alignItems: 'flex-start',
                                 flexDirection: 'column',
-                                paddingLeft: '1em'
+                                // paddingLeft: '1em'
                             }}>
-                                <AddClipIcon color={BtnsColour}/>
+                                <Button
+                                    onClick={addClipModal.openModal}
+                                    sx={{
+                                        width: 'inherit',
+                                        padding: 0,
+                                        '&:focus': {
+                                            outline: 'none'
+                                        },
+                                        '&:hover': {
+                                            backgroundColor: 'transparent'
+                                        }
+                                    }}
+                                >
+                                    <AddClipIcon color={BtnsColour}/>
+                                </Button>
                             </Box>
-                            <ClipsContainer selectedFolderId={selectedFolderId}/>
+                            
+                            <Box sx={{ flex: 1, minHeight: 0, overflow: 'auto', paddingTop: '5px'}}>
+                                <ClipsContainer clips={clips}/>
+                            </Box>
                         </Grid>
                     </Grid>
                 </Box>
