@@ -107,7 +107,7 @@ function App() {
             <Route
               path="/clips"
               element={
-                ["PLAYER", "STAFF"].includes(role)
+                ["PLAYER", "STAFF", "ADMIN"].includes(role)
                   ? (() => {
                       sessionStorage.setItem("lastValidPath", "/clips");
                       return <ClipsPage />;

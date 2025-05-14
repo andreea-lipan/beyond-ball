@@ -75,6 +75,25 @@ export function theme() {
                 color: alpha(palette.text.primary, 0.7)
             }
         },
+        breakpoints: {
+            values: {
+                xs: 0,
+                sm: 500,
+                md: 900,
+                lg: 1200,
+                w1400: 1400,
+                xl: 1600,
+                xxl: 2000,
+
+                // Add your custom breakpoints here
+                // todo remove these points, add more on top
+                mobile: 0,
+                myTablet: 700,
+                laptop: 1024,
+                desktop: 1280,
+                wide: 1600,
+            },
+        },
         components: {
             MuiCssBaseline: {
                 styleOverrides: {
@@ -87,7 +106,7 @@ export function theme() {
             },
             MuiDrawer: {
                 styleOverrides: {
-                    paper : {
+                    paper: {
                         backgroundColor: palette.primary.main, // your background.main
                         margin: 0,
                         padding: 0,
@@ -107,14 +126,14 @@ export function theme() {
                             backgroundColor: palette.secondary.dark,
                         },
                     },
-                    outlined:{
+                    outlined: {
                         borderRadius: 13,
                         '&:hover': {
                             borderColor: palette.secondary.dark,
                         },
                     }
                 }
-            }
+            },
         }
     });
 }
