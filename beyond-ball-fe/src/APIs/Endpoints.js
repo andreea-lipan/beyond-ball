@@ -26,6 +26,12 @@ export const CLIP_ENDPOINTS = {
     CLIP_VIDEO: (filename) => `${BASE_URL}${filename}`,
 }
 
+const FOLDER_URL = `${BASE_URL}/folders`
+export const FOLDER_ENDPOINTS = {
+    FOLDERS: `${FOLDER_URL}`,
+    FOLDER: (id) => `${FOLDER_URL}/${id}`,
+}
+
 const QUIZ_URL = `${BASE_URL}/quizzes`;
 export const QUIZ_ENDPOINTS = {
     QUIZZES: `${QUIZ_URL}`,

@@ -26,4 +26,8 @@ public class Clip {
     @JoinColumn(name = "user_account_id")
     private UserAccount author;
 
+    @ManyToOne
+    @JoinColumn(name = "folder_id")
+    private Folder folder;
+
 }

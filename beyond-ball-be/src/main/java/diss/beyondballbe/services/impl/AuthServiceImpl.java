@@ -52,7 +52,7 @@ public class AuthServiceImpl implements AuthService {
           UserAccount account = new UserAccount();
           account.setTeam(team);
           account.setUsername(request.getUsername());
-          account.setRole(UserRole.ADMIN);
+          account.setRole(UserRole.STAFF);
           account.setPassword(request.getPassword());
 
           userAccountRepository.save(account);

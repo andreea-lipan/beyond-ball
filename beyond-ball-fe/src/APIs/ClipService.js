@@ -15,9 +15,6 @@ const uploadClip = (file, title) => {
     return FileRequestInstance.post(CLIP_ENDPOINTS.CLIPS, formData)
 }
 
-const getClip = (clipUrl) => {
-    return FileRequestInstance.get(CLIP_ENDPOINTS.CLIP(clipUrl))
-}
 const getClipVideo = (filename) => {
     return RequestInstance.get(CLIP_ENDPOINTS.CLIP_VIDEO(filename), {responseType: "blob"}).then((blob) => {
         const videoBlob = blob.data;
