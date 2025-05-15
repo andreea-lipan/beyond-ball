@@ -27,6 +27,13 @@ export const CLIP_ENDPOINTS = {
     CLIP_VIDEO: (filename) => `${BASE_URL}${filename}`,
 }
 
+const VIDEO_NOTES_URL = `${BASE_URL}/video-notes`
+export const VIDEO_NOTES_ENDPOINTS = {
+    NOTES: `${VIDEO_NOTES_URL}`,
+    NOTES_BY_CLIP: (clipId) => `${VIDEO_NOTES_URL}/clip/${clipId}`,
+    NOTE: (id) => `${VIDEO_NOTES_URL}/${id}`,
+}
+
 const FOLDER_URL = `${BASE_URL}/folders`
 export const FOLDER_ENDPOINTS = {
     FOLDERS: `${FOLDER_URL}`,

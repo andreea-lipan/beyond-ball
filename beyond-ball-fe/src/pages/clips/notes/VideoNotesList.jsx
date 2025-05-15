@@ -1,11 +1,11 @@
 import VideoNoteItem from "./VideoNoteItem.jsx";
 
-const VideoNotesList = ({videoNotes}) => {
+const VideoNotesList = ({videoNotes, seekTo}) => {
 
     return(
         videoNotes?.length > 0 ?
-        videoNotes.map((note, index) => (
-            <VideoNoteItem key={index} note={note} />
+        videoNotes.map((note) => (
+            <VideoNoteItem note={note} seekTo={seekTo}/>
         )) :
         <>
 

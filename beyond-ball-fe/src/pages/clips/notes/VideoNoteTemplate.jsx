@@ -1,17 +1,18 @@
 import React from 'react';
 import {Box, Card, CardContent, Button, TextField, Typography, useTheme, Tooltip} from '@mui/material';
 
-const VideoNoteTemplate = ({handleClose, getTimestamp, addComment}) => {
+const VideoNoteTemplate = ({handleClose, getTimestamp, addNote}) => {
     const theme = useTheme();
     const [currentTimestamp, setCurrentTimestamp] = React.useState(0);
+    const [noteText, setNoteText] = React.useState("");
 
     const handleSetCurrentTimestamp = () => {
         const timestamp = getTimestamp();
         setCurrentTimestamp(timestamp);
     }
 
-    const handleAddComment = () => {
-
+    const handleAddNote = () => {
+        addNote(noteText, currentTimestamp);
     }
 
     return (
@@ -31,6 +32,8 @@ const VideoNoteTemplate = ({handleClose, getTimestamp, addComment}) => {
             {/* Note input */}
             <CardContent sx={{ p: 0,width:"100%" }}>
                 <TextField
+                    value={noteText}
+                    onChange={(e) => setNoteText(e.target.value)}
                     fullWidth
                     multiline
                     minRows={1}
@@ -39,7 +42,7 @@ const VideoNoteTemplate = ({handleClose, getTimestamp, addComment}) => {
                     size="small"
                     sx={{
                         '& .MuiInputBase-input': {
-                            fontSize: '0.8rem' 
+                            fontSize: '0.8rem'
                         }
                     }}
                 />
@@ -50,7 +53,7 @@ const VideoNoteTemplate = ({handleClose, getTimestamp, addComment}) => {
                 <Button variant="outlined" size="small" onClick={handleClose}>
                     Cancel
                 </Button>
-                <Button variant="contained" size="small" onClick={handleAddComment}>
+                <Button variant="contained" size="small" onClick={handleAddNote}>
                     Post
                 </Button>
             </Box>

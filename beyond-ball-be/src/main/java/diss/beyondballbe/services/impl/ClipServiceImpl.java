@@ -98,8 +98,7 @@ public class ClipServiceImpl implements ClipService {
     }
 
     @Override
-    public ClipDTO getClipById(String id) {
-        Clip clip = clipRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Clip not found"));
-        return new ClipDTO(clip);
+    public Clip getClipById(String id) {
+        return clipRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Clip not found"));
     }
 }

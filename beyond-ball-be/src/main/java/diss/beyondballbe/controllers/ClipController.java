@@ -1,6 +1,7 @@
 package diss.beyondballbe.controllers;
 
 
+import diss.beyondballbe.model.DTOs.ClipDTO;
 import diss.beyondballbe.model.DTOs.UploadClipRequest;
 import diss.beyondballbe.model.DTOs.WhiteboardCreationRequest;
 import diss.beyondballbe.services.ClipService;
@@ -36,7 +37,7 @@ public class ClipController {
     @GetMapping("/{id}")
     public ResponseEntity<?> getClipById(@PathVariable String id) {
         try {
-            return ResponseEntity.ok(clipService.getClipById(id));
+            return ResponseEntity.ok(new ClipDTO(clipService.getClipById(id)));
         } catch (Exception e) {
             return ResponseEntity.status(404).body("Clip not found");
         }

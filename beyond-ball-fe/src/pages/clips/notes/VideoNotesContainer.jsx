@@ -2,6 +2,7 @@ import {Box, Button, Typography, useTheme} from "@mui/material";
 import VideoNoteTemplate from "./VideoNoteTemplate.jsx";
 import {useEffect, useState} from "react";
 import VideoNotesList from "./VideoNotesList.jsx";
+import VideoNoteService from "../../../APIs/VideoNoteService.js";
 
 const VideoNotesContainer = ({ seekTo, getTimestamp, clipId}) => {
 
@@ -14,11 +15,34 @@ const VideoNotesContainer = ({ seekTo, getTimestamp, clipId}) => {
     }, [clipId]);
 
     const fetchVideoNotes = () => {
-
+        VideoNoteService.getVideoNotesForClip(clipId).then((response) => {
+            setVideoNotes(sortVideoNotes(response));
+        })
     }
 
-    const addComment = () => {
+    const sortVideoNotes = (videoNotes) => {
+        return videoNotes.sort((a, b) => {
+            const aTimestamp = a.videoTimestamp;
+            const bTimestamp = b.videoTimestamp;
 
+            if (aTimestamp < bTimestamp) {
+                return -1;
+            }
+            if (aTimestamp > bTimestamp) {
+                return 1;
+            }
+            return 0;
+        });
+    }
+
+    const addNote = (text, videoTimestamp) => {
+        const note = {
+            videoTimestamp,
+            text,
+            clipId
+        }
+        VideoNoteService.createVideoNote(note).then(fetchVideoNotes)
+        setAddingComment(false);
     }
 
     const handleClose = () => {
@@ -45,7 +69,7 @@ const VideoNotesContainer = ({ seekTo, getTimestamp, clipId}) => {
                     <VideoNoteTemplate
                         handleClose={handleClose}
                         getTimestamp={getTimestamp}
-                        addComment={addComment}/>
+                        addNote={addNote}/>
                 </Box>
                 :
                 <Button variant={"contained"} onClick={() => setAddingComment(true)}>Add new note</Button>
