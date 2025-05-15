@@ -3,7 +3,7 @@ import {
     Box,
     Button,
     Divider,
-    Grid,
+    Grid, Tooltip,
     Typography, useTheme
 } from "@mui/material";
 import React, {useEffect, useState} from "react";
@@ -157,15 +157,17 @@ const ClipsPage = () => {
                                 flexDirection: 'column',
                                 paddingRight: '2em'
                             }}>
-                                <Button
-                                    onClick={addFolderModal.openModal}
-                                    sx={{
-                                        minWidth: 'auto',
-                                        padding: 0,
-                                    }}
-                                >
-                                    <AddFolderIcon color={BtnsColour}/>
-                                </Button>
+                                <Tooltip title="Create a new folder" placement="top">
+                                    <Button
+                                        onClick={addFolderModal.openModal}
+                                        sx={{
+                                            minWidth: 'auto',
+                                            padding: 0,
+                                        }}
+                                    >
+                                            <AddFolderIcon color={BtnsColour}/>
+                                    </Button>
+                                </Tooltip>
                             </Box>
                             <Box sx={{
                                 padding: "20px 0 20px 0",
@@ -222,15 +224,17 @@ const ClipsPage = () => {
                                 flexDirection: 'column',
                                 paddingLeft: '1em'
                             }}>
-                                <Button
-                                    onClick={addClipModal.openModal}
-                                    sx={{
-                                        width: 'inherit',
-                                        padding: 0,
-                                    }}
-                                >
-                                    <AddClipIcon color={BtnsColour}/>
-                                </Button>
+                                <Tooltip title="Add a new video clip" placement="top">
+                                    <Button
+                                        onClick={addClipModal.openModal}
+                                        sx={{
+                                            width: 'inherit',
+                                            padding: 0,
+                                        }}
+                                    >
+                                        <AddClipIcon color={BtnsColour}/>
+                                    </Button>
+                                </Tooltip>
                             </Box>
                             
                             <Box

@@ -47,7 +47,7 @@ export function theme() {
             },
             // Subtitles
             h2: {
-                fontSize: '1.2rem',
+                fontSize: '1.4rem',
                 fontWeight: 400,
                 color: alpha(palette.text.primary, 1)
             },
@@ -126,15 +126,33 @@ export function theme() {
                         '&:hover': {
                             backgroundColor: palette.secondary.dark,
                         },
+
                     },
                     outlined: {
                         borderRadius: 13,
                         '&:hover': {
-                            borderColor: palette.secondary.dark,
+                            borderColor: palette.secondary.main,
                         },
                     }
                 }
             },
+            MuiTextField: {
+                styleOverrides: {
+                    root: {
+                        '& .MuiOutlinedInput-root': {
+                            '& fieldset': {
+                                borderColor: palette.primary.main,
+                            },
+                            '&:hover fieldset': {
+                                borderColor: palette.secondary.main,
+                            },
+                            '&.Mui-focused fieldset': {
+                                borderColor: palette.secondary.main,
+                            }
+                        }
+                    }
+                }
+            }
         }
     });
 }

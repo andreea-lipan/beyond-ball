@@ -37,3 +37,13 @@ button:focus {
 button:hover {
     background-color: transparent;
 }
+
+/* Video container styles */
+video {
+    background-color: black;
+    height: 100%;
+    aspect-ratio: 16/9;
+    width: 70vw;
+    max-width: 1500px;
+    object-fit: contain;
+}

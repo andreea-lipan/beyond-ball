@@ -4,7 +4,7 @@ import ClipService from "../../APIs/ClipService.js";
 import {useParams} from "react-router-dom";
 import Layout from "../../components/Layout.jsx";
 import VideoNotesContainer from "./notes/VideoNotesContainer.jsx";
-import {Box, Button} from "@mui/material";
+import {Box, Typography} from "@mui/material";
 
 const ClipDetailPage = () => {
 
@@ -43,7 +43,14 @@ const ClipDetailPage = () => {
 
     return (
         <Layout>
-            <h2>{clip?.title}</h2>
+            <Typography variant="h1"
+                sx={{
+                    paddingY: 3
+                }}
+            >
+                {clip?.title}
+            </Typography>
+
             {filename &&
                 <Box sx={{
                     display: 'flex',
@@ -51,7 +58,7 @@ const ClipDetailPage = () => {
                     alignItems: 'center',
                     justifyContent: 'center',
                     margin: 'auto',
-                    padding: '1em'
+                    height:'80vh'
                 }}>
                     <VideoPlayer videoUrl={filename} videoRef={videoRef} />
                     <VideoNotesContainer seekTo={seekTo} getTimestamp={getTimestamp} clipId={id}/>
@@ -62,16 +69,15 @@ const ClipDetailPage = () => {
 }
 
 const VideoPlayer = ({ videoUrl, videoRef }) => {
-
-
     return (
-        <div>
-            <video ref={videoRef} controls width="800" height="800">
+        <Box sx={{
+            height:'80vh'
+        }}>
+            <video ref={videoRef} controls>
                 <source src={videoUrl} type="video/mp4" />
-                Your browser does not support the video tag.
+                Your browser does not support the video player.
             </video>
-
-        </div>
+        </Box>
     );
 };
 

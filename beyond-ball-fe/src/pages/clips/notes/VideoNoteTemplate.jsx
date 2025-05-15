@@ -1,8 +1,8 @@
 import React from 'react';
-import { Box, Card, CardContent, Button, TextField, Typography } from '@mui/material';
+import {Box, Card, CardContent, Button, TextField, Typography, useTheme, Tooltip} from '@mui/material';
 
 const VideoNoteTemplate = ({handleClose, getTimestamp, addComment}) => {
-
+    const theme = useTheme();
     const [currentTimestamp, setCurrentTimestamp] = React.useState(0);
 
     const handleSetCurrentTimestamp = () => {
@@ -15,27 +15,37 @@ const VideoNoteTemplate = ({handleClose, getTimestamp, addComment}) => {
     }
 
     return (
-        <Card sx={{ width: '100%', mb: 2, p: 2, borderRadius: 8 }}>
+        <Card sx={{ width: '100%', mb: 2, p: 2, borderRadius: 8 , backgroundColor: theme.palette.background.secondary}}>
             {/* Timestamp top */}
             <Box sx={{ display: 'flex', alignItems: 'center', mb: 2, gap:1 }}>
-                <Button variant="outlined" size="small" onClick={handleSetCurrentTimestamp}>
-                    Set Current Timestamp
-                </Button>
+                <Tooltip arrow placement="top" title={'This will save a timestamp along with your note, to know which part of the video you are referring to'}>
+                    <Button variant="outlined" size="small" onClick={handleSetCurrentTimestamp}>
+                        Add current timestamp to note
+                    </Button>
+                </Tooltip>
                 <Typography variant="subtitle2" >
-                    Timestamp - {formatTimestamp(currentTimestamp)}
+                    {formatTimestamp(currentTimestamp)}
                 </Typography>
             </Box>
 
             {/* Note input */}
-            <CardContent sx={{ p: 0,width:"500px" }}>
+            <CardContent sx={{ p: 0,width:"100%" }}>
                 <TextField
                     fullWidth
                     multiline
                     minRows={1}
                     placeholder="Write your note here..."
                     variant="outlined"
+                    size="small"
+                    sx={{
+                        '& .MuiInputBase-input': {
+                            fontSize: '0.8rem' 
+                        }
+                    }}
                 />
             </CardContent>
+
+            {/* Save and Cancel buttons */}
             <Box sx={{ display: 'flex', justifyContent:'space-between', alignItems: 'center', mt: 2 }}>
                 <Button variant="outlined" size="small" onClick={handleClose}>
                     Cancel
