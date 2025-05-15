@@ -41,9 +41,9 @@ export function theme() {
 
             // Titles
             h1: {
-                fontSize: '1.45rem',
+                fontSize: '2.5rem',
                 fontWeight: 700,
-                color: alpha(palette.secondary.main, 1)
+                color: alpha(palette.secondary.dark, 1)
             },
             // Subtitles
             h2: {

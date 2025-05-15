@@ -1,8 +1,9 @@
 import {Box, Typography} from "@mui/material";
 import ClipsList from "./ClipsList.jsx";
 
+// Either displays the clips if they exist
+// or displays an intuitive message for the user
 const ClipsContainer = ({clips}) => {
-
     return (
         clips.length > 0 ?
                 <ClipsList clips={clips}/>

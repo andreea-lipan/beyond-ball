@@ -4,8 +4,8 @@ import {Popup} from "../../../components/popup/Popup.jsx";
 import {MessageType} from "../../../components/popup/MessageType.js";
 
 export const AddFolderModal = ({ state, handleConfirm}) => {
-
     const theme = useTheme();
+    const [folderName, setFolderName] = useState("");
 
     let confirmButtonText= "Create folder";
     let declineButtonText= "Cancel";
@@ -34,8 +34,6 @@ export const AddFolderModal = ({ state, handleConfirm}) => {
         p: 4,
     };
 
-    const [folderName, setFolderName] = useState("");
-
     const handleClose = () => {
         setFolderName("");
         state.closeModal()
@@ -45,9 +43,13 @@ export const AddFolderModal = ({ state, handleConfirm}) => {
         <>
             <Modal open={state.isOpen} onClose={handleClose}>
                 <Box sx={modalStyle}>
+
+                    {/* Modal message */}
                     <Typography variant="h6" gutterBottom>
                         {message}
                     </Typography>
+
+                    {/* Input */}
                     <TextField
                         placeholder = {"Folder 1"}
                         value = {folderName}
@@ -55,6 +57,8 @@ export const AddFolderModal = ({ state, handleConfirm}) => {
                         sx = {{
                         minWidth: '100%'
                     }}/>
+
+                    {/* Confirmation or Close buttons */}
                     <Box mt={4} display="flex" justifyContent="space-between">
                         <Button
                             variant="contained"
@@ -67,22 +71,12 @@ export const AddFolderModal = ({ state, handleConfirm}) => {
                                     showError('Please add a folder name first');
                                 }
                             }}
-                            sx={{
-                                '&:focus': {
-                                    outline: 'none' // make the default browser selection not visible
-                                }
-                            }}
                         >
                             {confirmButtonText}
                         </Button>
                         <Button
                             variant="outlined"
                             onClick={handleClose}
-                            sx={{
-                                '&:focus': {
-                                    outline: 'none' // make the default browser selection not visible
-                                }
-                            }}
                         >
                             {declineButtonText}
                         </Button>

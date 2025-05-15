@@ -1,23 +1,14 @@
 import Layout from "../../components/Layout.jsx";
 import {
-    Avatar,
     Box,
     Button,
-    Card, Divider,
-    Grid, IconButton,
-    InputAdornment,
-    TextField,
-    ToggleButton,
-    ToggleButtonGroup,
+    Divider,
+    Grid,
     Typography, useTheme
 } from "@mui/material";
-import {TestComponent} from "../../components/TestComponent.jsx";
-import SearchIcon from "@mui/icons-material/Search";
-import DeleteIcon from "@mui/icons-material/Delete";
 import React, {useEffect, useState} from "react";
 import {AddClipIcon} from "../../components/icons/clips/AddClipIcon.jsx";
 import {AddFolderIcon} from "../../components/icons/clips/AddFolderIcon.jsx";
-import {RichTreeView, SimpleTreeView, TreeItem} from "@mui/x-tree-view";
 import FolderStructure from "./folders/FolderStructure.jsx";
 import FolderService from "../../APIs/FolderService.js";
 import ClipsContainer from "./ClipsContainer.jsx";
@@ -25,194 +16,30 @@ import ClipService from "../../APIs/ClipService.js";
 import useModal from "../../components/modals/useModal.js";
 import {AddFolderModal} from "./modals/AddFolderModal.jsx";
 import {AddClipModal} from "./modals/AddClipModal.jsx";
+import SearchBar from "../../components/SearchBar.jsx";
 
 const ClipsPage = () => {
-    const [search, setSearch] = useState("");
     const theme = useTheme();
     const BtnsColour = theme.palette.secondary.dark
 
-    const FOOTBALL_CLIP_FOLDERS = [
-        {
-            id: 'attacking-play',
-            label: 'Attacking Play',
-            children: [
-                { id: 'counter-attacks', label: 'Counter AttackssssssssssssssssssssssAttackssssssssssssssssssssss' },
-                { id: 'build-up', label: 'Build-Up Play' },
-                { id: 'final-third', label: 'Final Third Combinations' },
-            ],
-        },
-        {
-            id: 'defensive-structure',
-            label: 'Defensive Structure',
-            children: [
-                { id: 'low-block', label: 'Low Block' },
-                { id: 'high-press', label: 'High Press' },
-                { id: 'mid-block', label: 'Mid Block' },
-            ],
-        },
-        {
-            id: 'set-pieces',
-            label: 'Set Pieces',
-            children: [
-                { id: 'corners-for', label: 'Corners - For' },
-                { id: 'corners-against', label: 'Corners - Against' },
-                { id: 'free-kicks', label: 'Free Kicks' },
-                { id: 'throw-ins', label: 'Throw-ins' },
-            ],
-        },
-        {
-            id: 'transition-moments',
-            label: 'Transition Moments',
-            children: [
-                { id: 'defense-to-attack', label: 'Defense to Attack' },
-                { id: 'attack-to-defense', label: 'Attack to Defense' },
-            ],
-        },
-        {
-            id: 'goalkeeping',
-            label: 'Goalkeeping',
-            children: [
-                { id: 'shot-stopping', label: 'Shot Stopping' },
-                { id: 'distribution', label: 'Distribution' },
-                { id: 'crosses', label: 'Dealing with Crosses' },
-            ],
-        },
-        {
-            id: 'finishing',
-            label: 'Finishing',
-            children: [
-                { id: '1v1', label: '1v1 with Keeper' },
-                { id: 'long-range', label: 'Long Range Shots' },
-                { id: 'headers', label: 'Headers' },
-            ],
-        },
-        {
-            id: 'midfield-combos',
-            label: 'Midfield Combinations',
-            children: [
-                { id: 'third-man-runs', label: 'Third Man Runs' },
-                { id: 'triangles', label: 'Passing Triangles' },
-                { id: 'switch-play', label: 'Switch of Play' },
-            ],
-        },
-        {
-            id: 'individual-skills',
-            label: 'Individual Skills',
-            children: [
-                { id: 'dribbling', label: 'Dribbling' },
-                { id: 'nutmegs', label: 'Nutmegs' },
-                { id: 'skill-moves', label: 'Skill Moves' },
-            ],
-        },
-        {
-            id: 'defensive-duels',
-            label: 'Defensive Duels',
-            children: [
-                { id: 'tackles', label: 'Tackles' },
-                { id: 'interceptions', label: 'Interceptions' },
-                { id: 'blocks', label: 'Blocks' },
-            ],
-        },
-        {
-            id: 'aerial-battles',
-            label: 'Aerial Battles',
-            children: [
-                { id: 'attacking-headers', label: 'Attacking Headers' },
-                { id: 'defensive-headers', label: 'Defensive Headers' },
-            ],
-        },
-        {
-            id: 'team-shape',
-            label: 'Team Shape',
-            children: [
-                { id: 'out-of-possession', label: 'Out of Possession' },
-                { id: 'in-possession', label: 'In Possession' },
-            ],
-        },
-        {
-            id: 'penalty-area-play',
-            label: 'Penalty Area Play',
-            children: [
-                { id: 'goalmouth-scrambles', label: 'Goalmouth Scrambles' },
-                { id: 'rebounds', label: 'Rebounds' },
-            ],
-        },
-        {
-            id: 'pressing',
-            label: 'Pressing',
-            children: [
-                { id: 'counter-pressing', label: 'Counter Pressing' },
-                { id: 'press-traps', label: 'Press Traps' },
-            ],
-        },
-        {
-            id: 'passing-combinations',
-            label: 'Passing Combinations',
-            children: [
-                { id: '1-2s', label: '1-2s' },
-                { id: 'wall-passes', label: 'Wall Passes' },
-                { id: 'diagonals', label: 'Diagonal Balls' },
-            ],
-        },
-        {
-            id: 'player-focus',
-            label: 'Player Focus',
-            children: [
-                { id: 'forwards', label: 'Forwards' },
-                { id: 'midfielders', label: 'Midfielders' },
-                { id: 'defenders', label: 'Defenders' },
-            ],
-        },
-        {
-            id: 'referee-decisions',
-            label: 'Referee Decisions',
-            children: [
-                { id: 'penalties', label: 'Penalties' },
-                { id: 'fouls', label: 'Fouls' },
-                { id: 'offsides', label: 'Offsides' },
-            ],
-        },
-        {
-            id: 'injury-moments',
-            label: 'Injury Moments',
-            children: [
-                { id: 'minor-knocks', label: 'Minor Knocks' },
-                { id: 'stretcher-cases', label: 'Stretcher Cases' },
-            ],
-        },
-        {
-            id: 'match-highlights',
-            label: 'Match Highlights',
-            children: [
-                { id: 'first-half', label: 'First Half' },
-                { id: 'second-half', label: 'Second Half' },
-                { id: 'extra-time', label: 'Extra Time' },
-            ],
-        },
-        {
-            id: 'fan-interaction',
-            label: 'Fan Interaction',
-            children: [
-                { id: 'celebrations', label: 'Celebrations' },
-                { id: 'chants', label: 'Chants' },
-                { id: 'crowd-reactions', label: 'Crowd Reactions' },
-            ],
-        },
-    ];
-
     const [folderTree, setFolderTree] = useState([]);
     const [selectedFolderId, setSelectedFolderId] = useState(null);
+    const addFolderModal = useModal(false);
 
     const [clips, setClips] = useState([]);
+    const [filteredClips, setFilteredClips] = useState([]);
+    const [searchTerm, setSearchTerm] = useState('');
+    const addClipModal = useModal(false);
 
     useEffect(() => {
-        fetchClips()
+        if(!setSelectedFolderId) return
+        fetchClips();
     }, [selectedFolderId]);
 
     const fetchClips = () => {
         ClipService.getClipsByFolder(selectedFolderId).then((response) => {
-            console.log(response);
             setClips(response);
+            setFilteredClips(response);
         })
     }
 
@@ -224,7 +51,6 @@ const ClipsPage = () => {
         ClipService.uploadClip(file,title,selectedFolderId).then(fetchClips)
     };
 
-
     const fetchFolderTree = () => {
         FolderService.getFolderTree()
             .then((response) => {
@@ -232,6 +58,7 @@ const ClipsPage = () => {
             })
             .catch((error) => {
                 console.error("Error fetching folder tree:", error);
+                // todo show error
             });
     }
 
@@ -239,12 +66,21 @@ const ClipsPage = () => {
         fetchFolderTree();
     }, []);
 
-    const addFolderModal = useModal(false);
-    const addClipModal = useModal(false);
+    const handleSearchClips = (searchTerm) => {
+        if (!searchTerm) {
+            setFilteredClips(clips);
+            return;
+        }
+        const newClips = clips.filter((clip) => clip.title.toLowerCase().includes(searchTerm.toLowerCase()));
+        setFilteredClips(newClips);
+    }
 
+    // todo ordonat clips after upload date
     // todo figure out how to stop the extra scroll on mac
+    // todo extract top bar and maybe more
     return (
         <Layout>
+            {/* Modals for adding a clip and a folder */}
             <AddFolderModal
                 state={addFolderModal}
                 handleConfirm={createFolder}
@@ -253,14 +89,17 @@ const ClipsPage = () => {
                 state={addClipModal}
                 handleConfirm={uploadClip}
             />
-            <Typography variant="h3" align="center" gutterBottom sx={{ color: "#2e7d32", mt: 3, mb: 3 }}>
+
+            {/* Page Title */}
+            <Typography variant="h1" align="center" sx={{ mt: 3, mb: 3 }}>
                 Clips
             </Typography>
 
+            {/* Page Content */}
             <Box sx={{
                 width: {
-                    xs: '100%',    // mobile
-                    sm: '90vw',   // tablet
+                    xs: '100%',
+                    sm: '90vw',
                     xl: '80vw',
                     xxl: '1900px',
                 },
@@ -268,6 +107,8 @@ const ClipsPage = () => {
                 flexDirection: 'column',
                 minHeight: 'calc(100vh - 200px)', // Account for header and title
             }}>
+
+                {/* Top Bar */}
                 <Box sx={{
                     backgroundColor: theme.palette.secondary.main,
                     padding: 3,
@@ -283,36 +124,11 @@ const ClipsPage = () => {
                         },
                         gap: 2,
                     }}>
-
-                        <TextField
-                            // placeholder="Search clips by name"
-                            value={search}
-                            onChange={e => setSearch(e.target.value)}
-                            sx={{
-                                width: '100%',
-                                backgroundColor: theme.palette.primary.main,
-                                borderRadius: 5,
-                                boxShadow: "none",
-                                "& .MuiOutlinedInput-root": {
-                                    borderRadius: '25px',
-                                    boxShadow: "none",
-                                },
-                                "& fieldset": {
-                                    border: "none",
-                                },
-                            }}
-                            slotProps={{
-                                input: {
-                                    startAdornment: <InputAdornment position="start">
-                                        <SearchIcon/>
-                                    </InputAdornment>,
-                                },
-                            }}
-                        />
-
+                        <SearchBar onSearch={handleSearchClips} searchTerm={searchTerm} setSearchTerm={setSearchTerm}/>
                     </Box>
                 </Box>
 
+                {/* Main Content */}
                 <Box sx={{
                     backgroundColor: theme.palette.primary.main,
                     padding: "24px 5px 24px 5px",
@@ -321,11 +137,15 @@ const ClipsPage = () => {
                     display: 'flex',
                     flexDirection: 'column',
                 }}>
-                    <Grid container sx={{
-                        flex: 1,
-                        minHeight: 0, // Important for proper flex behavior
+                    <Grid container
+                          columns={16}
+                          sx={{
+                            flex: 1,
+                            minHeight: 0, // Important for proper flex behavior
                     }}>
-                        <Grid size={{ xs: 2, sm: 3, md: 2, lg:5, w1400: 4, xl:2 }} sx={{
+
+                        {/* Left side, folder structure */}
+                        <Grid size={{ xs: 2, sm: 3}} sx={{
                             display: 'flex',
                             flexDirection: 'column',
                             borderRight: 1
@@ -335,19 +155,13 @@ const ClipsPage = () => {
                                 display:'flex',
                                 alignItems: 'flex-end',
                                 flexDirection: 'column',
-                                paddingRight: '1em'
+                                paddingRight: '2em'
                             }}>
                                 <Button
                                     onClick={addFolderModal.openModal}
                                     sx={{
                                         minWidth: 'auto',
                                         padding: 0,
-                                        '&:focus': {
-                                            outline: 'none'
-                                        },
-                                        '&:hover': {
-                                            backgroundColor: 'transparent'
-                                        }
                                     }}
                                 >
                                     <AddFolderIcon color={BtnsColour}/>
@@ -387,44 +201,47 @@ const ClipsPage = () => {
                             </Box>
                         </Grid>
 
-                        {/*todo make divider adjustable*/}
+
                         <Divider orientation="vertical" 
                             sx={{
                                 border: "20px"
                             }}/>
 
-                        <Grid size={{ xs: 2, sm: 9, md: 10, lg: 7, w1400: 8, xl:10 }} sx={{ //todo fix this aaaa
-                            display: 'flex',
-                            flexDirection: 'column',
-                            flex: 1,
-                            minHeight: 0
+                        {/* Right side, clips */}
+                        <Grid size={{ xs: 14, sm: 13}}
+                              sx={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                flex: 1,
+                                minHeight: 0
                         }}>
                             <Box sx={{
                                 height: '30px',
                                 display:'flex',
                                 alignItems: 'flex-start',
                                 flexDirection: 'column',
-                                // paddingLeft: '1em'
+                                paddingLeft: '1em'
                             }}>
                                 <Button
                                     onClick={addClipModal.openModal}
                                     sx={{
                                         width: 'inherit',
                                         padding: 0,
-                                        '&:focus': {
-                                            outline: 'none'
-                                        },
-                                        '&:hover': {
-                                            backgroundColor: 'transparent'
-                                        }
                                     }}
                                 >
                                     <AddClipIcon color={BtnsColour}/>
                                 </Button>
                             </Box>
                             
-                            <Box sx={{ flex: 1, minHeight: 0, overflow: 'auto', paddingTop: '5px'}}>
-                                <ClipsContainer clips={clips}/>
+                            <Box
+                                sx={{
+                                    flex: 1,
+                                    minHeight: 0,
+                                    overflow: 'auto',
+                                    paddingTop: '1em',
+                                    paddingX: '1em'
+                            }}>
+                                <ClipsContainer clips={filteredClips}/>
                             </Box>
                         </Grid>
                     </Grid>
@@ -432,8 +249,6 @@ const ClipsPage = () => {
             </Box>
         </Layout>
     )
-
 }
-
 
 export default ClipsPage;

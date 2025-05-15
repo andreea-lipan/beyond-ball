@@ -5,16 +5,21 @@ import {MessageType} from "../../../components/popup/MessageType.js";
 
 export const AddClipModal = ({ state, handleConfirm}) => {
     const theme = useTheme();
-    const [selectedFile, setSelectedFile] = useState(null);
 
+    // for error messages
     const [isPopupVisible, setIsPopupVisible] = useState(false);
     const [popupMessage, setPopupMessage] = useState("");
     const [popupType, setPopupType] = useState(MessageType.error);
+    const showError = (message) => {
+        setPopupMessage(message);
+        setPopupType(MessageType.error);
+        setIsPopupVisible(true);
+    };
 
+    // modal information
     let confirmButtonText= "Upload";
     let declineButtonText= "Cancel";
     let message = "Upload a video clip";
-
     const modalStyle = {
         position: 'absolute',
         top: '50%',
@@ -27,12 +32,11 @@ export const AddClipModal = ({ state, handleConfirm}) => {
         p: 4,
     };
 
-    const showError = (message) => {
-        setPopupMessage(message);
-        setPopupType(MessageType.error);
-        setIsPopupVisible(true);
-    };
+    // video clip and filename information
+    const [videoName, setVideoName] = useState("");
+    const [selectedFile, setSelectedFile] = useState(null);
 
+    // uploading a video file
     const handleFileChange = (event) => {
         const file = event.target.files[0];
         if (!file) return;
@@ -40,7 +44,6 @@ export const AddClipModal = ({ state, handleConfirm}) => {
         // Check file extension
         const allowedExtensions = ['.mp4', '.avi', '.mov', '.mkv'];
         const fileExtension = '.' + file.name.split('.').pop().toLowerCase();
-        
         if (!allowedExtensions.includes(fileExtension)) {
             showError('Please select a valid video file format (mp4, avi, mov, mkv)');
             return;
@@ -54,18 +57,18 @@ export const AddClipModal = ({ state, handleConfirm}) => {
         }
     };
 
+    // closing the modal
     const handleClose = () => {
         setSelectedFile(null);
         setVideoName("")
         state.closeModal()
     }
 
-    const [videoName, setVideoName] = useState("");
-
     return (
         <>
             <Modal open={state.isOpen} onClose={handleClose}>
                 <Box sx={modalStyle}>
+                    {/* Modal message */}
                     <Typography variant="h6" gutterBottom>
                         {message}
                     </Typography>
@@ -120,22 +123,12 @@ export const AddClipModal = ({ state, handleConfirm}) => {
                                     showError('Please select a video file first');
                                 }
                             }}
-                            sx={{
-                                '&:focus': {
-                                    outline: 'none'
-                                }
-                            }}
                         >
                             {confirmButtonText}
                         </Button>
                         <Button
                             variant="outlined"
                             onClick={handleClose}
-                            sx={{
-                                '&:focus': {
-                                    outline: 'none'
-                                }
-                            }}
                         >
                             {declineButtonText}
                         </Button>

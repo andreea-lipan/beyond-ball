@@ -6,7 +6,7 @@ const ClipsList = ({clips}) => {
         <Box sx={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-            gap: 2,
+            gap: 3,
             padding: '1em',
             width: '100%'
         }}>
