@@ -45,10 +45,8 @@ export const QUIZ_ENDPOINTS = {
     QUIZZES: `${QUIZ_URL}`,
 };
 
-export const PLAYERS_ENDPOINTS = {
-    //todo
-}
-
+const USER_URL = `${BASE_URL}/users`
 export const USER_ENDPOINTS = {
-    MOCK: `${BASE_URL}/users/teams/{teamId}/players/mock`
+    MOCK: `${USER_URL}/teams/{teamId}/players/mock`,
+    TEAM_MEMBERS: (teamId) => `${USER_URL}/teams/${teamId}/members`,
 }

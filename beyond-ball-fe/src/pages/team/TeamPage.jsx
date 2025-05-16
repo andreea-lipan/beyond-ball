@@ -1,33 +1,32 @@
 import Layout from "../../components/Layout.jsx";
 import {Box, Button, Tooltip, Typography} from "@mui/material";
-import {TestComponent} from "../../components/TestComponent.jsx";
 import React, {useEffect, useState} from "react";
 import TeamTopBar from "./TeamTopBar.jsx";
 import TeamContainer from "./TeamContainer.jsx";
+import UserService from "../../APIs/UserService.js";
+import Storage from "../../utils/Storage.js";
 
-const mockTeam = [
-    { id: 1, name: "Lionel Messi", role: "Player", position: "Bench", goals: 2, assists: 0, active: true },
-    { id: 2, name: "Laura James", role: "Technical Staff", position: "Analyst", goals: 0, assists: 0, active: true },
-    { id: 3, name: "Jamie Vardy", role: "Player", position: "Striker", goals: 5, assists: 1, active: true },
-    { id: 4, name: "Chris Walker", role: "Technical Staff", position: "Coach", goals: 0, assists: 0, active: true },
-];
 const TeamPage = () => {
-    const teamName = "BBGs";
+    const teamId = Storage.getTeamIdFromToken();
+    const [teamName, setTeamName] = useState("");
     const [search, setSearch] = useState("");
-    const [filter, setFilter] = useState("Player");
+    const [filter, setFilter] = useState("PLAYER");
 
-    const [team, setTeam] = useState(mockTeam);
+    const [team, setTeam] = useState([]);
 
-    const filteredTeam = team.filter(member =>
-        member.role === filter && member.name.toLowerCase().includes(search.toLowerCase())
-    );
+    const filteredTeam = team.filter(member => {
+        return member.role === filter && member?.name.toLowerCase().includes(search.toLowerCase())
+    });
 
     useEffect(() => {
         fetchTeam()
-    }, []);
+    }, [teamId]);
 
     const fetchTeam = () => {
-
+        UserService.getTeamMembers(teamId).then(response => {
+            setTeam(response.members);
+            setTeamName(response.teamName);
+        })
     }
 
     return (

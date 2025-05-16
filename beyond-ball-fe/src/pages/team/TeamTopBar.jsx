@@ -30,8 +30,8 @@ const TeamTopBar = ({search, setSearch, filter, setFilter}) => {
                     onChange={handleFilterChange}
                     aria-label="Role Filter"
                 >
-                    <ToggleButton value="Player">Players</ToggleButton>
-                    <ToggleButton value="Technical Staff">Technical Staff</ToggleButton>
+                    <ToggleButton value="PLAYER">Players</ToggleButton>
+                    <ToggleButton value="STAFF">Technical Staff</ToggleButton>
                 </ToggleButtonGroup>
 
                 <TextField
