@@ -1,7 +1,7 @@
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import './App.css'
 import WhiteboardsPage from "./pages/whiteboards/WhiteboardsPage.jsx";
-import TeamPage from "./pages/TeamPage.jsx";
+import TeamPage from "./pages/team/TeamPage.jsx";
 import PlayerProfilePage from "./pages/PlayerProfilePage.jsx";
 import ClipsPage from "./pages/clips/view-clips/ClipsPage.jsx";
 import QuizzesPage from "./pages/quizzes/QuizzesPage.jsx";
@@ -55,7 +55,7 @@ function App() {
                                         sessionStorage.setItem("lastValidPath", "/team");
                                         return <TeamPage/>;
                                     })()
-                                    : <TeamAdminPage/>
+                                    : <TeamPage/>
                             }
                         />
 
@@ -128,7 +128,7 @@ function App() {
                         <Route
                             path="/quizzes"
                             element={
-                                ["PLAYER", "STAFF"].includes(role)
+                                ["PLAYER", "STAFF", "ADMIN"].includes(role)
                                     ? (() => {
                                         sessionStorage.setItem("lastValidPath", "/quizzes");
                                         return <QuizzesPage/>;
