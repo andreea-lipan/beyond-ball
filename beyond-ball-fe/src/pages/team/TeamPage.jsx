@@ -1,5 +1,5 @@
 import Layout from "../../components/Layout.jsx";
-import {Button, Tooltip, Typography} from "@mui/material";
+import {Box, Button, Tooltip, Typography} from "@mui/material";
 import {TestComponent} from "../../components/TestComponent.jsx";
 import React, {useEffect, useState} from "react";
 import TeamTopBar from "./TeamTopBar.jsx";
@@ -12,7 +12,7 @@ const mockTeam = [
     { id: 4, name: "Chris Walker", role: "Technical Staff", position: "Coach", goals: 0, assists: 0, active: true },
 ];
 const TeamPage = () => {
-    const teamName = "Team Name";
+    const teamName = "BBGs";
     const [search, setSearch] = useState("");
     const [filter, setFilter] = useState("Player");
 
@@ -32,12 +32,24 @@ const TeamPage = () => {
 
     return (
         <Layout>
-            <Typography variant="h3" align="center" gutterBottom sx={{color: "#2e7d32", mt: 3}}>
+            <Typography variant="h1" align="center" sx={{ mt: 3, mb: 3 }}>
                 Team {teamName}
             </Typography>
 
-            <TeamTopBar search={search} setSearch={setSearch} filter={filter} setFilter={setFilter} />
-            <TeamContainer team={filteredTeam}/>
+            <Box sx={{
+                width: {
+                    xs: '100%',
+                    sm: '90vw',
+                    xl: '80vw',
+                    xxl: '1900px',
+                },
+                display: 'flex',
+                flexDirection: 'column',
+                minHeight: 'calc(100vh - 200px)', // Account for header and title
+            }}>
+                <TeamTopBar search={search} setSearch={setSearch} filter={filter} setFilter={setFilter} />
+                <TeamContainer team={filteredTeam}/>
+            </Box>
         </Layout>
     )
 }

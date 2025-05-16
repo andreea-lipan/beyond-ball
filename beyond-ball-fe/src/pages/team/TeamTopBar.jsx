@@ -1,10 +1,11 @@
-import {Box, Button, InputAdornment, TextField, ToggleButton, ToggleButtonGroup} from "@mui/material";
+import {Box, InputAdornment, TextField, ToggleButton, ToggleButtonGroup, useTheme} from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-import React, {useEffect, useState} from "react";
+import React from "react";
 import {useAuth} from "../../components/AuthContext.jsx";
 
 const TeamTopBar = ({search, setSearch, filter, setFilter}) => {
     const { role, teamId } = useAuth();
+    const theme = useTheme();
 
     const handleFilterChange = (event, newFilter) => {
         if (newFilter) setFilter(newFilter);
@@ -12,11 +13,9 @@ const TeamTopBar = ({search, setSearch, filter, setFilter}) => {
 
     return(
         <Box sx={{
-            backgroundColor: "#9ca3af",
+            backgroundColor: theme.palette.secondary.main,
             padding: 3,
             borderRadius: "16px 16px 0 0",
-            marginX: 4,
-            marginTop: 4,
         }}>
             <Box sx={{
                 display: 'flex',
@@ -41,7 +40,7 @@ const TeamTopBar = ({search, setSearch, filter, setFilter}) => {
                     onChange={e => setSearch(e.target.value)}
                     sx={{
                         width: '400px',
-                        backgroundColor: "#ffffff",
+                        backgroundColor: theme.palette.primary.main,
                         borderRadius: 5,
                         boxShadow: "none",
                         "& .MuiOutlinedInput-root": {
@@ -52,12 +51,14 @@ const TeamTopBar = ({search, setSearch, filter, setFilter}) => {
                             border: "none",
                         },
                     }}
-                    InputProps={{
-                        startAdornment: (
-                            <InputAdornment position="start">
-                                <SearchIcon />
-                            </InputAdornment>
-                        )
+                    slotProps={{
+                        input: {
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <SearchIcon/>
+                                </InputAdornment>
+                            )
+                        }
                     }}
                 />
 
