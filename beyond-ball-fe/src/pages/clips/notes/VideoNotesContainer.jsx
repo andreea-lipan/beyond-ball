@@ -1,11 +1,10 @@
-import {Box, Button, Typography, useTheme} from "@mui/material";
+import {AppBar, Box, Button, Toolbar, Typography, useTheme} from "@mui/material";
 import VideoNoteTemplate from "./VideoNoteTemplate.jsx";
 import {useEffect, useState} from "react";
 import VideoNotesList from "./VideoNotesList.jsx";
 import VideoNoteService from "../../../APIs/VideoNoteService.js";
 
 const VideoNotesContainer = ({ seekTo, getTimestamp, clipId}) => {
-
     const [addingComment, setAddingComment] = useState(false);
     const [videoNotes, setVideoNotes] = useState([]);
     const theme = useTheme();
@@ -58,7 +57,7 @@ const VideoNotesContainer = ({ seekTo, getTimestamp, clipId}) => {
     }
 
     return (
-        <Box sx = {{
+        <Box sx={{
             backgroundColor: theme.palette.primary.main,
             height: '100%',
             borderRadius: '10px',
@@ -66,22 +65,80 @@ const VideoNotesContainer = ({ seekTo, getTimestamp, clipId}) => {
             maxWidth: '450px',
             overflowX: 'auto',
             marginLeft: '0.5em',
+            display: 'flex',
+            flexDirection: 'column',
             '&::-webkit-scrollbar': {
-                display: 'none'
-            }
+                    display: 'none'
+                }
         }}>
-            <Typography variant="h2" sx={{paddingY: 3}}>Notes</Typography>
-            <VideoNotesList getTimestamp={getTimestamp} videoNotes={videoNotes} seekTo={seekTo} deleteNote={deleteNote} updateNote={updateNote} />
-            {addingComment === true?
-                <Box sx={{paddingX: 3}}>
+
+            {/* Note top bar */}
+            <AppBar 
+                position='sticky' 
+                sx={{ 
+                    backgroundColor: theme.palette.primary.main,
+                    boxShadow: 'none',
+                    borderBottom: `1px solid ${theme.palette.secondary.main}`
+                }}
+            >
+                <Toolbar sx={{ 
+                    display: 'flex', 
+                    justifyContent: 'space-between',
+                    padding: '0 24px'
+                }}>
+                    <Typography variant="h2">Notes</Typography>
+                    <Button variant='contained' onClick={() => setAddingComment(true)}>
+                        {/*<AddCircleIcon sx={{color: theme.palette.secondary.main}}/>*/}
+                        Add new note
+                    </Button>
+                </Toolbar>
+            </AppBar>
+
+            {/* Notes list */}
+            <Box sx={{
+                flex: 1,  // This makes it take up all remaining space
+                overflowY: 'auto',
+                paddingX: 3,
+                paddingTop: 2,
+                paddingBottom: addingComment ? '200px' : 2, // Add space for the fixed bottom component
+                '&::-webkit-scrollbar': {
+                    display: 'none'
+                }
+            }}>
+                <VideoNotesList
+                    getTimestamp={getTimestamp}
+                    videoNotes={videoNotes}
+                    seekTo={seekTo}
+                    deleteNote={deleteNote}
+                    updateNote={updateNote}
+                />
+                {videoNotes.length === 0 && (
+                    <Typography sx={{paddingY: 2}}>
+                        You have no notes yet. Add one by clicking the add button above!
+                    </Typography>
+                )}
+            </Box>
+
+            {/* Add new note */}
+            {addingComment && (
+                <Box sx={{
+                    position: 'sticky',
+                    bottom: 0,
+                    backgroundColor: theme.palette.primary.main,
+                    borderTop: `1px solid ${theme.palette.secondary.main}`,
+                    padding: "10px 10px 0 10px",
+                    overflow: 'auto',
+                    '&::-webkit-scrollbar': {
+                        display: 'none'
+                    }
+                }}>
                     <VideoNoteTemplate
                         handleClose={handleClose}
                         getTimestamp={getTimestamp}
-                        addNote={addNote}/>
+                        addNote={addNote}
+                    />
                 </Box>
-                :
-                <Button variant={"contained"} onClick={() => setAddingComment(true)}>Add new note</Button>
-            }
+            )}
         </Box>
     );
 }

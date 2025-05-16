@@ -12,7 +12,8 @@ const VideoNoteCard = ({ note, seekTo, onEdit, onDelete}) => {
     }
 
     return (
-        <Card sx={{ width: '100%', mb: 2, p: 2, borderRadius: 8 }}>
+        <Card sx={{ width: '100%', mb: 2, p: '0.5em', borderRadius: 8 , paddingBottom: 0}}>
+
             {/* Top section: Author + Buttons */}
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Typography variant="subtitle2" sx={{m:1}}>
@@ -32,8 +33,11 @@ const VideoNoteCard = ({ note, seekTo, onEdit, onDelete}) => {
             </Box>
 
             {/* Note content */}
-            <CardContent sx={{ pt: 1, pl: 0, pr: 0 }}>
-                <Typography variant="body2">
+            <CardContent sx={{ paddingY: 0}}>
+                <Typography
+                    variant="body1"
+                    sx={{fontSize: '0.8rem'}}
+                >
                     <strong style={{ color: '#1976d2', cursor:"pointer" }} onClick={handleSeekTo}>{formatTimestamp(note.videoTimestamp)}</strong> – {note.text}
                 </Typography>
             </CardContent>

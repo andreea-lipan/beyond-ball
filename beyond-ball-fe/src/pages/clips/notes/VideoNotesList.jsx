@@ -9,7 +9,6 @@ const VideoNotesList = ({videoNotes, seekTo, deleteNote, updateNote, getTimestam
             <VideoNoteItem note={note} seekTo={seekTo} deleteNote={deleteNote} updateNote={updateNote} getTimestamp={getTimestamp}/>
         )) :
         <>
-
         </>
     )
 }
