@@ -1,15 +1,17 @@
-import {Avatar, Box, Card, Grid, IconButton, Typography} from "@mui/material";
+import {Avatar, Box, Card, Grid, IconButton, Typography, useTheme} from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import React from "react";
 import TeamList from "./TeamList.jsx";
 
 const TeamContainer = ({team}) => {
+    const theme = useTheme();
+
     return(
         <Box sx={{
-            backgroundColor: "#d1d5db",
-            padding: 3,
+            backgroundColor: theme.palette.primary.main,
             borderRadius: "0 0 16px 16px",
-            marginX: 4,
+            padding: "24px 5px 24px 5px",
+            flex: 1,
         }}>
             <Grid container spacing={3} justifyContent="center">
                 <TeamList team={team} />

@@ -48,7 +48,7 @@ export function theme() {
             // Subtitles
             h2: {
                 fontSize: '1.4rem',
-                fontWeight: 400,
+                fontWeight: 500,
                 color: alpha(palette.text.primary, 1)
             },
             // base size
@@ -135,6 +135,31 @@ export function theme() {
                         },
                     }
                 }
+            },
+            MuiToggleButton: {
+                styleOverrides: {
+                    root: {
+                        textTransform: 'none',
+                        backgroundColor: palette.secondary.main,
+                        '&:hover': {
+                            borderColor: palette.primary.main,
+                            borderWidth: '1px'
+                        },
+                        '&.Mui-selected': {
+                            backgroundColor: palette.secondary.dark,
+                            color: palette.text.secondary,
+                            '&:hover': {
+                                backgroundColor: palette.secondary.dark,
+                            }
+                        },
+                        '&.MuiToggleButtonGroup-firstButton': {
+                            borderRadius: '15px 0 0 15px'
+                        },
+                        '&.MuiToggleButtonGroup-lastButton': {
+                            borderRadius: '0 15px 15px 0'
+                        }
+                    },
+                },
             },
             MuiTextField: {
                 styleOverrides: {
