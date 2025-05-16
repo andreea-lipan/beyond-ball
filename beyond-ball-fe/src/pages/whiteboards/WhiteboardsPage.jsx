@@ -15,6 +15,7 @@ import Typography from '@mui/material/Typography';
 import CardActionArea from '@mui/material/CardActionArea';
 import SearchBar from "../../components/SearchBar.jsx";
 import {alpha} from "@mui/material/styles";
+import {WHITEBOARD_CREATION_PAGE} from "../../utils/UrlConstants.js";
 
 
 const WhiteboardsPage = () => {
@@ -106,7 +107,7 @@ const WhiteboardsPage = () => {
                         borderRadius: 5,
                         opacity: 0.8
                     }}>
-                        <CardActionArea>
+                        <CardActionArea onClick={() => {navigate(WHITEBOARD_CREATION_PAGE)}}>
                             <CardMedia sx={{objectFit: "contain", scale: '95%'}}
                                        component="img"
                                        image="src/assets/emptyWhiteboard.png"
