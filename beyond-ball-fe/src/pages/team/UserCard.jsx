@@ -24,7 +24,7 @@ const UserCard = ({user}) => {
                     alt={user.name}
                     sx={{ width: 80, height: 80, mb: 1 }}
                 />
-                <Typography variant="h2" sx={{padding: '0.2em 0 0.4em 0'}}>{user.name}</Typography>
+                <Typography variant="h2" sx={{padding: '0.2em 0 0.4em 0'}}>{user?.name}</Typography>
 
                 <Box sx={{
                     display: 'flex',
@@ -37,7 +37,7 @@ const UserCard = ({user}) => {
                         paddingRight: '10px'
                     }}>
                         <Typography variant="subtitle1">Position:</Typography>
-                        {user.role === "player" &&
+                        {user.role === "PLAYER" &&
                             <>
                                 <Typography variant="subtitle1">Goals:</Typography>
                                 <Typography variant="subtitle1">Assists:</Typography>
@@ -50,11 +50,11 @@ const UserCard = ({user}) => {
                         alignItems: 'flex-end',
                         paddingLeft: '10px'
                     }}>
-                        <Typography variant="subtitle1">{user.position}</Typography>
-                        {user.role === "player" &&
+                        <Typography variant="subtitle1">{user?.position}</Typography>
+                        {user.role === "PLAYER" &&
                             <>
-                                <Typography variant="subtitle1">{user.goals}</Typography>
-                                <Typography variant="subtitle1">{user.assists}</Typography>
+                                <Typography variant="subtitle1">{user?.goals}</Typography>
+                                <Typography variant="subtitle1">{user?.assists}</Typography>
                             </>
                         }
                     </Box>
