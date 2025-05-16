@@ -71,16 +71,7 @@ const SearchBar = ({onSearch, searchTerm, setSearchTerm}) => {
                     startAdornment: (
                         <InputAdornment position="start">
                             <IconButton
-                                onClick={handleSearchPress}
-                                // sx={{
-                                //     '&:focus': {
-                                //         outline: 'none'
-                                //     },
-                                //     '&:hover': {
-                                //         backgroundColor: 'transparent'
-                                //     }
-                                // }}
-                            >
+                                onClick={handleSearchPress}>
                                 <SearchIcon
                                 />
                             </IconButton>

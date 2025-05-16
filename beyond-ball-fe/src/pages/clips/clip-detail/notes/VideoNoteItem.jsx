@@ -1,9 +1,9 @@
 import {useState} from "react";
 import VideoNoteTemplate from "./VideoNoteTemplate.jsx";
 import VideoNoteCard from "./VideoNoteCard.jsx";
-import VideoNoteService from "../../../APIs/VideoNoteService.js";
-import useModal from "../../../components/modals/useModal.js";
-import {ConfirmationModal} from "../../../components/modals/ConfirmationModal.jsx";
+import VideoNoteService from "../../../../APIs/VideoNoteService.js";
+import useModal from "../../../../components/modals/useModal.js";
+import {ConfirmationModal} from "../../../../components/modals/ConfirmationModal.jsx";
 const VideoNoteItem = ({note, seekTo, getTimestamp, deleteNote, updateNote}) => {
 
     const [isEditing, setIsEditing] = useState(false);

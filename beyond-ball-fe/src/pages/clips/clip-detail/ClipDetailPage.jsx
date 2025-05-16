@@ -1,8 +1,8 @@
 import {useEffect, useRef, useState} from "react";
 import React from 'react';
-import ClipService from "../../APIs/ClipService.js";
+import ClipService from "../../../APIs/ClipService.js";
 import {useParams} from "react-router-dom";
-import Layout from "../../components/Layout.jsx";
+import Layout from "../../../components/Layout.jsx";
 import VideoNotesContainer from "./notes/VideoNotesContainer.jsx";
 import {Box, Typography} from "@mui/material";
 

@@ -2,7 +2,7 @@ import React from 'react';
 import { Card, CardContent, Box, Typography, IconButton } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import Storage from '../../../utils/Storage.js';
+import Storage from '../../../../utils/Storage.js';
 
 const VideoNoteCard = ({ note, seekTo, onEdit, onDelete}) => {
     const isAuthor = note.authorId === Storage.getUserIdFromToken();
