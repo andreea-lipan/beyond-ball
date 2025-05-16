@@ -1,51 +1,48 @@
-import React from 'react';
-import { Card, CardContent, Box, Typography, IconButton } from '@mui/material';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
-import Storage from '../../../utils/Storage.js';
+import {useState} from "react";
+import VideoNoteTemplate from "./VideoNoteTemplate.jsx";
+import VideoNoteCard from "./VideoNoteCard.jsx";
+import VideoNoteService from "../../../APIs/VideoNoteService.js";
+import useModal from "../../../components/modals/useModal.js";
+import {ConfirmationModal} from "../../../components/modals/ConfirmationModal.jsx";
+const VideoNoteItem = ({note, seekTo, getTimestamp, deleteNote, updateNote}) => {
 
-const VideoNoteItem = ({ note, seekTo }) => {
-    const isAuthor = note.authorId === Storage.getUserIdFromToken();
+    const [isEditing, setIsEditing] = useState(false);
+    const modalState = useModal();
 
-    const handleSeekTo = () => {
-        seekTo(note.videoTimestamp);
+    const startEditing = () => {
+        setIsEditing(true);
     }
 
-    return (
-        <Card sx={{ width: '100%', mb: 2, p: 2, borderRadius: 8 }}>
-            {/* Top section: Author + Buttons */}
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Typography variant="subtitle2" sx={{m:1}}>
-                    {note.author}
-                </Typography>
+    const stopEditing = () => {
+        setIsEditing(false);
+    }
 
-                {isAuthor && (
-                    <Box>
-                        <IconButton size="small" aria-label="edit">
-                            <EditIcon fontSize="small" />
-                        </IconButton>
-                        <IconButton size="small" aria-label="delete">
-                            <DeleteIcon fontSize="small" />
-                        </IconButton>
-                    </Box>
-                )}
-            </Box>
+    const handleDelete = () => {
+        deleteNote(note.id)
+    }
 
-            {/* Note content */}
-            <CardContent sx={{ pt: 1, pl: 0, pr: 0 }}>
-                <Typography variant="body2">
-                    <strong style={{ color: '#1976d2', cursor:"pointer" }} onClick={handleSeekTo}>{formatTimestamp(note.videoTimestamp)}</strong> – {note.text}
-                </Typography>
-            </CardContent>
-        </Card>
-    );
-};
+    const handleUpdate = (text, timestamp) => {
+        const updatedNote = {
+            ...note,
+            text: text,
+            videoTimestamp: timestamp
+        }
+        updateNote(updatedNote);
+        stopEditing();
+    }
 
-// Helper to format seconds into mm:ss
-const formatTimestamp = (seconds) => {
-    const min = Math.floor(seconds / 60);
-    const sec = Math.floor(seconds % 60).toString().padStart(2, '0');
-    return `${min}:${sec}`;
-};
+    return(
+        <>
+            <ConfirmationModal state={modalState} handleConfirm={handleDelete} message={"Are you sure you want to delete the note?"}/>
+            {isEditing ? (
+                <VideoNoteTemplate note={note} handleClose={stopEditing} addNote={handleUpdate}
+                                   getTimestamp={getTimestamp}/>
+            ) : (
+                <VideoNoteCard note={note} seekTo={seekTo} onEdit={startEditing} onDelete={modalState.openModal}/>
+            )}
+        </>
+
+    )
+}
 
 export default VideoNoteItem;

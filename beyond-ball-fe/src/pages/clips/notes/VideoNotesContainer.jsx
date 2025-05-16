@@ -45,6 +45,14 @@ const VideoNotesContainer = ({ seekTo, getTimestamp, clipId}) => {
         setAddingComment(false);
     }
 
+    const deleteNote = (noteId) => {
+        VideoNoteService.deleteVideoNote(noteId).then(fetchVideoNotes);
+    }
+
+    const updateNote = (note) => {
+        VideoNoteService.updateVideoNote(note.id, note).then(fetchVideoNotes);
+    }
+
     const handleClose = () => {
         setAddingComment(false);
     }
@@ -63,7 +71,7 @@ const VideoNotesContainer = ({ seekTo, getTimestamp, clipId}) => {
             }
         }}>
             <Typography variant="h2" sx={{paddingY: 3}}>Notes</Typography>
-            <VideoNotesList videoNotes={videoNotes} seekTo={seekTo}/>
+            <VideoNotesList getTimestamp={getTimestamp} videoNotes={videoNotes} seekTo={seekTo} deleteNote={deleteNote} updateNote={updateNote} />
             {addingComment === true?
                 <Box sx={{paddingX: 3}}>
                     <VideoNoteTemplate

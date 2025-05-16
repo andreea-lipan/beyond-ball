@@ -52,6 +52,7 @@ public class VideoNoteServiceImpl implements VideoNoteService {
     @Override
     public void deleteVideoNote(Long noteId) {
         VideoNote videoNote = videoNoteRepository.findById(noteId).orElseThrow(() -> new EntityNotFoundException("Video note not found"));
+
         videoNoteRepository.delete(videoNote);
     }
 

@@ -1,10 +1,10 @@
 import React from 'react';
 import {Box, Card, CardContent, Button, TextField, Typography, useTheme, Tooltip} from '@mui/material';
 
-const VideoNoteTemplate = ({handleClose, getTimestamp, addNote}) => {
+const VideoNoteTemplate = ({handleClose, getTimestamp, addNote, note}) => {
     const theme = useTheme();
-    const [currentTimestamp, setCurrentTimestamp] = React.useState(0);
-    const [noteText, setNoteText] = React.useState("");
+    const [currentTimestamp, setCurrentTimestamp] = React.useState(note?.videoTimestamp || 0);
+    const [noteText, setNoteText] = React.useState(note?.text);
 
     const handleSetCurrentTimestamp = () => {
         const timestamp = getTimestamp();
@@ -54,7 +54,7 @@ const VideoNoteTemplate = ({handleClose, getTimestamp, addNote}) => {
                     Cancel
                 </Button>
                 <Button variant="contained" size="small" onClick={handleAddNote}>
-                    Post
+                    Save
                 </Button>
             </Box>
         </Card>

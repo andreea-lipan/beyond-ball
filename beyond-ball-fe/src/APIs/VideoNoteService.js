@@ -15,9 +15,19 @@ const getVideoNotesForClip = (clipId) => {
     return RequestInstance.get(VIDEO_NOTES_ENDPOINTS.NOTES_BY_CLIP(clipId)).then(response => response.data)
 }
 
+const deleteVideoNote = (id) => {
+    return RequestInstance.delete(VIDEO_NOTES_ENDPOINTS.NOTE(id)).then(response => response.data)
+}
+
+const updateVideoNote = (id, videoNote) => {
+    return RequestInstance.put(VIDEO_NOTES_ENDPOINTS.NOTE(id), videoNote).then(response => response.data)
+}
+
 const VideoNoteService = {
     createVideoNote,
-    getVideoNotesForClip
+    getVideoNotesForClip,
+    deleteVideoNote,
+    updateVideoNote,
 }
 
 export default VideoNoteService;
