@@ -6,10 +6,13 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import CardActionArea from '@mui/material/CardActionArea';
 import {Box} from "@mui/material";
+import {useNavigate} from "react-router-dom";
+import {WHITEBOARD_DETAILS} from "../../../utils/UrlConstants.js";
 
 export const WhiteboardListItem = ({whiteboard}) => {
 
     const [image, setImage] = useState(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         whiteboardService.getWhiteboardImage(whiteboard.imageUrl).then((response) => {
@@ -31,7 +34,7 @@ export const WhiteboardListItem = ({whiteboard}) => {
         <Card sx={{display: "flex", height: '240px', justifyContent: "space-arround",
         // margin: "10px", 
         maxWidth: 280, borderRadius: 5}}>
-            <CardActionArea>
+            <CardActionArea onClick={() => {navigate(WHITEBOARD_DETAILS(whiteboard.id))}}>
                 <CardMedia sx={{objectFit: "contain", scale: '95%'}}
                            component="img"
                            image={image}
