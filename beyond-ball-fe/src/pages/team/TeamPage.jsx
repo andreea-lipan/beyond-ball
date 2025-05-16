@@ -45,7 +45,7 @@ const TeamPage = () => {
                 },
                 display: 'flex',
                 flexDirection: 'column',
-                minHeight: 'calc(100vh - 200px)', // Account for header and title
+                minHeight: 'calc(100vh - 143px)', // Account for header and title
             }}>
                 <TeamTopBar search={search} setSearch={setSearch} filter={filter} setFilter={setFilter} />
                 <TeamContainer team={filteredTeam}/>
