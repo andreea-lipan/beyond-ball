@@ -3,7 +3,7 @@ import './App.css'
 import WhiteboardsPage from "./pages/whiteboards/WhiteboardsPage.jsx";
 import TeamPage from "./pages/TeamPage.jsx";
 import PlayerProfilePage from "./pages/PlayerProfilePage.jsx";
-import ClipsPage from "./pages/clips/ClipsPage.jsx";
+import ClipsPage from "./pages/clips/view-clips/ClipsPage.jsx";
 import QuizzesPage from "./pages/quizzes/QuizzesPage.jsx";
 import LoginPage from "./pages/auth/LoginPage.jsx";
 import TeamRegisterPage from "./pages/auth/TeamRegisterPage.jsx";
@@ -15,7 +15,7 @@ import {useAuth} from "./components/AuthContext";
 import WhiteboardCreationPage from "./pages/whiteboards/WhiteboardCreationPage.jsx";
 import WhiteboardDetailPage from "./pages/whiteboards/WhiteboardDetailPage.jsx";
 import TeamAdminPage from "./pages/TeamAdminPage.jsx";
-import ClipDetailPage from "./pages/clips/ClipDetailPage.jsx";
+import ClipDetailPage from "./pages/clips/clip-detail/ClipDetailPage.jsx";
 
 
 function App() {

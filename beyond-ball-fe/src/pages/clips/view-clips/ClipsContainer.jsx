@@ -5,7 +5,7 @@ import ClipsList from "./ClipsList.jsx";
 // or displays an intuitive message for the user
 const ClipsContainer = ({clips}) => {
     return (
-        clips.length > 0 ?
+        clips?.length > 0 ?
                 <ClipsList clips={clips}/>
                 :
                 <NoClipsMessage/>

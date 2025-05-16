@@ -1,7 +1,7 @@
 import {Box, Button, Modal, TextField, Typography, useTheme} from "@mui/material";
 import React, {useState} from "react";
-import {Popup} from "../../../components/popup/Popup.jsx";
-import {MessageType} from "../../../components/popup/MessageType.js";
+import {Popup} from "../../../../components/popup/Popup.jsx";
+import {MessageType} from "../../../../components/popup/MessageType.js";
 
 export const AddFolderModal = ({ state, handleConfirm}) => {
     const theme = useTheme();

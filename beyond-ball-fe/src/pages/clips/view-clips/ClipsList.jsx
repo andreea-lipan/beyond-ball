@@ -1,5 +1,5 @@
 import {Box} from "@mui/material";
-import ClipCard from "./ClipCard";
+import ClipCard from "./ClipCard.jsx";
 
 const ClipsList = ({clips}) => {
     return (

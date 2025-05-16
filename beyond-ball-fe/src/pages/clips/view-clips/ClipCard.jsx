@@ -4,9 +4,9 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import CardActionArea from '@mui/material/CardActionArea';
-import ClipService from "../../APIs/ClipService.js";
+import ClipService from "../../../APIs/ClipService.js";
 import {useNavigate} from "react-router-dom";
-import {CLIP_DETAILS} from "../../utils/UrlConstants.js";
+import {CLIP_DETAILS} from "../../../utils/UrlConstants.js";
 import {Box, CircularProgress, useTheme} from "@mui/material";
 
 export const ClipCard = ({clip}) => {

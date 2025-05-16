@@ -2,7 +2,7 @@ import {AppBar, Box, Button, Toolbar, Typography, useTheme} from "@mui/material"
 import VideoNoteTemplate from "./VideoNoteTemplate.jsx";
 import {useEffect, useState} from "react";
 import VideoNotesList from "./VideoNotesList.jsx";
-import VideoNoteService from "../../../APIs/VideoNoteService.js";
+import VideoNoteService from "../../../../APIs/VideoNoteService.js";
 
 const VideoNotesContainer = ({ seekTo, getTimestamp, clipId}) => {
     const [addingComment, setAddingComment] = useState(false);
