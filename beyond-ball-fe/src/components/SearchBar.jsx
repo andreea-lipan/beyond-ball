@@ -48,7 +48,7 @@ const SearchBar = ({onSearch, searchTerm, setSearchTerm}) => {
     return (
         <TextField
             variant="outlined"
-            placeholder="Search clips by name"
+            placeholder="Search..."
             value={searchTerm}
             onChange={handleChange}
             onKeyDown={handleKeyDown}

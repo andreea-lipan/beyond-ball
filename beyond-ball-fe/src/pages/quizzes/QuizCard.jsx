@@ -1,4 +1,4 @@
-import {Button, Card, CardActionArea, CardContent, CardHeader, Icon, Typography} from "@mui/material";
+import {Box, Button, Card, CardActionArea, CardContent, CardHeader, Icon, Typography} from "@mui/material";
 import {
     ChecklistIcon,
     IdeaIcon,
@@ -46,8 +46,8 @@ export const QuizCard = ({quiz, index}) => {
         <Card
             key={quiz.id}
             sx={{
-                width: "17vw",
-                height: "45vh",
+                maxWidth: "25em",
+                // height: "45vh",
                 borderRadius: "20px",
                 display: "flex",
                 flexDirection: "column",
@@ -71,19 +71,19 @@ export const QuizCard = ({quiz, index}) => {
                 <CardHeader
                     avatar={<Icon color="primary"/>}
                     title={
-                        <Typography variant="h2" sx={{fontWeight: 700}} gutterBottom>
+                        <Typography variant="h2" sx={{fontWeight: 700, padding: "10px"}} gutterBottom>
                             {quiz.title}
                         </Typography>
                     }
                     subheader={
-                        <div style={{display: "flex", justifyContent: "space-between"}}>
+                        <Box sx={{display: "flex", justifyContent: "space-between", marginX: "25px"}}>
                             <Typography variant="subtitle2" gutterBottom>
                                 <TimerIcon/> {quiz.estimatedDuration} min
                             </Typography>
                             <Typography variant="subtitle2" gutterBottom>
                                 <QuestionsIcon/> {quiz.questions?.length} questions
                             </Typography>
-                        </div>
+                        </Box>
                     }
                 />
 
