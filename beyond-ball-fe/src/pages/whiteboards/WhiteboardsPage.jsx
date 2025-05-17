@@ -1,7 +1,7 @@
 import Layout from "../../components/Layout.jsx";
 import React, {useEffect, useState} from "react";
 import whiteboardService from "../../APIs/WhiteboardService.js";
-import {Box, IconButton, InputAdornment, TextField, useTheme} from "@mui/material";
+import {Box, IconButton, InputAdornment, TextField, ToggleButton, ToggleButtonGroup, useTheme} from "@mui/material";
 import {WhiteboardListItem} from "./display/WhiteboardListItem.jsx";
 import {mockWhiteboards} from "../../utils/whiteboard.js";
 import Storage from "../../utils/Storage.js";
@@ -13,15 +13,15 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import CardActionArea from '@mui/material/CardActionArea';
-import SearchBar from "../../components/SearchBar.jsx";
-import {alpha} from "@mui/material/styles";
 import {WHITEBOARD_CREATION_PAGE} from "../../utils/UrlConstants.js";
+import WhiteboardsTopBar from "./WhiteboardsTopBar.jsx";
 
 
 const WhiteboardsPage = () => {
     const theme = useTheme();
     const [whiteboards, setWhiteboards] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
+    const [filter, setFilter] = useState("title");
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -36,7 +36,10 @@ const WhiteboardsPage = () => {
 
 
     const filteredWhiteboards = whiteboards.filter((whiteboard) => {
-        return whiteboard.title.toLowerCase().includes(searchTerm.toLowerCase());
+        return filter.toLowerCase() === "title" ?
+            whiteboard.title.toLowerCase().includes(searchTerm.toLowerCase())
+            :
+            whiteboard.author.toLowerCase().includes(searchTerm.toLowerCase())
     })
 
 
@@ -44,7 +47,7 @@ const WhiteboardsPage = () => {
         <Layout>
 
             {/* Page Title */}
-            <Typography variant="h1" align="center" sx={{ mt: 3, mb: 3 }}>
+            <Typography variant="h1" align="center" sx={{mt: 3, mb: 3}}>
                 Team {Storage.getTeamIdFromToken()} Whiteboards
             </Typography>
 
@@ -61,25 +64,7 @@ const WhiteboardsPage = () => {
             }}>
 
                 {/* Top Bar */}
-                <Box sx={{
-                    backgroundColor: theme.palette.secondary.main,
-                    borderRadius: "16px 16px 0 0",
-                    padding: 3,
-                }}>
-                    <Box sx={{
-                        margin: 'auto',
-                        width: {
-                            xs: '100%',    // full width on mobile
-                            sm: '100%',   // 300px on tablet
-                            myTablet: '70%',
-                            md: '60%'
-                        },
-                        gap: 2,
-                    }}>
-                        <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm}/>
-                    </Box>
-                </Box>
-
+                <WhiteboardsTopBar filter={filter} setFilter={setFilter} search={searchTerm} setSearch={setSearchTerm}/>
                 {/*<Box sx={{*/}
                 {/*    display: 'flex',*/}
                 {/*    flex: 1,*/}
@@ -99,20 +84,22 @@ const WhiteboardsPage = () => {
                     borderRadius: "0 0 16px 16px"
                 }}>
                     <Card sx={{
-                        display: "flex", 
-                        height: '235px', 
-                        justifyContent: "space-arround", 
+                        display: "flex",
+                        height: '235px',
+                        justifyContent: "space-arround",
                         // margin: "10px",
-                        maxWidth: 280, 
+                        maxWidth: 280,
                         borderRadius: 5,
                         opacity: 0.8
                     }}>
-                        <CardActionArea onClick={() => {navigate(WHITEBOARD_CREATION_PAGE)}}>
+                        <CardActionArea onClick={() => {
+                            navigate(WHITEBOARD_CREATION_PAGE)
+                        }}>
                             <CardMedia sx={{objectFit: "contain", scale: '95%'}}
                                        component="img"
                                        image="src/assets/emptyWhiteboard.png"
                             />
-                            <CardContent sx={{padding:'0.5em'}}>
+                            <CardContent sx={{padding: '0.5em'}}>
                                 <Typography variant="body1">
                                     Create a new whiteboard
                                 </Typography>
@@ -125,7 +112,7 @@ const WhiteboardsPage = () => {
                     ))}
 
                 </Box>
-                </Box>
+            </Box>
             {/*</Box>*/}
 
 

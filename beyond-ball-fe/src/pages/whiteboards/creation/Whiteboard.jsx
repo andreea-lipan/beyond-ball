@@ -1,6 +1,6 @@
 import React, {useState, useRef} from "react";
 import {Toolbar} from "./Toolbar.jsx";
-import {TextField} from "@mui/material";
+import {Box, TextField, useTheme} from "@mui/material";
 import whiteboardService from "../../../APIs/WhiteboardService.js";
 import {WHITEBOARD_DETAILS} from "../../../utils/UrlConstants.js";
 import {useCanvasDrawing} from "./hooks/useCanvasDrawing.js";
@@ -16,11 +16,13 @@ export const Whiteboard = () => {
 
     const canvasRef = useRef(null);
     const ctxRef = useRef(null);
-    const [mode, setMode] = useState("free"); // 'free' | 'circle' | 'square'
+    const [mode, setMode] = useState("free"); // 'free' | 'circle' | 'cross'
     const [color, setColor] = useState(COLORS[2]);
 
     const isMobile = false;
     const [title, setTitle] = useState("");
+
+    const theme = useTheme();
 
     const {
         saveState,
@@ -81,9 +83,21 @@ export const Whiteboard = () => {
             <ConfirmationModal handleConfirm={saveImage}
                                message={"Are you sure you want to save the plan? It cannot be edited afterwards."}
                                state={saveModal}/>
-            <TextField style={{margin: "0.5rem", width: "50%", justifyContent: "center"}} placeholder={"Board Title"}
-                       value={title} onChange={(e) => setTitle(e.target.value)}/>
-            <div style={{display: "flex", flexDirection: isMobile ? "row" : "column"}}>
+            <TextField sx={{
+                borderRadius:"16px",
+                margin: "0.5rem",
+                width: "50%",
+                justifyContent: "center",
+                backgroundColor:theme.palette.primary.main,
+                "& .MuiOutlinedInput-root": {
+                    borderRadius: '16px',
+                    boxShadow: "none",
+                },
+            }}
+               placeholder={"Board Title"}
+               value={title}
+               onChange={(e) => setTitle(e.target.value)}/>
+            <Box sx={{display: "flex", flexDirection: isMobile ? "row" : "column"}}>
                 <Toolbar
                     mode={mode}
                     setMode={setMode}
@@ -109,7 +123,7 @@ export const Whiteboard = () => {
                     onTouchMove={drawTouch}
                     onTouchEnd={stopTouchDrawing}
                 />
-            </div>
+            </Box>
         </>
     );
 }
