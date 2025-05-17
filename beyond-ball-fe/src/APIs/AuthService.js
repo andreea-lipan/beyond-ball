@@ -1,4 +1,4 @@
-import {RequestInstance} from "./RequestInstance";
+import {RequestInstance, RequestInstanceNoToken} from "./RequestInstance";
 import {AUTH_ENDPOINTS} from "./Endpoints";
 import Storage from "../utils/Storage";
 
@@ -34,7 +34,7 @@ const login = async (username, password) => {
 // See example of using this function in the LoginPage
 
 const registerTeam = (team) => {
-    return RequestInstance.post(AUTH_ENDPOINTS.TEAM_SIGNUP, team)
+    return RequestInstanceNoToken.post(AUTH_ENDPOINTS.TEAM_SIGNUP, team)
         .then(res => res.data)
 }
 

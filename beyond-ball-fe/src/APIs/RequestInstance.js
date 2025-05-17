@@ -3,6 +3,12 @@ import Storage from '../utils/Storage';
 
 
 // use these functions when making calls to the BE
+export const RequestInstanceNoToken = axios.create({
+    mode:'cors',
+    headers: {
+        "Content-Type": "application/json",
+    },
+});
 
 export const RequestInstance = axios.create({
     mode:'cors',

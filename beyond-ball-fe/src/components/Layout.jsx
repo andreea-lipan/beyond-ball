@@ -56,7 +56,7 @@ const Layout = ({children}) => {
         <Box sx={{display: 'flex'}}>
             <CssBaseline/>
 
-            {/* The sidebar */}
+             {/* The sidebar */}
             <Drawer variant="permanent" open={open}>
 
                 {/* Open and close option */}

@@ -18,6 +18,7 @@ export function theme() {
         },
         background: {
             main: "#DAD7CD",
+            secondary: "#FFFFFF"
         },
         error: {
             main: "#FB9595",
@@ -40,13 +41,13 @@ export function theme() {
 
             // Titles
             h1: {
-                fontSize: '1.45rem',
+                fontSize: '2.5rem',
                 fontWeight: 700,
-                color: alpha(palette.secondary.main, 1)
+                color: alpha(palette.secondary.dark, 1)
             },
             // Subtitles
             h2: {
-                fontSize: '1.2rem',
+                fontSize: '1.4rem',
                 fontWeight: 400,
                 color: alpha(palette.text.primary, 1)
             },
@@ -75,6 +76,25 @@ export function theme() {
                 color: alpha(palette.text.primary, 0.7)
             }
         },
+        breakpoints: {
+            values: {
+                xs: 0,
+                sm: 500,
+                md: 900,
+                lg: 1200,
+                w1400: 1400,
+                xl: 1600,
+                xxl: 2000,
+
+                // Add your custom breakpoints here
+                // todo remove these points, add more on top
+                mobile: 0,
+                myTablet: 700,
+                laptop: 1024,
+                desktop: 1280,
+                wide: 1600,
+            },
+        },
         components: {
             MuiCssBaseline: {
                 styleOverrides: {
@@ -87,7 +107,7 @@ export function theme() {
             },
             MuiDrawer: {
                 styleOverrides: {
-                    paper : {
+                    paper: {
                         backgroundColor: palette.primary.main, // your background.main
                         margin: 0,
                         padding: 0,
@@ -106,12 +126,30 @@ export function theme() {
                         '&:hover': {
                             backgroundColor: palette.secondary.dark,
                         },
+
                     },
-                    outlined:{
+                    outlined: {
                         borderRadius: 13,
                         '&:hover': {
-                            borderColor: palette.secondary.dark,
+                            borderColor: palette.secondary.main,
                         },
+                    }
+                }
+            },
+            MuiTextField: {
+                styleOverrides: {
+                    root: {
+                        '& .MuiOutlinedInput-root': {
+                            '& fieldset': {
+                                borderColor: palette.primary.main,
+                            },
+                            '&:hover fieldset': {
+                                borderColor: palette.secondary.main,
+                            },
+                            '&.Mui-focused fieldset': {
+                                borderColor: palette.secondary.main,
+                            }
+                        }
                     }
                 }
             }

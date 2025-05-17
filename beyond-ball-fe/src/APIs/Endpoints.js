@@ -19,8 +19,28 @@ export const WHITEBOARD_ENDPOINTS = {
 
 }
 
-const QUIZ_URL = `${BASE_URL}/quizzes`;
+const CLIP_URL = `${BASE_URL}/clips`
+export const CLIP_ENDPOINTS = {
+    CLIPS: `${CLIP_URL}`,
+    CLIPS_BY_FOLDER: (folderId) => `${CLIP_URL}/folder/${folderId}`,
+    CLIP: (id) => `${CLIP_URL}/${id}`,
+    CLIP_VIDEO: (filename) => `${BASE_URL}${filename}`,
+}
 
+const VIDEO_NOTES_URL = `${BASE_URL}/video-notes`
+export const VIDEO_NOTES_ENDPOINTS = {
+    NOTES: `${VIDEO_NOTES_URL}`,
+    NOTES_BY_CLIP: (clipId) => `${VIDEO_NOTES_URL}/clip/${clipId}`,
+    NOTE: (id) => `${VIDEO_NOTES_URL}/${id}`,
+}
+
+const FOLDER_URL = `${BASE_URL}/folders`
+export const FOLDER_ENDPOINTS = {
+    FOLDERS: `${FOLDER_URL}`,
+    FOLDER: (id) => `${FOLDER_URL}/${id}`,
+}
+
+const QUIZ_URL = `${BASE_URL}/quizzes`;
 export const QUIZ_ENDPOINTS = {
     QUIZZES: `${QUIZ_URL}`,
 };
