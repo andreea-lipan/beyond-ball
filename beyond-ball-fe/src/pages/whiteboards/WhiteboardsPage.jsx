@@ -1,149 +1,119 @@
 import Layout from "../../components/Layout.jsx";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import whiteboardService from "../../APIs/WhiteboardService.js";
-import {Box, IconButton, InputAdornment, TextField} from "@mui/material";
+import {Box, IconButton, InputAdornment, TextField, ToggleButton, ToggleButtonGroup, useTheme} from "@mui/material";
 import {WhiteboardListItem} from "./display/WhiteboardListItem.jsx";
 import {mockWhiteboards} from "../../utils/whiteboard.js";
 import Storage from "../../utils/Storage.js";
 import {SearchIcon} from "../../components/icons/SearchIcon.jsx";
 import {PlusIcon} from "../../components/icons/PlusIcon.jsx";
 import {useNavigate} from "react-router-dom";
-
-
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import CardActionArea from '@mui/material/CardActionArea';
+import {WHITEBOARD_CREATION_PAGE} from "../../utils/UrlConstants.js";
+import WhiteboardsTopBar from "./WhiteboardsTopBar.jsx";
 
 
 const WhiteboardsPage = () => {
-
+    const theme = useTheme();
     const [whiteboards, setWhiteboards] = useState([]);
-    const [filteredWhiteboards, setFilteredWhiteboards] = useState([]);
-    const [inputValue, setInputValue] = useState("");
+    const [searchTerm, setSearchTerm] = useState("");
+    const [filter, setFilter] = useState("title");
     const navigate = useNavigate();
-
-
-    const fetchFilteredWhiteboards = (text) => {
-        whiteboardService.getWhiteboardsByTitle(text)
-            .then((response) => {
-                const data = response.data;
-                if (data && Array.isArray(data)) {
-                    setFilteredWhiteboards(data);
-                } else {
-                    setFilteredWhiteboards([]);
-                }
-            })
-            .catch((error) => {
-                console.error("Error fetching filtered whiteboards:", error);
-                setFilteredWhiteboards([]);
-            });
-    }
-
 
     useEffect(() => {
         whiteboardService.getWhiteboards()
             .then((response) => {
                 setWhiteboards(response);
-                setFilteredWhiteboards(response);
             })
             .catch(() => {
                 setWhiteboards(mockWhiteboards);
-                setFilteredWhiteboards(mockWhiteboards);
             });
     }, []);
 
 
-    //TODO: this is just a way to use the backend response, needs to look like the design
+    const filteredWhiteboards = whiteboards.filter((whiteboard) => {
+        return filter.toLowerCase() === "title" ?
+            whiteboard.title.toLowerCase().includes(searchTerm.toLowerCase())
+            :
+            whiteboard.author.toLowerCase().includes(searchTerm.toLowerCase())
+    })
+
+
     return (
         <Layout>
-            <Box sx={{
-                display: "flex",
-                flexDirection: "column",
-                mb: 10,
-                justifyContent: "space-between",
-                alignItems: "center"
-            }}>
-                <Typography variant="h4">
-                    Team {Storage.getTeamIdFromToken()} Whiteboards
-                </Typography>
-            </Box>
 
-            <Box>
+            {/* Page Title */}
+            <Typography variant="h1" align="center" sx={{mt: 3, mb: 3}}>
+                Team {Storage.getTeamIdFromToken()} Whiteboards
+            </Typography>
+
+            <Box sx={{
+                width: {
+                    xs: '100%',
+                    sm: '90vw',
+                    xl: '80vw',
+                    xxl: '1900px',
+                },
+                display: 'flex',
+                flexDirection: 'column',
+                minHeight: 'calc(100vh - 143px)', // Account for header and title
+            }}>
+
+                {/* Top Bar */}
+                <WhiteboardsTopBar filter={filter} setFilter={setFilter} search={searchTerm} setSearch={setSearchTerm}/>
+                {/*<Box sx={{*/}
+                {/*    display: 'flex',*/}
+                {/*    flex: 1,*/}
+                {/*    minHeight: 0*/}
+                {/*}}>*/}
                 <Box sx={{
                     display: "flex",
                     flexWrap: "wrap",
-                    justifyContent: "space-evenly",
-                    mt: 5,
-                    alignItems: "center",
-                    backgroundColor: "#3D5A3C",
-                    borderRadius: "10px",
-                    pb: 1,
-                    pt: 1
-                }}>
-                    <TextField
-                        sx={{
-                            display: "flex",
-                            minWidth: "50%",
-                            backgroundColor: "#A3B18A",
-                            borderRadius: "20px",
-                            justifyContent: "space-between",
-                            color: "#3D5A3C"
-                        }}
-                        label="Search whiteboards by name"
-                        onChange={(e) => {
-                            setInputValue(e.target.value)
-                        }}
-                        InputProps={{
-                            endAdornment: (
-                                <InputAdornment>
-                                    <IconButton onClick={() => {
-                                        fetchFilteredWhiteboards(inputValue)
-                                    }}>
-                                        <SearchIcon/>
-                                    </IconButton>
-                                </InputAdornment>
-                            )
-                        }}>
-                    </TextField>
-                </Box>
-                <Box sx={{
-                    display: "flex",
-                    flexWrap: "wrap",
-                    justifyContent: "space-evenly",
-                    backgroundColor: "#A3B18A",
-                    borderBottomRightRadius: "10px",
-                    borderBottomLeftRadius: "10px",
-                    pb: 5
+                    justifyContent: "center",
+                    backgroundColor: theme.palette.primary.main,
+                    gap: "20px",
+                    minHeight: 0,
+                    alignContent: "flex-start",
+                    flex: 1,
+                    paddingTop: "25px",
+                    paddingBottom: "25px",
+                    borderRadius: "0 0 16px 16px"
                 }}>
                     <Card sx={{
                         display: "flex",
-                        flexDirection: "column",
-                        justifyContent: "space-between",
-                        mt: 5,
+                        height: '235px',
+                        justifyContent: "space-arround",
+                        // margin: "10px",
                         maxWidth: 280,
-                        borderRadius: 5
+                        borderRadius: 5,
+                        opacity: 0.8
                     }}>
-                        <CardActionArea onClick={() => navigate("/whiteboards/creation")}>
-                            <CardMedia sx={{objectFit: "contain"}}
+                        <CardActionArea onClick={() => {
+                            navigate(WHITEBOARD_CREATION_PAGE)
+                        }}>
+                            <CardMedia sx={{objectFit: "contain", scale: '95%'}}
                                        component="img"
-                                       image="https://t4.ftcdn.net/jpg/08/88/95/25/360_F_888952567_Vgepu1UNHVLwBsCgIxANFegbBXLcxGjb.jpg"
+                                       image="src/assets/emptyWhiteboard.png"
                             />
-                            <CardContent>
-                                <Typography component="div">
-                                    <PlusIcon/>
+                            <CardContent sx={{padding: '0.5em'}}>
+                                <Typography variant="body1">
+                                    Create a new whiteboard
                                 </Typography>
-
                             </CardContent>
                         </CardActionArea>
                     </Card>
-                    {Array.isArray(filteredWhiteboards) && filteredWhiteboards.map((whiteboard) => (
+
+                    {filteredWhiteboards?.map((whiteboard) => (
                         <WhiteboardListItem key={whiteboard.id} whiteboard={whiteboard}/>
                     ))}
 
                 </Box>
             </Box>
+            {/*</Box>*/}
 
 
         </Layout>

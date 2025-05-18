@@ -1,5 +1,5 @@
 import React from "react";
-import {Button, Divider, IconButton, useTheme} from "@mui/material";
+import {Box, Button, Divider, IconButton, useTheme} from "@mui/material";
 import {BrushIcon} from "../../../components/icons/whiteboard/BrushIcon.jsx";
 import {CrossIcon} from "../../../components/icons/whiteboard/CrossIcon.jsx";
 import {CircleIcon} from "../../../components/icons/whiteboard/CircleIcon.jsx";
@@ -25,7 +25,7 @@ export const Toolbar = ({
     const theme = useTheme();
 
     return (
-        <div style={{display:"flex",flexDirection: vertical ? "column" : "row", backgroundColor: theme.palette.primary.main, borderRadius:"16px", padding: "8px", justifyContent: "space-evenly"}} >
+        <Box sx={{display:"flex",flexDirection: vertical ? "column" : "row", backgroundColor: theme.palette.primary.main, borderRadius:"16px", padding: "8px", justifyContent: "space-evenly"}} >
             <Button title="Save Board" onClick={saveImage} style={{borderRadius:"50%"}} > <SaveIcon/> </Button>
             <Divider flexItem orientation={vertical?"horizontal":"vertical"}/>
                 {COLORS.map((c) => (
@@ -41,6 +41,6 @@ export const Toolbar = ({
             <Button title="Undo" onClick={handleUndo} style={{borderRadius:"50%"}}> <UndoIcon/> </Button>
             <Button title="Redo" onClick={handleRedo} style={{borderRadius:"50%"}}> <RedoIcon/> </Button>
             <Button title="Clear Board" onClick={handleClear} style={{borderRadius:"50%"}}> <ClearIcon/> </Button>
-        </div>
+        </Box>
     );
 };

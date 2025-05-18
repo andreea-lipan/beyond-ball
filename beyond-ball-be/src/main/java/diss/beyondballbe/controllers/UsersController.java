@@ -27,7 +27,16 @@ public class UsersController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-
+    // Example secured method with team and role check
+    @PreAuthorize("@authValidator.belongsToTeam(#teamId) and hasAnyRole('STAFF', 'PLAYER', 'ADMIN')")
+    @GetMapping("/teams/{teamId}/members")
+    public ResponseEntity<?> getTeamMembers(@PathVariable Long teamId) {
+        try {
+            return ResponseEntity.ok(userAccountService.getTeamMembers(teamId));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
     // Example secured method with team and role check
     @PreAuthorize("@authValidator.belongsToTeam(#teamId) and hasRole('ADMIN')")
     @GetMapping("/teams/{teamId}/players/mock")
