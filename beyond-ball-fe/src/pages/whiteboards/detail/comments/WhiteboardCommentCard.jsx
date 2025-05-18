@@ -6,6 +6,7 @@ import React from "react";
 
 const WhiteboardCommentCard = ({ comment, onEdit, onDelete }) => {
     const isAuthor = comment.authorId === Storage.getUserIdFromToken();
+    const data = new Date(comment.postedDate);
 
     return (
         <Card sx={{ width: '100%', mb: 2, p: '0.5em', borderRadius: 8 , paddingBottom: 0}}>
@@ -13,7 +14,7 @@ const WhiteboardCommentCard = ({ comment, onEdit, onDelete }) => {
             {/* Top section: Author + Buttons */}
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Typography variant="subtitle2" sx={{m:1}}>
-                    {comment.authorUsername}
+                    {comment.authorUsername} - {data.getDay()}/{data.getMonth() + 1}/{data.getFullYear()}
                 </Typography>
 
                 {isAuthor && (

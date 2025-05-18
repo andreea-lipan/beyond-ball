@@ -1,7 +1,20 @@
-import {Box, Button, Card, CardContent, TextField, Tooltip, Typography, useTheme} from "@mui/material";
+import {
+    Box,
+    Button,
+    Card,
+    CardContent,
+    IconButton,
+    InputAdornment,
+    TextField,
+    Tooltip,
+    Typography,
+    useTheme
+} from "@mui/material";
 import React, {useState} from "react";
+import SearchIcon from "@mui/icons-material/Search";
+import SendIcon from '@mui/icons-material/Send';
 
-const WhiteboardCommentTemplate = ({addComment, handleClose, comment}) => {
+const WhiteboardSendComment = ({addComment, handleClose, comment}) => {
     const theme = useTheme();
 
     const [commentText, setCommentText] = useState(comment?.text || '');
@@ -13,10 +26,8 @@ const WhiteboardCommentTemplate = ({addComment, handleClose, comment}) => {
     }
 
     return(
-        <Card sx={{ width: '100%', mb: 2, p: 2, borderRadius: 8 , backgroundColor: theme.palette.background.secondary}}>
-
-            {/* Note input */}
-            <CardContent sx={{ p: 0,width:"100%" }}>
+        // <Card sx={{ width: '100%', mb: 1, p: 2, borderRadius: 8 , backgroundColor: theme.palette.background.secondary}}>
+            <Box sx={{ paddingBottom: 1, margin: 0, width:"100%" }}>
                 <TextField
                     value={commentText}
                     onChange={(e) => setCommentText(e.target.value)}
@@ -29,10 +40,23 @@ const WhiteboardCommentTemplate = ({addComment, handleClose, comment}) => {
                     slotProps={{
                         htmlInput: {
                             maxLength: maxCommentLength
+                        },
+                        input: {
+                            endAdornment: (
+                                <InputAdornment position="end">
+                                    <IconButton
+                                        sx = {{paddingRight: 0}}
+                                        onClick={handleAddComment}>
+                                        <SendIcon />
+                                    </IconButton>
+                                </InputAdornment>
+                            ),
                         }
                     }}
                     helperText= {commentText.length > 0.9 * maxCommentLength ? `${commentText.length}/${maxCommentLength}` : ''}
                     sx={{
+                        backgroundColor: theme.palette.background.secondary,
+                        borderRadius: '10px',
                         '& .MuiInputBase-input': {
                             fontSize: '0.8rem'
                         },
@@ -41,20 +65,10 @@ const WhiteboardCommentTemplate = ({addComment, handleClose, comment}) => {
                         }
                     }}
                 />
-            </CardContent>
-
-            {/* Save and Cancel buttons */}
-            <Box sx={{ display: 'flex', justifyContent:'space-between', alignItems: 'center', mt: 2 }}>
-                <Button variant="outlined" size="small" onClick={handleClose}>
-                    Cancel
-                </Button>
-                <Button variant="contained" size="small" onClick={handleAddComment}>
-                    Save
-                </Button>
             </Box>
-        </Card>
+        // </Card>
     )
 
 }
 
-export default WhiteboardCommentTemplate;
+export default WhiteboardSendComment;

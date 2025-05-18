@@ -6,6 +6,7 @@ import VideoNoteTemplate from "../../../clips/clip-detail/notes/VideoNoteTemplat
 import WhiteboardCommentTemplate from "./WhiteboardCommentTemplate.jsx";
 import WhiteboardCommentsList from "./WhiteboardCommentsList.jsx";
 import {connect,disconnect} from "../../../../APIs/WebSocket.js";
+import WhiteboardSendComment from "./WhiteboardSendComment.jsx";
 
 const WhiteboardCommentsContainer = ({ whiteboardId }) => {
 
@@ -120,7 +121,7 @@ const WhiteboardCommentsContainer = ({ whiteboardId }) => {
                 overflowY: 'auto',
                 paddingX: 3,
                 paddingTop: 2,
-                paddingBottom: '200px', // Add space for the fixed bottom component
+                paddingBottom: '10px', 
                 '&::-webkit-scrollbar': {
                     display: 'none'
                 }
@@ -149,7 +150,7 @@ const WhiteboardCommentsContainer = ({ whiteboardId }) => {
                     display: 'none'
                 }
             }}>
-                <WhiteboardCommentTemplate
+                <WhiteboardSendComment
                     addComment={addComment}
                 />
             </Box>

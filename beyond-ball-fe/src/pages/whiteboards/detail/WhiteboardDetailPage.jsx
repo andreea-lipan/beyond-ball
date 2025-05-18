@@ -53,7 +53,7 @@ const ImageBox = ({ image }) => {
         <Box sx={{
             height:'80vh'
         }}>
-            <img src={image} alt={"whiteboard"}/>
+            <img className="whiteboard" src={image} alt={"whiteboard"} />
         </Box>
     );
 };
