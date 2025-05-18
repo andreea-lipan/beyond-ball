@@ -13,6 +13,7 @@ public class UserAccountDTO {
     private String username;
     private String name;
     private PlayerStats playerStats;
+    private Boolean active;
     private UserRole role;
 
     public UserAccountDTO(UserAccount userAccount) {
@@ -27,5 +28,6 @@ public class UserAccountDTO {
         this.id = userAccount.getId();
         this.username = userAccount.getUsername();
         this.role = userAccount.getRole();
+        this.active = userAccount.getIsActive();
     }
 }

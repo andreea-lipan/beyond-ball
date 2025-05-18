@@ -12,4 +12,5 @@ import lombok.NoArgsConstructor;
 public class StaffAccount extends UserAccount {
     private String firstname;
     private String lastname;
+    private String position; // e.g. Coach, Assistant Coach, etc.
 }

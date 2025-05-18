@@ -28,6 +28,8 @@ public class UserAccount {
     @Column(nullable = false)
     private String password;
 
+    private Boolean isActive = true;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "team_id")
     private Team team;

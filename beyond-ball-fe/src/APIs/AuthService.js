@@ -38,9 +38,14 @@ const registerTeam = (team) => {
         .then(res => res.data)
 }
 
+const addTeamMember = (member) => {
+    return RequestInstance.post(AUTH_ENDPOINTS.MEMBER_SIGNUP, member).then(res => res.data)
+}
+
 const AuthService = {
     registerTeam,
-    login
+    login,
+    addTeamMember,
 }
 
 export default AuthService

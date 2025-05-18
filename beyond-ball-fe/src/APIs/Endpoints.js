@@ -6,7 +6,8 @@ const BASE_URL = "http://localhost:8080"
 const AUTH_URL = `${BASE_URL}/auth`
 export const AUTH_ENDPOINTS = {
     LOGIN: `${AUTH_URL}/login`,
-    TEAM_SIGNUP: `${AUTH_URL}/team-signup`
+    TEAM_SIGNUP: `${AUTH_URL}/team-signup`,
+    MEMBER_SIGNUP: `${AUTH_URL}/member-signup`,
 }
 
 // add as many categories as necessary
@@ -49,4 +50,6 @@ const USER_URL = `${BASE_URL}/users`
 export const USER_ENDPOINTS = {
     MOCK: `${USER_URL}/teams/{teamId}/players/mock`,
     TEAM_MEMBERS: (teamId) => `${USER_URL}/teams/${teamId}/members`,
+    USERS: `${USER_URL}`,
+    CHANGE_ACTIVE_STATUS: (userId) => `${USER_URL}/accounts/${userId}/active`,
 }

@@ -9,4 +9,5 @@ public interface UserAccountService {
     List<UserAccount> getAllAccounts();
     UserAccount getAccountById(Long id);
     TeamMembersDTO getTeamMembers(Long teamId);
+    void changeActiveStatus(Long id, boolean active);
 }

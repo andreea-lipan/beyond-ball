@@ -1,11 +1,13 @@
 package diss.beyondballbe.controllers;
 
 import diss.beyondballbe.exceptions.UsernameAlreadyExistsException;
+import diss.beyondballbe.model.DTOs.RegisterMemberDTO;
 import diss.beyondballbe.model.DTOs.TeamDTO;
 import diss.beyondballbe.services.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -47,6 +49,19 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
                     "error", "Unexpected error"
             ));
+        }
+    }
+
+    @PostMapping("/member-signup")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> registerMember(@RequestBody RegisterMemberDTO registerMemberDTO) {
+        try {
+            authService.registerMember(registerMemberDTO);
+            return ResponseEntity.ok().build();
+        } catch (UsernameAlreadyExistsException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
 }
