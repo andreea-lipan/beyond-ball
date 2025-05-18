@@ -3,6 +3,7 @@ import VideoNoteTemplate from "./VideoNoteTemplate.jsx";
 import {useEffect, useState} from "react";
 import VideoNotesList from "./VideoNotesList.jsx";
 import VideoNoteService from "../../../../APIs/VideoNoteService.js";
+import {connect,disconnect} from "../../../../APIs/WebSocket.js";
 
 const VideoNotesContainer = ({ seekTo, getTimestamp, clipId}) => {
     const [addingComment, setAddingComment] = useState(false);
@@ -11,28 +12,57 @@ const VideoNotesContainer = ({ seekTo, getTimestamp, clipId}) => {
 
     useEffect(() => {
         fetchVideoNotes();
+
+        connect(clipId, "CLIP", handleWebSocketMessage)
+
+        return () => {
+            disconnect();
+        }
+
     }, [clipId]);
+
+    const handleWebSocketMessage = (message) => {
+        console.log(message)
+        const videoNote = message.videoNote;
+        switch (message.action) {
+            case "CREATE":
+                setVideoNotes(prevState => [...prevState, videoNote]);
+                break;
+            case "DELETE":
+                setVideoNotes(prev => prev.filter(note => note.id !== videoNote.id));
+                break;
+            case "UPDATE":
+                setVideoNotes(prev => prev.map(note =>
+                    note.id === videoNote.id ? videoNote : note
+                ));
+                break;
+            default:
+                console.log("Unknown action: ", message.action);
+
+        }
+    }
 
     const fetchVideoNotes = () => {
         VideoNoteService.getVideoNotesForClip(clipId).then((response) => {
-            setVideoNotes(sortVideoNotes(response));
+            setVideoNotes(response);
         })
     }
 
-    const sortVideoNotes = (videoNotes) => {
-        return videoNotes.sort((a, b) => {
-            const aTimestamp = a.videoTimestamp;
-            const bTimestamp = b.videoTimestamp;
 
-            if (aTimestamp < bTimestamp) {
-                return -1;
-            }
-            if (aTimestamp > bTimestamp) {
-                return 1;
-            }
-            return 0;
-        });
+    const sortFn = (a, b) => {
+        const aTimestamp = a.videoTimestamp;
+        const bTimestamp = b.videoTimestamp;
+
+        if (aTimestamp < bTimestamp) {
+            return -1;
+        }
+        if (aTimestamp > bTimestamp) {
+            return 1;
+        }
+        return 0;
     }
+
+    const sortedVideoNotes = videoNotes.sort(sortFn);
 
     const addNote = (text, videoTimestamp) => {
         const note = {
@@ -40,16 +70,16 @@ const VideoNotesContainer = ({ seekTo, getTimestamp, clipId}) => {
             text,
             clipId
         }
-        VideoNoteService.createVideoNote(note).then(fetchVideoNotes)
+        VideoNoteService.createVideoNote(note)
         setAddingComment(false);
     }
 
     const deleteNote = (noteId) => {
-        VideoNoteService.deleteVideoNote(noteId).then(fetchVideoNotes);
+        VideoNoteService.deleteVideoNote(noteId)
     }
 
     const updateNote = (note) => {
-        VideoNoteService.updateVideoNote(note.id, note).then(fetchVideoNotes);
+        VideoNoteService.updateVideoNote(note.id, note)
     }
 
     const handleClose = () => {
@@ -107,7 +137,7 @@ const VideoNotesContainer = ({ seekTo, getTimestamp, clipId}) => {
             }}>
                 <VideoNotesList
                     getTimestamp={getTimestamp}
-                    videoNotes={videoNotes}
+                    videoNotes={sortedVideoNotes}
                     seekTo={seekTo}
                     deleteNote={deleteNote}
                     updateNote={updateNote}

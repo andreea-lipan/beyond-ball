@@ -13,7 +13,7 @@ import MockPage from "./pages/MockPage.jsx";
 import AccessDeniedRedirect from "./components/AccessDeniedRedirect.jsx";
 import {useAuth} from "./components/AuthContext";
 import WhiteboardCreationPage from "./pages/whiteboards/WhiteboardCreationPage.jsx";
-import WhiteboardDetailPage from "./pages/whiteboards/WhiteboardDetailPage.jsx";
+import WhiteboardDetailPage from "./pages/whiteboards/detail/WhiteboardDetailPage.jsx";
 import TeamAdminPage from "./pages/TeamAdminPage.jsx";
 import ClipDetailPage from "./pages/clips/clip-detail/ClipDetailPage.jsx";
 import { SidebarProvider } from './components/sidebar/SidebarContext.jsx';

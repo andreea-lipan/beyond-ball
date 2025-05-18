@@ -47,3 +47,12 @@ video {
     max-width: 1500px;
     object-fit: contain;
 }
+
+.whiteboard {
+    background-color: white;
+    height: 100%;
+    aspect-ratio: 1.5;
+    width: 60vw;
+    max-width: 1500px;
+    object-fit: contain;
+}

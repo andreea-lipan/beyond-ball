@@ -20,6 +20,13 @@ export const WHITEBOARD_ENDPOINTS = {
 
 }
 
+const WHITEBOARD_COMMENT_URL = `${BASE_URL}/whiteboard-comments`
+export const WHITEBOARD_COMMENT_ENDPOINTS = {
+    COMMENTS: `${WHITEBOARD_COMMENT_URL}`,
+    COMMENTS_BY_WHITEBOARD: (whiteboardId) => `${WHITEBOARD_COMMENT_URL}/whiteboard/${whiteboardId}`,
+    COMMENT: (id) => `${WHITEBOARD_COMMENT_URL}/${id}`,
+}
+
 const CLIP_URL = `${BASE_URL}/clips`
 export const CLIP_ENDPOINTS = {
     CLIPS: `${CLIP_URL}`,
@@ -52,4 +59,13 @@ export const USER_ENDPOINTS = {
     TEAM_MEMBERS: (teamId) => `${USER_URL}/teams/${teamId}/members`,
     USERS: `${USER_URL}`,
     CHANGE_ACTIVE_STATUS: (userId) => `${USER_URL}/accounts/${userId}/active`,
+}
+
+const SOCKET_URL = `${BASE_URL}/ws`
+export const SOCKET_ENDPOINTS = {
+    BASE: `${SOCKET_URL}`,
+    CLIP: (clipId) => `/app/clips/${clipId}`,
+    CLIP_INC: (clipId) => `/topic/clips/${clipId}`,
+    WHITEBOARD: (whiteboardId) => `/app/whiteboards/${whiteboardId}`,
+    WHITEBOARD_INC: (whiteboardId) => `/topic/whiteboards/${whiteboardId}`,
 }
