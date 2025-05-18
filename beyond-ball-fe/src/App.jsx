@@ -55,7 +55,7 @@ function App() {
                                         sessionStorage.setItem("lastValidPath", "/team");
                                         return <TeamPage/>;
                                     })()
-                                    : <TeamPage/>
+                                    : <TeamAdminPage/>
                             }
                         />
 
