@@ -1,9 +1,9 @@
-import Layout from "../../components/sidebar/Layout.jsx";
 import {useParams} from "react-router-dom";
 import React, {useEffect, useState} from "react";
 import whiteboardService from "../../../APIs/WhiteboardService.js";
 import {Box, Typography} from "@mui/material";
 import WhiteboardCommentsContainer from "./comments/WhiteboardCommentsContainer.jsx";
+import Layout from "../../../components/sidebar/Layout.jsx";
 
 const WhiteboardDetailPage = () => {
 

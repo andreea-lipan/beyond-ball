@@ -25,12 +25,20 @@ const WhiteboardSendComment = ({addComment, handleClose, comment}) => {
         setCommentText('');
     }
 
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            handleAddComment();
+        }
+    }
+
     return(
         // <Card sx={{ width: '100%', mb: 1, p: 2, borderRadius: 8 , backgroundColor: theme.palette.background.secondary}}>
             <Box sx={{ paddingBottom: 1, margin: 0, width:"100%" }}>
                 <TextField
                     value={commentText}
                     onChange={(e) => setCommentText(e.target.value)}
+                    onKeyDown={handleKeyDown}
                     fullWidth
                     multiline
                     minRows={1}
