@@ -31,7 +31,7 @@ public class WhiteboardController {
     @GetMapping("/{id}")
     public ResponseEntity<?> getWhiteboardById(@PathVariable String id) {
         try {
-            return ResponseEntity.ok(whiteboardService.getWhiteboardById(id));
+            return ResponseEntity.ok(new WhiteboardResponse(whiteboardService.getWhiteboardById(id)));
         } catch (Exception e) {
             return ResponseEntity.status(404).body("Whiteboard not found");
         }

@@ -1,31 +1,60 @@
 import Layout from "../../components/sidebar/Layout.jsx";
-import {TestComponent} from "../../components/TestComponent.jsx";
 import {useParams} from "react-router-dom";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import whiteboardService from "../../../APIs/WhiteboardService.js";
+import {Box, Typography} from "@mui/material";
+import WhiteboardCommentsContainer from "./comments/WhiteboardCommentsContainer.jsx";
 
 const WhiteboardDetailPage = () => {
 
     const {id} = useParams();
     const [image, setImage] = useState(null);
+    const [whiteboard, setWhiteboard] = useState(null);
 
     useEffect(() => {
         whiteboardService.getWhiteboard(id).then((response) => {
             console.log(response);
+            setWhiteboard(response.data);
             whiteboardService.getWhiteboardImage(response.data.imageUrl).then((response) => {
                 setImage(response)
             })
         })
     },[]);
 
-    //TODO: this is just a way to use the backend response, needs to look like the design, including the comments
     return (
         <Layout>
-            {image? <img src={image} alt="Whiteboard" style={{width: "100%", height: "auto"}}/> : <p>Loading...</p>}
-            <TestComponent text={`WhiteboardDetail ${id}`}/>
+            <Typography variant="h1"
+                        sx={{
+                            paddingY: 3
+                        }}
+            >
+                {whiteboard?.title}
+            </Typography>
+
+            {image &&
+                <Box sx={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    margin: 'auto',
+                    height:'80vh'
+                }}>
+                    <ImageBox image={image} />
+                    <WhiteboardCommentsContainer whiteboardId={id}/>
+                </Box>
+            }
         </Layout>
     )
 
 }
-
+const ImageBox = ({ image }) => {
+    return (
+        <Box sx={{
+            height:'80vh'
+        }}>
+            <img src={image} alt={"whiteboard"}/>
+        </Box>
+    );
+};
 export default WhiteboardDetailPage;

@@ -70,7 +70,7 @@ public class WhiteboardServiceImpl implements WhiteboardService {
     }
 
     @Override
-    public WhiteboardResponse getWhiteboardById(String id) {
+    public Whiteboard getWhiteboardById(String id) {
         return whiteboardRepository.findById(id)
                 .filter(whiteboard -> {
                     if (whiteboard.getAuthor() == null) {
@@ -78,7 +78,6 @@ public class WhiteboardServiceImpl implements WhiteboardService {
                     }
                     return belongsToTeam(whiteboard.getAuthor().getTeam().getId());
                 })
-                .map(WhiteboardResponse::new)
                 .orElseThrow(() -> new EntityNotFoundException("Whiteboard not found"));
     }
 

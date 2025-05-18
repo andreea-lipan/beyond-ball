@@ -20,6 +20,13 @@ export const WHITEBOARD_ENDPOINTS = {
 
 }
 
+const WHITEBOARD_COMMENT_URL = `${BASE_URL}/whiteboard-comments`
+export const WHITEBOARD_COMMENT_ENDPOINTS = {
+    COMMENTS: `${WHITEBOARD_COMMENT_URL}`,
+    COMMENTS_BY_WHITEBOARD: (whiteboardId) => `${WHITEBOARD_COMMENT_URL}/whiteboard/${whiteboardId}`,
+    COMMENT: (id) => `${WHITEBOARD_COMMENT_URL}/${id}`,
+}
+
 const CLIP_URL = `${BASE_URL}/clips`
 export const CLIP_ENDPOINTS = {
     CLIPS: `${CLIP_URL}`,

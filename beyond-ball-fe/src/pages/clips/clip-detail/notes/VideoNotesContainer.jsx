@@ -62,7 +62,7 @@ const VideoNotesContainer = ({ seekTo, getTimestamp, clipId}) => {
         return 0;
     }
 
-    const sortedVideoNotes = videoNotes.sort((a,b)=>sortFn(a,b));
+    const sortedVideoNotes = videoNotes.sort(sortFn);
 
     const addNote = (text, videoTimestamp) => {
         const note = {
