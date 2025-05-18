@@ -1,5 +1,4 @@
-import {Avatar, Box, Card, Grid, IconButton, Typography} from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
+import {Avatar, Box, Card, Grid, Typography} from "@mui/material";
 import React from "react";
 
 const UserCard = ({user}) => {
@@ -50,11 +49,11 @@ const UserCard = ({user}) => {
                         alignItems: 'flex-end',
                         paddingLeft: '10px'
                     }}>
-                        <Typography variant="subtitle1">{user?.position}</Typography>
+                        <Typography variant="subtitle1">{user?.position || 'N/A'}</Typography>
                         {user.role === "PLAYER" &&
                             <>
-                                <Typography variant="subtitle1">{user?.goals}</Typography>
-                                <Typography variant="subtitle1">{user?.assists}</Typography>
+                                <Typography variant="subtitle1">{user?.goals || 'N/A'}</Typography>
+                                <Typography variant="subtitle1">{user?.assists || 'N/A'}</Typography>
                             </>
                         }
                     </Box>

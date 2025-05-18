@@ -1,5 +1,4 @@
-import Layout from "../components/Layout.jsx";
-import {Typography} from "@mui/material";
+import Layout from "../components/sidebar/Layout.jsx";
 import {TestComponent} from "../components/TestComponent.jsx";
 
 const PlayerProfilePage = () => {

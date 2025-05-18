@@ -16,6 +16,7 @@ import WhiteboardCreationPage from "./pages/whiteboards/WhiteboardCreationPage.j
 import WhiteboardDetailPage from "./pages/whiteboards/WhiteboardDetailPage.jsx";
 import TeamAdminPage from "./pages/TeamAdminPage.jsx";
 import ClipDetailPage from "./pages/clips/clip-detail/ClipDetailPage.jsx";
+import { SidebarProvider } from './components/sidebar/SidebarContext.jsx';
 
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
 
     return (
         <div className="App">
+            <SidebarProvider>
             <ThemeProvider theme={theme}>
                 <BrowserRouter>
                     {/*<ScrollToTop/> /!* This will scroll to the top whenever the route changes *!/*/}
@@ -153,6 +155,7 @@ function App() {
                 </BrowserRouter>
             </ThemeProvider>
 
+            </SidebarProvider>
         </div>
     )
 }

@@ -1,9 +1,8 @@
-import Layout from "../../components/Layout.jsx";
+import Layout from "../../components/sidebar/Layout.jsx";
 import {TestComponent} from "../../components/TestComponent.jsx";
 import {useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import whiteboardService from "../../APIs/WhiteboardService.js";
-import {WHITEBOARD_ENDPOINTS} from "../../APIs/Endpoints.js";
 
 const WhiteboardDetailPage = () => {
 

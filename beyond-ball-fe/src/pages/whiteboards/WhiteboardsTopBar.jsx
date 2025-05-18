@@ -38,7 +38,7 @@ const WhiteboardsTopBar = ({search, setSearch, filter, setFilter}) => {
                     onChange={e => setSearch(e.target.value)}
                     sx={{
                         width: '400px',
-                        backgroundColor: theme.palette.primary.main,
+                        backgroundColor: theme.palette.background.main,
                         borderRadius: 5,
                         boxShadow: "none",
                         "& .MuiOutlinedInput-root": {

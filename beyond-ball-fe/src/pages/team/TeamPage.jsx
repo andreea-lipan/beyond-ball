@@ -1,4 +1,4 @@
-import Layout from "../../components/Layout.jsx";
+import Layout from "../../components/sidebar/Layout.jsx";
 import {Box, Button, Tooltip, Typography} from "@mui/material";
 import React, {useEffect, useState} from "react";
 import TeamTopBar from "./TeamTopBar.jsx";

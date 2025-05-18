@@ -55,7 +55,7 @@ const SearchBar = ({onSearch, searchTerm, setSearchTerm}) => {
             fullWidth
             sx={{
                 width: '100%',
-                backgroundColor: theme.palette.primary.main,
+                backgroundColor: theme.palette.background.main,
                 borderRadius: 5,
                 boxShadow: "none",
                 "& .MuiOutlinedInput-root": {

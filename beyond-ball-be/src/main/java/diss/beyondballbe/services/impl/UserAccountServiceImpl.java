@@ -45,4 +45,12 @@ public class UserAccountServiceImpl implements UserAccountService {
         teamMembersDTO.setMembers(userDTOs);
         return teamMembersDTO;
     }
+
+    @Override
+    public void changeActiveStatus(Long id, boolean active) {
+        UserAccount userAccount = userAccountRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + id));
+        userAccount.setIsActive(active);
+        userAccountRepository.save(userAccount);
+    }
 }
