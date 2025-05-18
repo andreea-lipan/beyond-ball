@@ -1,12 +1,10 @@
-import Layout from "../../components/Layout.jsx";
+import Layout from "../../components/sidebar/Layout.jsx";
 import React, {useEffect, useState} from "react";
 import whiteboardService from "../../APIs/WhiteboardService.js";
-import {Box, IconButton, InputAdornment, TextField, ToggleButton, ToggleButtonGroup, useTheme} from "@mui/material";
+import {Box, useTheme} from "@mui/material";
 import {WhiteboardListItem} from "./display/WhiteboardListItem.jsx";
 import {mockWhiteboards} from "../../utils/whiteboard.js";
 import Storage from "../../utils/Storage.js";
-import {SearchIcon} from "../../components/icons/SearchIcon.jsx";
-import {PlusIcon} from "../../components/icons/PlusIcon.jsx";
 import {useNavigate} from "react-router-dom";
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -15,7 +13,6 @@ import Typography from '@mui/material/Typography';
 import CardActionArea from '@mui/material/CardActionArea';
 import {WHITEBOARD_CREATION_PAGE} from "../../utils/UrlConstants.js";
 import WhiteboardsTopBar from "./WhiteboardsTopBar.jsx";
-
 
 const WhiteboardsPage = () => {
     const theme = useTheme();
@@ -65,11 +62,7 @@ const WhiteboardsPage = () => {
 
                 {/* Top Bar */}
                 <WhiteboardsTopBar filter={filter} setFilter={setFilter} search={searchTerm} setSearch={setSearchTerm}/>
-                {/*<Box sx={{*/}
-                {/*    display: 'flex',*/}
-                {/*    flex: 1,*/}
-                {/*    minHeight: 0*/}
-                {/*}}>*/}
+
                 <Box sx={{
                     display: "flex",
                     flexWrap: "wrap",

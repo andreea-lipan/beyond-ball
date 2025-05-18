@@ -1,8 +1,9 @@
-import {Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography} from "@mui/material";
+import {Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography, useTheme} from "@mui/material";
 import React from "react";
 import AddMemberDialog from "./AddMemberDialog.jsx";
 
 const MemberCredentialsDialog = ({credentials, state}) => {
+    const theme = useTheme();
     return(
         <Dialog
             open={state.isOpen}
@@ -58,13 +59,13 @@ const MemberCredentialsDialog = ({credentials, state}) => {
                     onClick={state.closeModal}
                     variant="contained"
                     sx={{
-                        backgroundColor: "#4b5563",
+                        backgroundColor: theme.palette.secondary.main,
                         textTransform: "none",
                         fontWeight: 500,
                         borderRadius: 16,
                         px: 4,
                         py: 1.5,
-                        "&:hover": {backgroundColor: "#374151"},
+                        '&:hover': {backgroundColor: theme.palette.secondary.dark}
                     }}
                 >
                     Close

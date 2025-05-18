@@ -3,7 +3,7 @@ import { Typography, Box, CircularProgress } from '@mui/material';
 import { RequestInstance } from '../APIs/RequestInstance';
 import { USER_ENDPOINTS } from '../APIs/Endpoints';
 import Storage from '../utils/Storage';
-import Layout from "../components/Layout";
+import Layout from "../components/sidebar/Layout.jsx";
 
 const MockPage = () => {
     const [response, setResponse] = useState("");

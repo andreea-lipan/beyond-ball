@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-import Layout from "../../components/Layout.jsx";
+import Layout from "../../components/sidebar/Layout.jsx";
 import {Box, Typography} from "@mui/material";
 import {TopBar} from "./TopBar.jsx";
 import {QuizContainer} from "./QuizContainer.jsx";
