@@ -53,3 +53,12 @@ export const USER_ENDPOINTS = {
     USERS: `${USER_URL}`,
     CHANGE_ACTIVE_STATUS: (userId) => `${USER_URL}/accounts/${userId}/active`,
 }
+
+const SOCKET_URL = `${BASE_URL}/ws`
+export const SOCKET_ENDPOINTS = {
+    BASE: `${SOCKET_URL}`,
+    CLIP: (clipId) => `/app/clips/${clipId}`,
+    CLIP_INC: (clipId) => `/topic/clips/${clipId}`,
+    WHITEBOARD: (whiteboardId) => `/app/whiteboards/${whiteboardId}`,
+    WHITEBOARD_INC: (whiteboardId) => `/topic/whiteboards/${whiteboardId}`,
+}
