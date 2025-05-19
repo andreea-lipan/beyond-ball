@@ -12,6 +12,7 @@ public class UserAccountDTO {
     private Long id;
     private String username;
     private String name;
+    private String email;
     private PlayerStats playerStats;
     private Boolean active;
     private UserRole role;
@@ -28,6 +29,7 @@ public class UserAccountDTO {
         this.id = userAccount.getId();
         this.username = userAccount.getUsername();
         this.role = userAccount.getRole();
+        this.email = userAccount.getEmail();
         this.active = userAccount.getIsActive();
     }
 }

@@ -26,6 +26,7 @@ public class EmailServiceImpl implements EmailService {
             message.setTo(userAccount.getEmail());
             message.setSubject("Your Account Credentials");
             message.setText("Username: " + userAccount.getUsername() + "\nPassword: " + userAccount.getPassword());
+            System.out.println(message);
             mailSender.send(message);
             return true;
         } catch (Exception e) {
