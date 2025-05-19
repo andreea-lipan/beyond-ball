@@ -8,12 +8,13 @@ export const QuizContainer = ({quizzes, handleNext, handlePrev, page, maxPage}) 
         <Box
             sx={{
                 display: "flex",
+                flex: 1,
                 flexDirection: "row",
                 justifyContent: "space-between",
                 backgroundColor: "primary.main",
                 pt: "10vh",
                 pb: "13vh",
-                borderRadius: "10px",
+                borderRadius: "0 0 16px 16px",
             }}
         >
             <IconButton disableRipple

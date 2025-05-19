@@ -1,4 +1,4 @@
-import Layout from "../../components/Layout.jsx";
+import Layout from "../../components/sidebar/Layout.jsx";
 import {Whiteboard} from "./creation/Whiteboard.jsx";
 import React from "react";
 

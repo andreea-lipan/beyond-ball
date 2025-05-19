@@ -19,10 +19,12 @@ public class WhiteboardResponse {
 
 
     public WhiteboardResponse(Whiteboard whiteboard) {
+        String teamId = whiteboard.getAuthor().getTeam().getId().toString();
+
         this.id = whiteboard.getId();
         this.title = whiteboard.getTitle();
         this.creationDate = whiteboard.getCreationDate();
-        this.imageUrl = "/uploads/" + whiteboard.getImageUrl();
+        this.imageUrl = "/uploads/" + teamId + "/whiteboards/" + whiteboard.getImageUrl();
         this.author = whiteboard.getAuthor().getUsername();
     }
 }

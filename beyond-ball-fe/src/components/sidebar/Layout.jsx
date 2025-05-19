@@ -15,27 +15,28 @@ import {useState} from "react";
 import MuiDrawer from '@mui/material/Drawer';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import {useNavigate} from "react-router-dom";
-import {CLIPS_PAGE, PROFILE_PAGE, QUIZZES_PAGE, TEAM_PAGE, WHITEBOARDS_PAGE} from "../utils/UrlConstants.js";
-import {MenuIcon} from "./icons/sidebar/MenuIcon.jsx";
-import {WhiteboardIcon} from "./icons/sidebar/WhiteboardIcon.jsx";
-import {TeamIcon} from "./icons/sidebar/TeamIcon.jsx";
-import {ProfileIcon} from "./icons/sidebar/ProfileIcon.jsx";
-import {ClipsIcon} from "./icons/sidebar/ClipsIcon.jsx";
-import {QuizzesIcon} from "./icons/sidebar/QuizzesIcon.jsx";
+import {CLIPS_PAGE, PROFILE_PAGE, QUIZZES_PAGE, TEAM_PAGE, WHITEBOARDS_PAGE} from "../../utils/UrlConstants.js";
+import {MenuIcon} from "../icons/sidebar/MenuIcon.jsx";
+import {WhiteboardIcon} from "../icons/sidebar/WhiteboardIcon.jsx";
+import {TeamIcon} from "../icons/sidebar/TeamIcon.jsx";
+import {ProfileIcon} from "../icons/sidebar/ProfileIcon.jsx";
+import {ClipsIcon} from "../icons/sidebar/ClipsIcon.jsx";
+import {QuizzesIcon} from "../icons/sidebar/QuizzesIcon.jsx";
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
-import Storage from "../utils/Storage";
+import Storage from "../../utils/Storage.js";
+import { useSidebar } from './SidebarContext.jsx';
 
 const drawerWidth = 240
 
 const Layout = ({children}) => {
-    const [open, setOpen] = useState(false);
+    const { isOpen, setIsOpen } = useSidebar();
 
-    const handleDrawerOpen = () => {
-        setOpen(true);
+    const handleDrawerisOpen = () => {
+        setIsOpen(true);
     };
 
     const handleDrawerClose = () => {
-        setOpen(false);
+        setIsOpen(false);
     };
 
     const navigator = useNavigate();
@@ -57,11 +58,11 @@ const Layout = ({children}) => {
             <CssBaseline/>
 
             {/* The sidebar */}
-            <Drawer variant="permanent" open={open}>
+            <Drawer variant="permanent" isOpen={isOpen}>
 
-                {/* Open and close option */}
+                {/* isOpen and close option */}
                 <DrawerHeader>
-                    {open ?
+                    {isOpen ?
                         <Tooltip title={"Close menu"} placement="right">
                             <IconButton
                                 onClick={handleDrawerClose}
@@ -70,10 +71,10 @@ const Layout = ({children}) => {
                             </IconButton>
                         </Tooltip>
                         :
-                        <Tooltip title={"Open menu"} placement="right">
+                        <Tooltip title={"isOpen menu"} placement="right">
                             <IconButton
-                                aria-label="open drawer"
-                                onClick={handleDrawerOpen}
+                                aria-label="isOpen drawer"
+                                onClick={handleDrawerisOpen}
                                 sx={[{margin: 'auto'}]
                                 }>
                                 <MenuIcon color={BtnsColour}/>
@@ -94,7 +95,7 @@ const Layout = ({children}) => {
                             <ListItemButton
                                 sx={[
                                     {minHeight: 48, px: 2.5,},
-                                    open ? {justifyContent: 'initial'}
+                                    isOpen ? {justifyContent: 'initial'}
                                         : {justifyContent: 'center'},]
                                     }
                                 onClick={() => navigator(url)}
@@ -102,7 +103,7 @@ const Layout = ({children}) => {
                                 <Tooltip title={text} placement="right"> {/* this is for hover text */}
                                     <ListItemIcon
                                         sx={[{minWidth: 0, justifyContent: 'center',},
-                                            open ? {mr: 3}
+                                            isOpen ? {mr: 3}
                                                 : {mr: 'auto'}]}
                                     >
                                         {icon}
@@ -110,7 +111,7 @@ const Layout = ({children}) => {
                                 </Tooltip>
                                 <ListItemText
                                     primary={text}
-                                    sx={[open ? {opacity: 1}
+                                    sx={[isOpen ? {opacity: 1}
                                         : {opacity: 0}]}
                                 />
                             </ListItemButton>
@@ -123,7 +124,7 @@ const Layout = ({children}) => {
                         <ListItemButton
                             sx={[
                                 { minHeight: 48, px: 2.5 },
-                                open ? { justifyContent: 'initial' } : { justifyContent: 'center' }
+                                isOpen ? { justifyContent: 'initial' } : { justifyContent: 'center' }
                             ]}
                             onClick={() => {
                                 Storage.logout();
@@ -134,7 +135,7 @@ const Layout = ({children}) => {
                                 <ListItemIcon
                                     sx={[
                                         { minWidth: 0, justifyContent: 'center' },
-                                        open ? { mr: 3 } : { mr: 'auto' }
+                                        isOpen ? { mr: 3 } : { mr: 'auto' }
                                     ]}
                                 >
                                     <ExitToAppIcon color={BtnsColour} />
@@ -142,7 +143,7 @@ const Layout = ({children}) => {
                             </Tooltip>
                             <ListItemText
                                 primary="Logout"
-                                sx={[open ? { opacity: 1 } : { opacity: 0 }]}
+                                sx={[isOpen ? { opacity: 1 } : { opacity: 0 }]}
                             />
                         </ListItemButton>
                     </ListItem>
@@ -160,7 +161,7 @@ const Layout = ({children}) => {
 
 export default Layout;
 
-const openedMixin = (theme) => ({
+const isOpenedMixin = (theme) => ({
     width: drawerWidth,
     transition: theme.transitions.create('width', {
         easing: theme.transitions.easing.sharp,
@@ -192,7 +193,7 @@ const DrawerHeader = styled('div')(({theme}) => ({
 }));
 
 
-const Drawer = styled(MuiDrawer, {shouldForwardProp: (prop) => prop !== 'open'})(
+const Drawer = styled(MuiDrawer, {shouldForwardProp: (prop) => prop !== 'isOpen'})(
     ({theme}) => ({
         width: drawerWidth,
         flexShrink: 0,
@@ -200,14 +201,14 @@ const Drawer = styled(MuiDrawer, {shouldForwardProp: (prop) => prop !== 'open'})
         boxSizing: 'border-box',
         variants: [
             {
-                props: ({open}) => open,
+                props: ({isOpen}) => isOpen,
                 style: {
-                    ...openedMixin(theme),
-                    '& .MuiDrawer-paper': openedMixin(theme),
+                    ...isOpenedMixin(theme),
+                    '& .MuiDrawer-paper': isOpenedMixin(theme),
                 },
             },
             {
-                props: ({open}) => !open,
+                props: ({isOpen}) => !isOpen,
                 style: {
                     ...closedMixin(theme),
                     '& .MuiDrawer-paper': closedMixin(theme),

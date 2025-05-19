@@ -1,4 +1,4 @@
-import Layout from "../../components/Layout.jsx";
+import Layout from "../../components/sidebar/Layout.jsx";
 import {
     CssBaseline,
     Paper,
@@ -53,6 +53,13 @@ const LoginPage = () => {
         }
     };
 
+    const handleKeyDown = (e) => {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            handleLogin(e);
+        }
+    }
+
     return (
         <>
             <CssBaseline />
@@ -93,6 +100,7 @@ const LoginPage = () => {
                     </Typography>
 
                     <TextField
+                        onKeyDown={handleKeyDown}
                         fullWidth
                         label="Username"
                         variant="outlined"
@@ -101,6 +109,7 @@ const LoginPage = () => {
                         sx={{ mb: 2 }}
                     />
                     <TextField
+                        onKeyDown={handleKeyDown}
                         fullWidth
                         label="Password"
                         type="password"
