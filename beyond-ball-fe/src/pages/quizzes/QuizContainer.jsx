@@ -2,7 +2,7 @@ import {Box, IconButton, Typography} from "@mui/material";
 import {ArrowBackIos, ArrowForwardIos} from "@mui/icons-material";
 import {QuizCard} from "./QuizCard.jsx";
 
-export const QuizContainer = ({quizzes, handleNext, handlePrev, page, maxPage}) => {
+export const QuizContainer = ({quizzes, handleNext, handlePrev, page, maxPage, onQuizDeleted}) => {
 
     return (
         <Box
@@ -37,7 +37,7 @@ export const QuizContainer = ({quizzes, handleNext, handlePrev, page, maxPage}) 
                     quizzes.map((quiz, index) => {
 
                         return (
-                            <QuizCard quiz={quiz} index={index} />
+                            <QuizCard quiz={quiz} index={index} onQuizDeleted={onQuizDeleted}/>
                         );
                     })
                     :
