@@ -10,7 +10,7 @@ import {
   Alert,
   Divider,
 } from "@mui/material";
-
+//ejcehcdjdyjt
 const TakeQuizPage = () => {
   const { id } = useParams();
   const [quiz, setQuiz] = useState(null);
