@@ -1,12 +1,26 @@
-import {RequestInstance} from "./RequestInstance.js";
-import {QUIZ_ENDPOINTS} from "./Endpoints.js";
+import { RequestInstance } from "./RequestInstance.js";
+import { QUIZ_ENDPOINTS } from "./Endpoints.js";
 
 const getQuizzes = () => {
-    return RequestInstance.get(QUIZ_ENDPOINTS.QUIZZES)
-}
+  return RequestInstance.get(QUIZ_ENDPOINTS.QUIZZES);
+};
 
+const createQuiz = (quizData) => {
+  return RequestInstance.post(QUIZ_ENDPOINTS.QUIZZES, quizData);
+};
+
+const deleteQuiz = (quizId) => {
+    return RequestInstance.delete(`/quizzes/${quizId}`);
+  };
+
+  const getQuizById = (quizId) => {
+    return RequestInstance.get(`${QUIZ_ENDPOINTS.QUIZZES}/${quizId}`);
+  };
 const QuizService = {
-    getQuizzes,
-}
+  getQuizzes,
+  createQuiz,
+  deleteQuiz,
+  getQuizById // ✅ adăugat aici
+};
 
-export default QuizService
+export default QuizService;

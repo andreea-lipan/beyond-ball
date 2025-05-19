@@ -12,6 +12,8 @@ import {CardActions} from "@mui/joy";
 import Storage from "../../utils/Storage.js";
 import {useNavigate} from "react-router-dom";
 import {QUIZ_TAKING_PAGE} from "../../utils/UrlConstants.js";
+import quizService from "../../APIs/QuizService.js";
+import { Delete } from "@mui/icons-material";
 
 const iconComponents = [
     QuizSheetIcon,
@@ -23,10 +25,9 @@ const iconComponents = [
 
 function getRandomInt(max) {
     return Math.floor(Math.random() * max);
-}
+  }
 
-export const QuizCard = ({quiz, index}) => {
-
+  export const QuizCard = ({ quiz, index, onQuizDeleted }) => {
     const Icon = iconComponents[(index * getRandomInt(100)) % iconComponents.length];
     const role = Storage.getRoleFromToken();
     const canDownload = role === "STAFF" || role === "ADMIN";
@@ -41,6 +42,20 @@ export const QuizCard = ({quiz, index}) => {
             navigate(QUIZ_TAKING_PAGE(quiz.id));
         }
     }
+
+    const handleDelete = async () => {
+        if (window.confirm("Are you sure you want to delete this quiz?")) {
+            try {
+                await quizService.deleteQuiz(quiz.id);
+                if (onQuizDeleted) {
+                    onQuizDeleted(); // notifică părintele să reîncarce lista
+                }
+            } catch (error) {
+                console.error("Failed to delete quiz:", error);
+                alert("Failed to delete quiz. Try again!");
+            }
+        }
+    };
 
     return (
         <Card
@@ -109,6 +124,14 @@ export const QuizCard = ({quiz, index}) => {
             {canDownload && (
                 <CardActions sx={{mt: "auto", mr: "auto", p: "0.5vw"}}>
                     <Button onClick={handleDownload}> Download answers</Button>
+                    <Button
+                        onClick={handleDelete}
+                        variant="outlined"
+                        color="error"
+                        startIcon={<Delete />}
+                    >
+                        Delete Quiz
+                    </Button>
                 </CardActions>
             )}
             {/*todo: add a "Completed" text when the quiz was taken by the player, and make the card action disabled too when that happens*/}

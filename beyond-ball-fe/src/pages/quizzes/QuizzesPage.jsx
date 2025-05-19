@@ -8,8 +8,9 @@ import quizService from "../../APIs/QuizService.js";
 import {MessageType} from "../../components/popup/MessageType.js";
 
 const QuizzesPage = () => {
-    const [page, setPage] = useState(0);
-    const quizzesPerPage = 3;
+  const navigate = useNavigate();
+  const [page, setPage] = useState(0);
+  const quizzesPerPage = 3;
 
     const [quizzes, setQuizzes] = useState([]);
     const [rawSearchTerm, setRawSearchTerm] = useState("");
@@ -29,18 +30,34 @@ const QuizzesPage = () => {
         return () => clearTimeout(delay); // Cleanup
     }, [rawSearchTerm]);
 
-    useEffect(() => {
-        quizService.getQuizzes()
-            .then(response => {
-                setQuizzes(response.data);
-            })
-            .catch(error => {
-                console.log(error);
-                setIsVisible(true);
-                setMessage("Failed to fetch quizzes.");
-                setMessageType(MessageType.error);
-            })
-    }, []);
+  useEffect(() => {
+    fetchQuizzes();
+  }, []);
+
+  const fetchQuizzes = () => {
+    quizService.getQuizzes()
+      .then(response => {
+        setQuizzes(response.data);
+      })
+      .catch(error => {
+        console.log(error);
+        setIsVisible(true);
+        setMessage("Failed to fetch quizzes.");
+        setMessageType(MessageType.error);
+      });
+  };
+
+  const handleDeleteQuiz = async (quizId) => {
+    try {
+      await quizService.deleteQuiz(quizId);
+      fetchQuizzes();
+    } catch (error) {
+      console.error(error);
+      setIsVisible(true);
+      setMessage("Failed to delete quiz.");
+      setMessageType(MessageType.error);
+    }
+  };
 
     const filteredQuizzes = quizzes.filter((quiz) =>
         quiz.title.toLowerCase().includes(searchTerm.toLowerCase())
@@ -54,11 +71,12 @@ const QuizzesPage = () => {
 
     const handlePrev = () => setPage((prev) => Math.max(prev - 1, 0));
     const handleNext = () => setPage((prev) => Math.min(prev + 1, maxPage - 1));
-
     const handleSearch = (e) => setRawSearchTerm(e.target.value);
 
-    const handleAddQuiz = () => console.log("Add Quiz clicked");
 
+  const handleAddQuiz = () => {
+    navigate("/quizzes/create");
+  };
 
     return (
         <Layout>
@@ -80,7 +98,7 @@ const QuizzesPage = () => {
                 flexDirection: 'column',
                 minHeight: 'calc(100vh - 143px)', // Account for header and title
             }}>
-                <TopBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} handleSearch={handleSearch}/>
+                <TopBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} handleSearch={handleSearch} handleAddQuiz={handleAddQuiz}/>
 
                 <QuizContainer
                     quizzes={currentQuizzes}
@@ -88,6 +106,7 @@ const QuizzesPage = () => {
                     handlePrev={handlePrev}
                     page={page}
                     maxPage={maxPage}
+                    onQuizDeleted={handleDeleteQuiz}
                 />
 
             </Box>

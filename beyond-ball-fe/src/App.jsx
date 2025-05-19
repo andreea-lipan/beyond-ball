@@ -17,6 +17,7 @@ import WhiteboardDetailPage from "./pages/whiteboards/detail/WhiteboardDetailPag
 import TeamAdminPage from "./pages/TeamAdminPage.jsx";
 import ClipDetailPage from "./pages/clips/clip-detail/ClipDetailPage.jsx";
 import { SidebarProvider } from './components/sidebar/SidebarContext.jsx';
+import TakeQuizPage from "./pages/quizzes/TakeQuizPage.jsx";
 
 
 function App() {
@@ -148,6 +149,31 @@ function App() {
                                         return <MockPage/>;
                                     })()
                                     : <AccessDeniedRedirect/>
+                            }
+                        />
+
+                        {/* ✅ Create Quiz Page - only for STAFF and ADMIN */}
+                        <Route
+                            path="/quizzes/create"
+                            element={
+                                ["STAFF", "ADMIN"].includes(role)
+                                    ? (() => {
+                                        sessionStorage.setItem("lastValidPath", "/quizzes/create");
+                                        return <CreateQuiz />;
+                                    })()
+                                    : <AccessDeniedRedirect />
+                            }
+                        />
+
+                        <Route
+                            path="/quizzes/:id"
+                            element={
+                                ["PLAYER", "STAFF", "ADMIN"].includes(role)
+                                    ? (() => {
+                                        sessionStorage.setItem("lastValidPath", "/quizzes/:id");
+                                        return <TakeQuizPage />;
+                                    })()
+                                    : <AccessDeniedRedirect />
                             }
                         />
                     </Routes>
