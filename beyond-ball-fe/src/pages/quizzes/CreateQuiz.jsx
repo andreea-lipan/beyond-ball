@@ -4,10 +4,10 @@ import {
   Box, Button, TextField, Typography, IconButton, Snackbar, Alert
 } from "@mui/material";
 import { Delete, ContentCopy } from "@mui/icons-material";
-import Layout from "../../components/Layout.jsx";
+import Layout from "../../components/sidebar/Layout.jsx";
 import quizService from "../../APIs/QuizService.js";
 
-const CreateQuiz = () => {
+export const CreateQuiz = () => {
   const navigate = useNavigate();
 
   const [title, setTitle] = useState("");
@@ -227,5 +227,3 @@ const CreateQuiz = () => {
     </Layout>
   );
 };
-
-export default CreateQuiz;

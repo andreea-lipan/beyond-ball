@@ -16,11 +16,18 @@ const deleteQuiz = (quizId) => {
   const getQuizById = (quizId) => {
     return RequestInstance.get(`${QUIZ_ENDPOINTS.QUIZZES}/${quizId}`);
   };
+  const downloadAnswers = (quizId) => {
+  return RequestInstance.get(
+    `${QUIZ_ENDPOINTS.QUIZZES}/${quizId}/answers/download`,
+    { responseType: "blob" }
+  );
+};
 const QuizService = {
   getQuizzes,
   createQuiz,
   deleteQuiz,
-  getQuizById // ✅ adăugat aici
+  getQuizById, // ✅ adăugat aici
+  downloadAnswers
 };
 
 export default QuizService;

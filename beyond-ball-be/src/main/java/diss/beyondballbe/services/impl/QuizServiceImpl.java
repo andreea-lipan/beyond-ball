@@ -29,17 +29,12 @@ public class QuizServiceImpl implements QuizService {
     private AuthValidator authValidator;
 
     @Override
-    public List<QuizDTO> getAllQuizzes() {
-        return quizRepository.findAll().stream()
-                .filter(quiz -> {
-                    if (quiz.getAuthor() == null) {
-                        return false;
-                    }
-                    return authValidator.belongsToTeam(quiz.getAuthor().getTeam().getId());
-                })
-                .map(QuizDTO::new)
-                .toList();
-    }
+public List<QuizDTO> getAllQuizzes() {
+    return quizRepository.findAll().stream()
+            .map(QuizDTO::new)
+            .toList();
+}
+
 
     @Override
     public void createQuiz(QuizDTO quizDTO) {
