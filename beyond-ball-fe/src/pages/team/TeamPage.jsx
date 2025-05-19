@@ -32,7 +32,7 @@ const TeamPage = () => {
     return (
         <Layout>
             <Typography variant="h1" align="center" sx={{ mt: 3, mb: 3 }}>
-                Team {teamName}
+                Team Members
             </Typography>
 
             <Box sx={{

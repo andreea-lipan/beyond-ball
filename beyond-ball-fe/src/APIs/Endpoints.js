@@ -69,3 +69,8 @@ export const SOCKET_ENDPOINTS = {
     WHITEBOARD: (whiteboardId) => `/app/whiteboards/${whiteboardId}`,
     WHITEBOARD_INC: (whiteboardId) => `/topic/whiteboards/${whiteboardId}`,
 }
+
+export const EMAIL_ENDPOINTS = {
+    EMAIL_RESEND: `${BASE_URL}/email/resend`,
+    EMAIL_SEND: `${BASE_URL}/email/send`
+}

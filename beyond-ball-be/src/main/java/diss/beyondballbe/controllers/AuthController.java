@@ -56,8 +56,7 @@ public class AuthController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> registerMember(@RequestBody RegisterMemberDTO registerMemberDTO) {
         try {
-            authService.registerMember(registerMemberDTO);
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok(authService.registerMember(registerMemberDTO));
         } catch (UsernameAlreadyExistsException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
         } catch (Exception e) {

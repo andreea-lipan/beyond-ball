@@ -28,6 +28,9 @@ public class UserAccount {
     @Column(nullable = false)
     private String password;
 
+    @Column
+    private String email;
+
     private Boolean isActive = true;
 
     @ManyToOne(fetch = FetchType.EAGER)

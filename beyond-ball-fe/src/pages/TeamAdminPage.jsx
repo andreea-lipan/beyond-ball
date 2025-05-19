@@ -1,20 +1,20 @@
-import React, {useState, useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import {
-    Card,
-    Typography,
-    IconButton,
     Avatar,
-    Grid,
-    TextField,
-    InputAdornment,
+    Box,
     Button,
+    Card,
+    Grid,
+    IconButton,
+    InputAdornment,
+    TextField,
     ToggleButton,
     ToggleButtonGroup,
-    Box, useTheme,
+    Typography,
+    useTheme,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SearchIcon from "@mui/icons-material/Search";
-import {Dialog, DialogTitle, DialogContent, DialogActions} from "@mui/material";
 import Layout from "../components/sidebar/Layout.jsx";
 import {useAuth} from "../components/AuthContext";
 import UserService from "../APIs/UserService.js";
@@ -23,7 +23,9 @@ import AddMemberDialog from "./AddMemberDialog.jsx";
 import AuthService from "../APIs/AuthService.js";
 import MemberCredentialsDialog from "./MemberCredentialsDialog.jsx";
 import useModal from "../components/modals/useModal.js";
-import CardActionArea from "@mui/material/CardActionArea";
+import EmailService from "../APIs/EmailService.js";
+import {Popup} from "../components/popup/Popup.jsx";
+import {MessageType} from "../components/popup/MessageType.js";
 
 
 const TeamAdminPage = () => {
@@ -39,6 +41,10 @@ const TeamAdminPage = () => {
     const [search, setSearch] = useState("");
     const [filter, setFilter] = useState("PLAYER");
     const [credentials, setCredentials] = useState({username: "", password: ""});
+
+    const [popupMessage, setPopupMessage] = useState("");
+    const [popupType, setPopupType] = useState("")
+    const [showPopup, setShowPopup] = useState(false)
 
     useEffect(() => {
         if (teamId) {
@@ -77,15 +83,35 @@ const TeamAdminPage = () => {
             lastname: member.lastName,
             role: filter,
             position: member.position || "",
+            email: member.email,
             active: true,
         }
         console.log(newMember)
-        credentialsModal.openModal()
-        AuthService.addTeamMember(newMember).then(() => {
+        sendingEmailPopup(newMember.email)
+        AuthService.addTeamMember(newMember).then((member) => {
             fetchTeamData();
             credentialsModal.openModal()
+            handleSendEmail(member)
         })
 
+    }
+
+    const sendingEmailPopup = (email) => {
+        setPopupMessage(`Sending an email with the credentials to ${email}`)
+        setPopupType(MessageType.info)
+        setShowPopup(true)
+    }
+
+    const sentEmailPopup = (email) => {
+        setPopupMessage(`Email sent successfully to ${email}`);
+        setPopupType(MessageType.success)
+        setShowPopup(true)
+    }
+
+    const failedEmail = (email) => {
+        setPopupMessage(`Failed to send email to ${email}`);
+        setPopupType(MessageType.error);
+        setShowPopup(true);
     }
 
     const handleToggleActive = (id) => {
@@ -100,6 +126,35 @@ const TeamAdminPage = () => {
         })
     };
 
+    const handleSendEmail = (member) => {
+        sendingEmailPopup(member.email)
+        EmailService.sendEmail({
+            email: member.email,
+            username: member.username,
+            password: member.password
+        }).then(() => {
+            sentEmailPopup(member.email)
+        }).catch(()=> {
+            failedEmail(member.email)
+        })
+    }
+
+    const handleResendEmail = async (member) => {
+        try {
+            sendingEmailPopup(member.email)
+            await EmailService.resendEmail({
+                email: member.email,
+                username: member.username,
+                password: member.password
+            });
+            sentEmailPopup(member.email)
+        } catch (err) {
+            console.error(err);
+            failedEmail(member.email)
+        }
+    };
+
+
     const handleFilterChange = (event, newFilter) => {
         if (newFilter) setFilter(newFilter);
     };
@@ -111,6 +166,12 @@ const TeamAdminPage = () => {
 
     return (
         <Layout>
+            <Popup
+                message={popupMessage}
+                messageType={popupType}
+                isVisible={showPopup}
+                setIsVisible={setShowPopup}
+            />
             <Typography variant="h1" align="center" sx={{mt: 3, mb: 3}}>
                 Manage your team
             </Typography>
@@ -226,11 +287,11 @@ const TeamAdminPage = () => {
                                     {/*    alignItems: "center",*/}
                                     {/*    justifyContent: 'center'*/}
                                     {/*}}>*/}
-                                        <Avatar alt={member.name} sx={{width: 56, height: 56, mb: 1}}/>
+                                    <Avatar alt={member.name} sx={{width: 56, height: 56, mb: 1}}/>
 
-                                        {/* Name */}
-                                        <Typography variant="h2"
-                                                    sx={{padding: '0.2em 0 0.4em 0'}}>{member.name}</Typography>
+                                    {/* Name */}
+                                    <Typography variant="h2"
+                                                sx={{padding: '0.2em 0 0.4em 0'}}>{member.name}</Typography>
                                     {/*</Box>*/}
 
 
@@ -270,8 +331,18 @@ const TeamAdminPage = () => {
                                                     </>
                                                 }
                                             </Box>
-                                        </Box>
 
+                                        </Box>
+                                        <Box>
+                                            <Button
+                                                variant="outlined"
+                                                size="small"
+                                                onClick={() => handleResendEmail(member)}
+                                                sx={{ mt: 1, color: theme.palette.secondary.main, borderColor: theme.palette.secondary.main }}
+                                            >
+                                                Resend Email
+                                            </Button>
+                                        </Box>
                                         {/* Archive */}
                                         <IconButton onClick={() => handleToggleActive(member.id)} color="secondary"
                                                     title="Set Inactive">
