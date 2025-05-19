@@ -38,7 +38,7 @@ export const QuizContainer = ({ quizzes, handleNext, handlePrev, page, maxPage, 
               key={quiz.id || index}
               quiz={quiz}
               index={index}
-              onDelete={onQuizDeleted} // ✅ transmite callback-ul
+              onQuizDeleted={onQuizDeleted} // ✅ transmite callback-ul
             />
           ))
         ) : (

@@ -47,26 +47,16 @@ const QuizzesPage = () => {
   };
 
   const handleDeleteQuiz = async (quizId) => {
-    try {
-      await quizService.deleteQuiz(quizId);
-      fetchQuizzes();
-    } catch (error) {
-      console.error(error);
-      setIsVisible(true);
-      setMessage("Failed to delete quiz.");
-      setMessageType(MessageType.error);
-    }
+  
+    fetchQuizzes();
   };
+
 
   const filteredQuizzes = quizzes.filter((quiz) =>
     quiz.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const maxPage = Math.ceil(filteredQuizzes.length / quizzesPerPage);
-  const currentQuizzes = filteredQuizzes.slice(
-    page * quizzesPerPage,
-    page * quizzesPerPage + quizzesPerPage
-  );
 
   const handlePrev = () => setPage((prev) => Math.max(prev - 1, 0));
   const handleNext = () => setPage((prev) => Math.min(prev + 1, maxPage - 1));
@@ -91,7 +81,7 @@ const QuizzesPage = () => {
       <TopBar handleAddQuiz={handleAddQuiz} handleSearch={handleSearch} />
 
       <QuizContainer
-        quizzes={currentQuizzes}
+        quizzes={quizzes}
         handleNext={handleNext}
         handlePrev={handlePrev}
         page={page}

@@ -10,12 +10,15 @@ const createQuiz = (quizData) => {
 };
 
 const deleteQuiz = (quizId) => {
-    return RequestInstance.delete(`/quizzes/${quizId}`);
+    return RequestInstance.delete(`${QUIZ_ENDPOINTS.QUIZZES}/${quizId}`);
   };
+  
 
   const getQuizById = (quizId) => {
     return RequestInstance.get(`${QUIZ_ENDPOINTS.QUIZZES}/${quizId}`);
   };
+
+
 const QuizService = {
   getQuizzes,
   createQuiz,
