@@ -42,6 +42,7 @@ const TeamAdminPage = () => {
     const [filter, setFilter] = useState("PLAYER");
     const [credentials, setCredentials] = useState({username: "", password: ""});
 
+    const [popupOpen, setPopupOpen] = useState(false);
     const [popupMessage, setPopupMessage] = useState("");
     const [popupType, setPopupType] = useState("")
     const [showPopup, setShowPopup] = useState(false)
