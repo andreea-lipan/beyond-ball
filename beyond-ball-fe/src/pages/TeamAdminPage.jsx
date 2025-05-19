@@ -13,6 +13,8 @@ import {
     Typography,
     useTheme,
 } from "@mui/material";
+import { Popup } from "../components/popup/Popup.jsx";
+import { MessageType } from "../components/popup/MessageType.js";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SearchIcon from "@mui/icons-material/Search";
 import Layout from "../components/sidebar/Layout.jsx";
@@ -39,6 +41,11 @@ const TeamAdminPage = () => {
     const [search, setSearch] = useState("");
     const [filter, setFilter] = useState("PLAYER");
     const [credentials, setCredentials] = useState({username: "", password: ""});
+
+    const [popupMessage, setPopupMessage] = useState("");
+    const [popupType, setPopupType] = useState(null);
+    const [popupOpen, setPopupOpen] = useState(false);
+
 
     useEffect(() => {
         if (teamId) {
@@ -124,8 +131,37 @@ const TeamAdminPage = () => {
         member.role === filter && member.name?.toLowerCase().includes(search.toLowerCase())
     ).sort((a, b) => b.active - a.active);
 
+    const handleExcelUpload = async (e) => {
+        const fileInput = e.target;
+        const file = fileInput.files[0];
+        if (!file) return;
+    
+        try {
+            await UserService.uploadPlayersExcel(teamId, file);
+            setPopupMessage("Player data uploaded successfully.");
+            setPopupType(MessageType.success);
+            setPopupOpen(true);
+            fetchTeamData();
+        } catch (err) {
+            console.error("Upload failed:", err);
+            setPopupMessage("Upload failed. " + (err?.response?.data || "Please try again."));
+            setPopupType(MessageType.error);
+            setPopupOpen(true);
+        }
+        finally {
+            // Reset file input so selecting the same file again triggers onChange
+            fileInput.value = "";
+        }
+    };
+    
+    
+    const triggerExcelInput = () => {
+        document.getElementById("excel-upload-input").click();
+    };
+      
 
     return (
+        
         <Layout>
             <Typography variant="h1" align="center" sx={{mt: 3, mb: 3}}>
                 Manage your team
@@ -182,9 +218,22 @@ const TeamAdminPage = () => {
                             }}
                         />
 
-                        <Button variant="outlined" sx={{color: "#374151", borderColor: "#374151"}}>
-                            Upload data from Excel
-                        </Button>
+                        <>
+                            <input
+                                type="file"
+                                accept=".xlsx"
+                                id="excel-upload-input"
+                                style={{ display: "none" }}
+                                onChange={handleExcelUpload}
+                            />
+                            <Button
+                                variant="outlined"
+                                sx={{ color: "#374151", borderColor: "#374151" }}
+                                onClick={triggerExcelInput}
+                            >
+                                Upload data from Excel
+                            </Button>
+                        </>
                     </Box>
                 </Box>
 
@@ -276,13 +325,13 @@ const TeamAdminPage = () => {
                                                 alignItems: 'flex-end',
                                                 paddingLeft: '10px'
                                             }}>
-                                                <Typography variant="subtitle1">{member?.position || 'N/A'}</Typography>
+                                                <Typography variant="subtitle1">{member.playerStats?.position || 'N/A'}</Typography>
                                                 {member.role === "PLAYER" &&
                                                     <>
                                                         <Typography
-                                                            variant="subtitle1">{member?.goals || 'N/A'}</Typography>
+                                                            variant="subtitle1">{member.playerStats?.goals ?? 'N/A'}</Typography>
                                                         <Typography
-                                                            variant="subtitle1">{member?.assists || 'N/A'}</Typography>
+                                                            variant="subtitle1">{member.playerStats?.assists ?? 'N/A'}</Typography>
                                                     </>
                                                 }
                                             </Box>
@@ -317,6 +366,16 @@ const TeamAdminPage = () => {
 
             {/* Show added players credentials */}
             <MemberCredentialsDialog state={credentialsModal} credentials={credentials}/>
+
+            {popupOpen && (
+        <Popup
+          isVisible={popupOpen}
+          setIsVisible={setPopupOpen}
+          message={popupMessage}
+          messageType={popupType}
+          duration={popupType === MessageType.success ? 100 : 3000}
+        />
+      )}
         </Layout>
     );
 };

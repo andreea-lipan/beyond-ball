@@ -1,5 +1,6 @@
 import {RequestInstance} from "./RequestInstance.js";
 import {USER_ENDPOINTS} from "./Endpoints.js";
+import {FileRequestInstance} from "./RequestInstance.js";
 
 const getTeamMembers = (teamId) => {
     return getTeamMembersForAdmin(teamId).then(res => {
@@ -19,10 +20,19 @@ const changeActiveStatus = (memberId, active) => {
     return RequestInstance.post(USER_ENDPOINTS.CHANGE_ACTIVE_STATUS(memberId), {active: active});
 }
 
+const uploadPlayersExcel = async (teamId, file) => {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const response = await FileRequestInstance.post(USER_ENDPOINTS.UPLOAD_PLAYERS(teamId), formData);
+    return response.data;
+};
+
 const UserService = {
     getTeamMembers,
     changeActiveStatus,
-    getTeamMembersForAdmin
+    getTeamMembersForAdmin,
+    uploadPlayersExcel
 }
 
 export default UserService;

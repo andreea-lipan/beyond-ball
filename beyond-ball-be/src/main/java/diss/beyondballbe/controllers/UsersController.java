@@ -2,11 +2,14 @@ package diss.beyondballbe.controllers;
 
 import diss.beyondballbe.model.DTOs.ChangeActiveStatusDTO;
 import diss.beyondballbe.model.accounts.UserAccount;
+import diss.beyondballbe.services.PlayerUploadService;
 import diss.beyondballbe.services.UserAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.List;
 
 
@@ -17,6 +20,9 @@ public class UsersController {
 
     @Autowired
     private UserAccountService userAccountService;
+
+    @Autowired
+    private PlayerUploadService playerUploadService;
 
     // Use this to view in Postman the data for the accounts
     @GetMapping("accounts")
@@ -47,6 +53,17 @@ public class UsersController {
             return ResponseEntity.ok("User account status changed successfully");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/teams/{teamId}/players/upload")
+    public ResponseEntity<?> uploadPlayersExcel(@RequestParam("file") MultipartFile file, @PathVariable Long teamId) {
+        try {
+            playerUploadService.uploadPlayerStats(file, teamId);
+            return ResponseEntity.ok("Upload player stats from excel successful.");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error: " + e.getMessage());
         }
     }
 
