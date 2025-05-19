@@ -28,12 +28,10 @@ public class UserAccount {
     @Column(nullable = false)
     private String password;
 
-<<<<<<< HEAD
     @Column
     private String email;
-=======
+
     private Boolean isActive = true;
->>>>>>> 51e0058a87872a1324a021a78994037f455ce610
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "team_id")

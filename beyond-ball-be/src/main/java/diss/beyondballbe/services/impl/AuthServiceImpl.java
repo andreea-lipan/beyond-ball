@@ -13,6 +13,7 @@ import diss.beyondballbe.persistence.TeamRepository;
 import diss.beyondballbe.persistence.UserAccountRepository;
 import diss.beyondballbe.security.JwtUtil;
 import diss.beyondballbe.services.AuthService;
+import diss.beyondballbe.services.EmailService;
 import diss.beyondballbe.services.FolderService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,9 @@ public class AuthServiceImpl implements AuthService {
 
     @Autowired
     private FolderService folderService;
+
+    @Autowired
+    private EmailService emailService;
 
     @Autowired
     private JwtUtil jwtUtil;
@@ -104,9 +108,12 @@ public class AuthServiceImpl implements AuthService {
                 player.setPassword(request.getPassword());
                 player.setFirstname(request.getFirstname());
                 player.setLastname(request.getLastname());
+                player.setEmail(request.getEmail());
                 player.setIsActive(true);
 
-                userAccountRepository.save(player);
+                UserAccount userAccount = userAccountRepository.save(player);
+                emailService.sendCredentials(userAccount);
+
             }
             case STAFF -> {
                 StaffAccount staff = new StaffAccount();
@@ -117,9 +124,12 @@ public class AuthServiceImpl implements AuthService {
                 staff.setFirstname(request.getFirstname());
                 staff.setLastname(request.getLastname());
                 staff.setPosition(request.getPosition());
+                staff.setEmail(request.getEmail());
                 staff.setIsActive(true);
 
-                userAccountRepository.save(staff);
+                UserAccount userAccount = userAccountRepository.save(staff);
+                emailService.sendCredentials(userAccount);
+
             }
             default -> throw new IllegalArgumentException("Invalid role");
         }

@@ -19,12 +19,12 @@ const AddMemberDialog = ({addMember, state, role}) => {
         lastName: "",
         position: "",
         email: "",
-        role: "Player"
+        role: role
     });
 
     const handleCloseDialog = () => {
         state.closeModal();
-        setNewMember({fistName: "", lastName: "", position: "", email: ""});
+        setNewMember({firstName: "", lastName: "", position: "", email: "", role: role});
     }
 
     const handleAddMember = () => {
@@ -34,7 +34,7 @@ const AddMemberDialog = ({addMember, state, role}) => {
             return;
         }
 
-        if (newMember.role !== "Player" && newMember.position === "") {
+        if (newMember.role !== "PLAYER" && newMember.position === "") {
             setErrorMessage("Please specify the staff role");
             setShowError(true);
             return;

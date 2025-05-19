@@ -61,14 +61,6 @@ export const USER_ENDPOINTS = {
     CHANGE_ACTIVE_STATUS: (userId) => `${USER_URL}/accounts/${userId}/active`,
 }
 
-<<<<<<< HEAD
-export const USER_ENDPOINTS = {
-    MOCK: `${BASE_URL}/users/teams/{teamId}/players/mock`
-}
-
-export const EMAIL_ENDPOINTS = {
-    EMAIL_RESEND: `${BASE_URL}/email/resend`
-=======
 const SOCKET_URL = `${BASE_URL}/ws`
 export const SOCKET_ENDPOINTS = {
     BASE: `${SOCKET_URL}`,
@@ -76,5 +68,8 @@ export const SOCKET_ENDPOINTS = {
     CLIP_INC: (clipId) => `/topic/clips/${clipId}`,
     WHITEBOARD: (whiteboardId) => `/app/whiteboards/${whiteboardId}`,
     WHITEBOARD_INC: (whiteboardId) => `/topic/whiteboards/${whiteboardId}`,
->>>>>>> 51e0058a87872a1324a021a78994037f455ce610
+}
+
+export const EMAIL_ENDPOINTS = {
+    EMAIL_RESEND: `${BASE_URL}/email/resend`
 }

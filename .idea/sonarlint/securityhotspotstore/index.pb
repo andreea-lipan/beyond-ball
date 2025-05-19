@@ -63,5 +63,3 @@ Obeyond-ball-be/src/main/java/diss/beyondballbe/controllers/EmailController.java
 Xbeyond-ball-be/src/main/java/diss/beyondballbe/services/impl/UserAccountServiceImpl.java,5\2\524dd6aa72079e1de63374061a719af84c7a1cc5
 
 Obeyond-ball-be/src/main/java/diss/beyondballbe/controllers/UsersController.java,c\c\cc287a736d9841285e596e61388771aaafb99a78
-E
-run configuration.txt,b\8\b878c22310cb37dd8f44a3274b62a30f7ebfaa41
