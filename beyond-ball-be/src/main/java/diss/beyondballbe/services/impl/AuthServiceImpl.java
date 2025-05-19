@@ -4,6 +4,7 @@ import diss.beyondballbe.exceptions.UsernameAlreadyExistsException;
 import diss.beyondballbe.model.DTOs.FolderCreationRequest;
 import diss.beyondballbe.model.DTOs.RegisterMemberDTO;
 import diss.beyondballbe.model.DTOs.TeamDTO;
+import diss.beyondballbe.model.DTOs.UserAccountDTO;
 import diss.beyondballbe.model.Team;
 import diss.beyondballbe.model.accounts.PlayerAccount;
 import diss.beyondballbe.model.accounts.StaffAccount;
@@ -91,7 +92,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public void registerMember(RegisterMemberDTO request) {
+    public UserAccountDTO registerMember(RegisterMemberDTO request) {
         Team team = teamRepository.findById(request.getTeamId())
                 .orElseThrow(() -> new EntityNotFoundException("Team not found"));
 
@@ -111,8 +112,7 @@ public class AuthServiceImpl implements AuthService {
                 player.setEmail(request.getEmail());
                 player.setIsActive(true);
 
-                UserAccount userAccount = userAccountRepository.save(player);
-                emailService.sendCredentials(userAccount);
+                return new UserAccountDTO(userAccountRepository.save(player));
 
             }
             case STAFF -> {
@@ -127,9 +127,7 @@ public class AuthServiceImpl implements AuthService {
                 staff.setEmail(request.getEmail());
                 staff.setIsActive(true);
 
-                UserAccount userAccount = userAccountRepository.save(staff);
-                emailService.sendCredentials(userAccount);
-
+                return new UserAccountDTO(userAccountRepository.save(staff));
             }
             default -> throw new IllegalArgumentException("Invalid role");
         }

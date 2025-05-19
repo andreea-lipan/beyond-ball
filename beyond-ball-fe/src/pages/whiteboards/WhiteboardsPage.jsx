@@ -45,7 +45,7 @@ const WhiteboardsPage = () => {
 
             {/* Page Title */}
             <Typography variant="h1" align="center" sx={{mt: 3, mb: 3}}>
-                Team {Storage.getTeamIdFromToken()} Whiteboards
+                Team Whiteboards
             </Typography>
 
             <Box sx={{

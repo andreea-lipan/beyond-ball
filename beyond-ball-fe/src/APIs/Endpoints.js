@@ -71,5 +71,6 @@ export const SOCKET_ENDPOINTS = {
 }
 
 export const EMAIL_ENDPOINTS = {
-    EMAIL_RESEND: `${BASE_URL}/email/resend`
+    EMAIL_RESEND: `${BASE_URL}/email/resend`,
+    EMAIL_SEND: `${BASE_URL}/email/send`
 }
