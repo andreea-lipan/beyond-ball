@@ -10,7 +10,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/my_database
       SPRING_DATASOURCE_USERNAME: my_user
       SPRING_DATASOURCE_PASSWORD: my_password
-      SPRING_JPA_HIBERNATE_DDL_AUTO: create
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
     depends_on:
       - database
 
@@ -18,7 +18,7 @@ services:
     build:
       context: ./beyond-ball-fe
     ports:
-      - "3001:3000"
+      - "3000:3000"
     depends_on:
       - backend
 
@@ -27,7 +27,7 @@ services:
     container_name: postgres_db
     restart: always
     ports:
-      - "5433:5432"
+      - "5432:5432"
     environment:
       POSTGRES_USER: my_user
       POSTGRES_PASSWORD: my_password

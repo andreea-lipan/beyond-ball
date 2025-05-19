@@ -18,11 +18,13 @@ import TeamAdminPage from "./pages/TeamAdminPage.jsx";
 import ClipDetailPage from "./pages/clips/clip-detail/ClipDetailPage.jsx";
 import { SidebarProvider } from './components/sidebar/SidebarContext.jsx';
 import TakeQuizPage from "./pages/quizzes/TakeQuizPage.jsx";
+import {CreateQuiz} from "./pages/quizzes/CreateQuiz.jsx";
+
 
 
 function App() {
-    const {role, teamId} = useAuth();
-
+    const {role, _teamId} = useAuth();
+    
     return (
         <div className="App">
             <SidebarProvider>

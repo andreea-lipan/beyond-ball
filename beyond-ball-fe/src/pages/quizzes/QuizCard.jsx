@@ -33,9 +33,23 @@ function getRandomInt(max) {
     const canDownload = role === "STAFF" || role === "ADMIN";
     const navigate = useNavigate();
 
-    const handleDownload = () => {
-
-    }
+const handleDownload = async () => {
+  try {
+    const res = await quizService.downloadAnswers(quiz.id);
+    const blob = new Blob([res.data], { type: "text/csv" });
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `quiz-${quiz.id}-answers.csv`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    window.URL.revokeObjectURL(url);
+  } catch (err) {
+    console.error("Download failed", err);
+    alert("Could not download quiz answers.");
+  }
+};
 
     const handleClick = () => {
         if (role === "PLAYER") {
