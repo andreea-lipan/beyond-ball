@@ -9,6 +9,9 @@ import {
   Button,
   Alert,
   Divider,
+  Card,
+  CardHeader,
+  CardContent,
 } from "@mui/material";
 
 const TakeQuizPage = () => {
@@ -29,14 +32,10 @@ const TakeQuizPage = () => {
   }, [id]);
 
   const handleChange = (questionId, value) => {
-    setAnswers((prev) => ({
-      ...prev,
-      [questionId]: value,
-    }));
+    setAnswers((prev) => ({ ...prev, [questionId]: value }));
   };
 
   const handleSubmit = async () => {
-    // Transform answers into DTOs
     const payload = quiz.questions.map((q) => ({
       questionId: q.id,
       answerText: answers[q.id] ?? "",
@@ -51,7 +50,6 @@ const TakeQuizPage = () => {
     }
   };
 
-  // **Move these inside the component**, before your final return**
   if (error) {
     return (
       <Layout>
@@ -67,58 +65,58 @@ const TakeQuizPage = () => {
     );
   }
 
-  // **Main UI**
   return (
     <Layout>
-      <Box sx={{ p: 4 }}>
-        <Typography variant="h2" gutterBottom>
+      <Box sx={{ maxWidth: 600, mx: "auto", py: 4 }}>
+        <Typography variant="h3" align="center" gutterBottom>
           {quiz.title}
         </Typography>
-        <Typography variant="subtitle1" gutterBottom>
+        <Typography variant="body1" align="center" gutterBottom>
           {quiz.description}
         </Typography>
         <Divider sx={{ my: 3 }} />
 
-        {quiz.questions.map((question, idx) => (
-          <Box key={question.id} sx={{ my: 4 }}>
-            <Typography variant="h6" gutterBottom>
-              {idx + 1}. {question.question}
-            </Typography>
-
-            {question.type === "SCALA" ? (
-              <TextField
-                label="Scale (1 to 5)"
-                type="number"
-                inputProps={{ min: 1, max: 5 }}
-                fullWidth
-                value={answers[question.id] || ""}
-                onChange={(e) =>
-                  handleChange(question.id, e.target.value)
-                }
+        <Box display="flex" flexDirection="column" gap={2}>
+          {quiz.questions.map((question, idx) => (
+            <Card key={question.id} variant="outlined">
+              <CardHeader
+                title={`${idx + 1}. ${question.question}`}
+                titleTypographyProps={{ variant: "h6" }}
               />
-            ) : (
-              <TextField
-                label="Your Answer"
-                multiline
-                fullWidth
-                rows={3}
-                value={answers[question.id] || ""}
-                onChange={(e) =>
-                  handleChange(question.id, e.target.value)
-                }
-              />
-            )}
-          </Box>
-        ))}
+              <CardContent>
+                {question.type === "SCALA" ? (
+                  <TextField
+                    fullWidth
+                    label="Scale (1–5)"
+                    type="number"
+                    inputProps={{ min: 1, max: 5 }}
+                    value={answers[question.id] || ""}
+                    onChange={(e) =>
+                      handleChange(question.id, e.target.value)
+                    }
+                  />
+                ) : (
+                  <TextField
+                    fullWidth
+                    label="Your Answer"
+                    multiline
+                    rows={3}
+                    value={answers[question.id] || ""}
+                    onChange={(e) =>
+                      handleChange(question.id, e.target.value)
+                    }
+                  />
+                )}
+              </CardContent>
+            </Card>
+          ))}
+        </Box>
 
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={handleSubmit}
-          sx={{ mt: 3 }}
-        >
-          Submit Answers
-        </Button>
+        <Box textAlign="center" mt={4}>
+          <Button variant="contained" onClick={handleSubmit}>
+            Submit Answers
+          </Button>
+        </Box>
 
         {submitted && (
           <Alert severity="success" sx={{ mt: 3 }}>

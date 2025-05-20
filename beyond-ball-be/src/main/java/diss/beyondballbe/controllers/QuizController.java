@@ -1,8 +1,8 @@
 package diss.beyondballbe.controllers;
 
 import diss.beyondballbe.model.DTOs.QuizDTO;
+import diss.beyondballbe.model.DTOs.QuizQuestionDTO;
 import diss.beyondballbe.model.accounts.UserAccount;
-import diss.beyondballbe.model.quizes.Quiz;
 import diss.beyondballbe.services.QuizService;
 
 import java.io.OutputStreamWriter;
@@ -19,8 +19,12 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import java.io.ByteArrayOutputStream;
-
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.Map;
+import java.util.stream.Stream;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import diss.beyondballbe.persistence.QuizAnswerEntity;
@@ -108,43 +112,65 @@ public class QuizController {
     }
 
   // ── Download answers CSV ───────────────────────────────────────────────────
-    @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/{quizId}/answers/download")
-    public ResponseEntity<ByteArrayResource> downloadAnswers(@PathVariable Long quizId) throws Exception {
-        // verify quiz exists (optional)
-        quizService.getQuizById(quizId);
+@PreAuthorize("hasRole('ADMIN')")
+@GetMapping("/{quizId}/answers/download")
+public ResponseEntity<ByteArrayResource> downloadAnswers(@PathVariable Long quizId) throws Exception {
+    // 1) Load the quiz (DTO) to get the ordered list of questions
+    QuizDTO quizDto = quizService.getQuizById(quizId);
+    List<QuizQuestionDTO> questions = quizDto.getQuestions();
 
-        // fetch persisted answers
-        List<QuizAnswerEntity> answers = answerService.findByQuizId(quizId);
+    // 2) Fetch all persisted answers
+    List<QuizAnswerEntity> answers = answerService.findByQuizId(quizId);
 
-        // build CSV
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        CSVPrinter csv = new CSVPrinter(
-            new OutputStreamWriter(out, StandardCharsets.UTF_8),
-            CSVFormat.DEFAULT.withHeader("Answer ID","Username","Question Text","Answer","Submitted At")
-        );
+    // 3) Group answers by username
+    Map<String, List<QuizAnswerEntity>> answersByUser = answers.stream()
+        .collect(Collectors.groupingBy(a -> a.getUser().getUsername()));
 
-        for (QuizAnswerEntity a : answers) {
-            csv.printRecord(
-                a.getId(),
-                a.getUser().getUsername(),
-                a.getQuestion().getQuestion(),
-                a.getAnswerText(),
-                a.getSubmittedAt()
-            );
+    // 4) Build the CSV with a header row: Username + each question text
+    String[] header = Stream.concat(
+            Stream.of("Username"),
+            questions.stream().map(QuizQuestionDTO::getQuestion)
+        )
+        .toArray(String[]::new);
+
+    ByteArrayOutputStream out = new ByteArrayOutputStream();
+    CSVPrinter csv = new CSVPrinter(
+        new OutputStreamWriter(out, StandardCharsets.UTF_8),
+        CSVFormat.DEFAULT.withHeader(header)
+    );
+
+    // 5) For each user, emit one row: username + answers in question order
+    for (Map.Entry<String,List<QuizAnswerEntity>> entry : answersByUser.entrySet()) {
+        String username = entry.getKey();
+        List<QuizAnswerEntity> userAnswers = entry.getValue();
+
+        // map questionId -> answerText
+        Map<Long, String> answerMap = userAnswers.stream()
+            .collect(Collectors.toMap(
+                a -> a.getQuestion().getId(),
+                QuizAnswerEntity::getAnswerText
+            ));
+
+        // build row
+        List<String> row = new ArrayList<>();
+        row.add(username);
+        for (QuizQuestionDTO q : questions) {
+            row.add(answerMap.getOrDefault(q.getId(), ""));
         }
-        csv.flush();
-
-        // wrap and return
-        ByteArrayResource resource = new ByteArrayResource(out.toByteArray());
-        String filename = "quiz-" + quizId + "-answers.csv";
-
-        return ResponseEntity.ok()
-            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + filename + "\"")
-            .contentLength(resource.contentLength())
-            .contentType(MediaType.parseMediaType("text/csv"))
-            .body(resource);
+        csv.printRecord(row);
     }
+
+    csv.flush();
+
+    // 6) Return as downloadable file
+    ByteArrayResource resource = new ByteArrayResource(out.toByteArray());
+    String filename = "quiz-" + quizId + "-responses.csv";
+    return ResponseEntity.ok()
+        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + filename + "\"")
+        .contentLength(resource.contentLength())
+        .contentType(MediaType.parseMediaType("text/csv"))
+        .body(resource);
+}
 
     
     @PreAuthorize("hasAnyRole('STAFF', 'PLAYER', 'ADMIN')")
