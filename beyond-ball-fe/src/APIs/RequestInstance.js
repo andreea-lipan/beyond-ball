@@ -19,9 +19,9 @@ export const RequestInstance = axios.create({
 
 export const FileRequestInstance = axios.create({
     mode:'cors',
-    headers: {
-        "Content-Type": "multipart/form-data",
-    },
+    // headers: {
+    //     "Content-Type": "multipart/form-data",
+    // },
 });
 
 // Attach token to all Requests

@@ -59,6 +59,7 @@ export const USER_ENDPOINTS = {
     TEAM_MEMBERS: (teamId) => `${USER_URL}/teams/${teamId}/members`,
     USERS: `${USER_URL}`,
     CHANGE_ACTIVE_STATUS: (userId) => `${USER_URL}/accounts/${userId}/active`,
+    UPLOAD_PLAYERS: (teamId) => `${USER_URL}/teams/${teamId}/players/upload`,
 }
 
 const SOCKET_URL = `${BASE_URL}/ws`
