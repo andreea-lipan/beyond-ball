@@ -10,7 +10,7 @@ import {
   Alert,
   Divider,
 } from "@mui/material";
-//ejcehcdjdyjt
+
 const TakeQuizPage = () => {
   const { id } = useParams();
   const [quiz, setQuiz] = useState(null);
@@ -19,7 +19,8 @@ const TakeQuizPage = () => {
   const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
-    quizService.getQuizById(id)
+    quizService
+      .getQuizById(id)
       .then((res) => setQuiz(res.data))
       .catch((err) => {
         console.error(err);
@@ -34,28 +35,54 @@ const TakeQuizPage = () => {
     }));
   };
 
-  const handleSubmit = () => {
-    console.log("✅ Submitted answers:", answers);
-    setSubmitted(true);
+  const handleSubmit = async () => {
+    // Transform answers into DTOs
+    const payload = quiz.questions.map((q) => ({
+      questionId: q.id,
+      answerText: answers[q.id] ?? "",
+    }));
 
-    // TODO: Poți trimite către backend cu axios.post("/answers", answers)
+    try {
+      await quizService.submitAnswers(quiz.id, payload);
+      setSubmitted(true);
+    } catch (err) {
+      console.error("Submit failed", err);
+      setError("Could not submit answers.");
+    }
   };
 
-  if (error) return <Layout><Alert severity="error">{error}</Alert></Layout>;
-  if (!quiz) return <Layout><Typography>Loading...</Typography></Layout>;
+  // **Move these inside the component**, before your final return**
+  if (error) {
+    return (
+      <Layout>
+        <Alert severity="error">{error}</Alert>
+      </Layout>
+    );
+  }
+  if (!quiz) {
+    return (
+      <Layout>
+        <Typography>Loading...</Typography>
+      </Layout>
+    );
+  }
 
+  // **Main UI**
   return (
     <Layout>
       <Box sx={{ p: 4 }}>
-        <Typography variant="h2" gutterBottom>{quiz.title}</Typography>
-        <Typography variant="subtitle1" gutterBottom>{quiz.description}</Typography>
-
+        <Typography variant="h2" gutterBottom>
+          {quiz.title}
+        </Typography>
+        <Typography variant="subtitle1" gutterBottom>
+          {quiz.description}
+        </Typography>
         <Divider sx={{ my: 3 }} />
 
-        {quiz.questions?.map((question, index) => (
+        {quiz.questions.map((question, idx) => (
           <Box key={question.id} sx={{ my: 4 }}>
             <Typography variant="h6" gutterBottom>
-              {index + 1}. {question.question}
+              {idx + 1}. {question.question}
             </Typography>
 
             {question.type === "SCALA" ? (
@@ -65,7 +92,9 @@ const TakeQuizPage = () => {
                 inputProps={{ min: 1, max: 5 }}
                 fullWidth
                 value={answers[question.id] || ""}
-                onChange={(e) => handleChange(question.id, e.target.value)}
+                onChange={(e) =>
+                  handleChange(question.id, e.target.value)
+                }
               />
             ) : (
               <TextField
@@ -74,7 +103,9 @@ const TakeQuizPage = () => {
                 fullWidth
                 rows={3}
                 value={answers[question.id] || ""}
-                onChange={(e) => handleChange(question.id, e.target.value)}
+                onChange={(e) =>
+                  handleChange(question.id, e.target.value)
+                }
               />
             )}
           </Box>
