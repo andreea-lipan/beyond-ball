@@ -5,6 +5,7 @@ import diss.beyondballbe.persistence.QuizAnswerRepository;
 import diss.beyondballbe.services.QuizAnswerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
@@ -20,5 +21,11 @@ public class QuizAnswerServiceImpl implements QuizAnswerService {
     @Override
     public List<QuizAnswerEntity> findByQuizId(Long quizId) {
         return repo.findByQuiz_Id(quizId);
+    }
+
+    // ← implement saveAll(...)
+    @Override
+    public void saveAll(List<QuizAnswerEntity> answers) {
+        repo.saveAll(answers);
     }
 }

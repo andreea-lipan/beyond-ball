@@ -1,10 +1,14 @@
 package diss.beyondballbe.controllers;
 
 import diss.beyondballbe.model.DTOs.QuizDTO;
+import diss.beyondballbe.model.accounts.UserAccount;
+import diss.beyondballbe.model.quizes.Quiz;
 import diss.beyondballbe.services.QuizService;
 
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
+import java.security.Principal;
+import java.time.Instant;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
@@ -12,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import java.io.ByteArrayOutputStream;
 
@@ -19,7 +24,12 @@ import java.util.List;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import diss.beyondballbe.persistence.QuizAnswerEntity;
+import diss.beyondballbe.persistence.QuizRepository;
 import diss.beyondballbe.services.QuizAnswerService;
+import diss.beyondballbe.services.QuizQuestionService;
+import diss.beyondballbe.model.DTOs.QuizAnswerDTO;
+import diss.beyondballbe.services.UserAccountService;
+import jakarta.persistence.EntityNotFoundException;
 
 
 @CrossOrigin
@@ -30,6 +40,14 @@ public class QuizController {
     private QuizAnswerService answerService;
     @Autowired
     private QuizService quizService;
+    @Autowired
+    private UserAccountService userService;
+    @Autowired
+    private QuizQuestionService questionService;
+    @Autowired
+    private QuizRepository quizRepository; 
+   
+
 
     // ✅ GET - toți pot vedea quizurile
     @PreAuthorize("hasAnyRole('STAFF', 'PLAYER', 'ADMIN')")
@@ -52,6 +70,40 @@ public class QuizController {
     @DeleteMapping("/{quizId}")
     public ResponseEntity<?> deleteQuiz(@PathVariable Long quizId) {
         quizService.deleteQuiz(quizId);
+        return ResponseEntity.ok().build();
+    }
+         @PreAuthorize("hasRole('PLAYER')")
+    @PostMapping("/{quizId}/answers")
+    public ResponseEntity<Void> submitQuizAnswers(
+        @PathVariable Long quizId,
+        @RequestBody List<QuizAnswerDTO> answerDTOs,
+        Principal principal
+    ) {
+        // 1) Load the Quiz entity (instead of `new Quiz(quizId)`)
+        var quizEntity = quizRepository.findById(quizId)
+            .orElseThrow(() -> new EntityNotFoundException("Quiz not found: " + quizId));
+
+        // 2) Unwrap the Optional<UserAccount> instead of passing it in raw
+        UserAccount user = userService.findByUsername(principal.getName())
+            .orElseThrow(() -> new UsernameNotFoundException("User not found: " + principal.getName()));
+
+        // 3) Map DTOs to entities
+        List<QuizAnswerEntity> entities = answerDTOs.stream().map(dto -> {
+            QuizAnswerEntity e = new QuizAnswerEntity();
+            e.setQuiz(quizEntity);                                   
+            e.setUser(user);                                         
+            e.setQuestion(
+              questionService.getById(dto.getQuestionId())
+                .orElseThrow(() -> new EntityNotFoundException("Question not found: " + dto.getQuestionId()))
+            );
+            e.setAnswerText(dto.getAnswerText());
+            e.setSubmittedAt(Instant.now());
+            return e;
+        }).toList();
+
+        // 4) Persist them
+        answerService.saveAll(entities);
+
         return ResponseEntity.ok().build();
     }
 

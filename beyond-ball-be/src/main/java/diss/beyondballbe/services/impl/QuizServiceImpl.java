@@ -7,7 +7,6 @@ import diss.beyondballbe.model.quizes.QuizQuestion;
 import diss.beyondballbe.model.quizes.QuizQuestionType;
 import diss.beyondballbe.persistence.QuizRepository;
 import diss.beyondballbe.persistence.UserAccountRepository;
-import diss.beyondballbe.security.AuthValidator;
 import diss.beyondballbe.services.QuizService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,8 +24,6 @@ public class QuizServiceImpl implements QuizService {
     @Autowired
     private UserAccountRepository userAccountRepository;
 
-    @Autowired
-    private AuthValidator authValidator;
 
     @Override
 public List<QuizDTO> getAllQuizzes() {
@@ -85,4 +82,5 @@ public List<QuizDTO> getAllQuizzes() {
                 .orElseThrow(() -> new RuntimeException("Quiz not found with id: " + quizId));
         return new QuizDTO(quiz);
     }
+    
 }

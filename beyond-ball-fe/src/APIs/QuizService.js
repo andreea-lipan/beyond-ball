@@ -22,12 +22,18 @@ const deleteQuiz = (quizId) => {
     { responseType: "blob" }
   );
 };
+const submitAnswers = (quizId, answerDTOs) =>
+  RequestInstance.post(
+    `${QUIZ_ENDPOINTS.QUIZZES}/${quizId}/answers`,
+    answerDTOs
+  );
 const QuizService = {
   getQuizzes,
   createQuiz,
   deleteQuiz,
   getQuizById, // ✅ adăugat aici
-  downloadAnswers
+  downloadAnswers,
+  submitAnswers
 };
 
 export default QuizService;
