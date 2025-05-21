@@ -4,7 +4,7 @@ import WhiteboardsPage from "./pages/whiteboards/WhiteboardsPage.jsx";
 import TeamPage from "./pages/team/TeamPage.jsx";
 import PlayerProfilePage from "./pages/PlayerProfilePage.jsx";
 import ClipsPage from "./pages/clips/view-clips/ClipsPage.jsx";
-import QuizzesPage from "./pages/quizzes/QuizzesPage.jsx";
+import QuizzesPage from "./pages/quizzes/view/QuizzesPage.jsx";
 import LoginPage from "./pages/auth/LoginPage.jsx";
 import TeamRegisterPage from "./pages/auth/TeamRegisterPage.jsx";
 import {ThemeProvider} from "@mui/material";
@@ -17,8 +17,8 @@ import WhiteboardDetailPage from "./pages/whiteboards/detail/WhiteboardDetailPag
 import TeamAdminPage from "./pages/TeamAdminPage.jsx";
 import ClipDetailPage from "./pages/clips/clip-detail/ClipDetailPage.jsx";
 import { SidebarProvider } from './components/sidebar/SidebarContext.jsx';
-import TakeQuizPage from "./pages/quizzes/TakeQuizPage.jsx";
-import {CreateQuiz} from "./pages/quizzes/CreateQuiz.jsx";
+import TakeQuizPage from "./pages/quizzes/respond/TakeQuizPage.jsx";
+import {CreateQuiz} from "./pages/quizzes/create/CreateQuiz.jsx";
 
 
 

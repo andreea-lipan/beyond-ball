@@ -7,6 +7,7 @@ import diss.beyondballbe.model.quizes.QuizQuestion;
 import diss.beyondballbe.model.quizes.QuizQuestionType;
 import diss.beyondballbe.persistence.QuizRepository;
 import diss.beyondballbe.persistence.UserAccountRepository;
+import diss.beyondballbe.security.AuthValidator;
 import diss.beyondballbe.services.QuizService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,13 +25,17 @@ public class QuizServiceImpl implements QuizService {
     @Autowired
     private UserAccountRepository userAccountRepository;
 
+    @Autowired
+    private AuthValidator authValidator;
+
 
     @Override
-public List<QuizDTO> getAllQuizzes() {
-    return quizRepository.findAll().stream()
-            .map(QuizDTO::new)
-            .toList();
-}
+    public List<QuizDTO> getAllQuizzes() {
+        return quizRepository.findAll().stream()
+                .filter(quiz -> authValidator.belongsToTeam(quiz.getAuthor().getTeam().getId()))
+                .map(QuizDTO::new)
+                .toList();
+    }
 
 
     @Override
@@ -47,7 +52,7 @@ public List<QuizDTO> getAllQuizzes() {
 
         quiz.setAuthor(user);
 
-        // ✅ Creăm întrebările și le asociem quizului
+        // Create the questions and add to the quiz
         List<QuizQuestion> questions = new ArrayList<>();
         if (quizDTO.getQuestions() != null) {
             for (QuizQuestionDTO qdto : quizDTO.getQuestions()) {
@@ -82,5 +87,5 @@ public List<QuizDTO> getAllQuizzes() {
                 .orElseThrow(() -> new RuntimeException("Quiz not found with id: " + quizId));
         return new QuizDTO(quiz);
     }
-    
+
 }

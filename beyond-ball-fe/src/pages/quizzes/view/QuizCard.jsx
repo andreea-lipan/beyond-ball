@@ -1,19 +1,19 @@
-import {Box, Button, Card, CardActionArea, CardContent, CardHeader, Icon, Typography} from "@mui/material";
+import {Box, Button, Card, CardActionArea, CardContent, CardHeader, Icon, Typography, useTheme} from "@mui/material";
 import {
     ChecklistIcon,
     IdeaIcon,
     MultipleChoiceIcon,
     QuestionMarkIcon,
     QuizSheetIcon
-} from "../../components/icons/quiz/quizIcons.jsx";
-import {TimerIcon} from "../../components/icons/quiz/TimerIcon.jsx";
-import {QuestionsIcon} from "../../components/icons/quiz/QuestionsIcon.jsx";
+} from "../../../components/icons/quiz/quizIcons.jsx";
+import {TimerIcon} from "../../../components/icons/quiz/TimerIcon.jsx";
+import {QuestionsIcon} from "../../../components/icons/quiz/QuestionsIcon.jsx";
 import {CardActions} from "@mui/joy";
-import Storage from "../../utils/Storage.js";
+import Storage from "../../../utils/Storage.js";
 import {useNavigate} from "react-router-dom";
-import {QUIZ_TAKING_PAGE} from "../../utils/UrlConstants.js";
-import quizService from "../../APIs/QuizService.js";
-import { Delete } from "@mui/icons-material";
+import {QUIZ_TAKING_PAGE} from "../../../utils/UrlConstants.js";
+import quizService from "../../../APIs/QuizService.js";
+import {Delete} from "@mui/icons-material";
 
 const iconComponents = [
     QuizSheetIcon,
@@ -25,31 +25,34 @@ const iconComponents = [
 
 function getRandomInt(max) {
     return Math.floor(Math.random() * max);
-  }
+}
 
-  export const QuizCard = ({ quiz, index, onQuizDeleted }) => {
+export const QuizCard = ({quiz, index, onQuizDeleted}) => {
     const Icon = iconComponents[(index * getRandomInt(100)) % iconComponents.length];
     const role = Storage.getRoleFromToken();
     const canDownload = role === "STAFF" || role === "ADMIN";
+    const canDelete = role === "STAFF" || role === "ADMIN";
+    const quizCompleted = false; //todo
     const navigate = useNavigate();
+    const theme = useTheme();
 
-const handleDownload = async () => {
-  try {
-    const res = await quizService.downloadAnswers(quiz.id);
-    const blob = new Blob([res.data], { type: "text/csv" });
-    const url = window.URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = `quiz-${quiz.id}-answers.csv`;
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-    window.URL.revokeObjectURL(url);
-  } catch (err) {
-    console.error("Download failed", err);
-    alert("Could not download quiz answers.");
-  }
-};
+    const handleDownload = async () => {
+        try {
+            const res = await quizService.downloadAnswers(quiz.id);
+            const blob = new Blob([res.data], {type: "text/csv"});
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = `quiz-${quiz.id}-answers.csv`;
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            window.URL.revokeObjectURL(url);
+        } catch (err) {
+            console.error("Download failed", err);
+            alert("Could not download quiz answers.");
+        }
+    };
 
     const handleClick = () => {
         if (role === "PLAYER") {
@@ -94,7 +97,7 @@ const handleDownload = async () => {
                         backgroundColor: "rgba(0, 0, 0, 0.08)",
                     },
                 }}
-                disabled={canDownload}
+                disabled={canDownload || quizCompleted}
             >
                 {/* Icon in Top Left */}
                 <CardHeader
@@ -114,6 +117,9 @@ const handleDownload = async () => {
                             </Typography>
                         </Box>
                     }
+                    sx={{
+                        minWidth: "300px"
+                    }}
                 />
 
                 <CardContent style={{overflow: "hidden", flexGrow: 1}}>
@@ -125,30 +131,34 @@ const handleDownload = async () => {
                             WebkitLineClamp: {
                                 xs: 2,
                                 sm: 3,
-                                md: 4,
-                                lg: 5
+                                md: 8,
+                                lg: 11
                             },
                             overflow: 'hidden',
-                            textOverflow: 'ellipsis',
+                            // textOverflow: 'ellipsis',
                         }}
                     >
                         {quiz.description}</Typography>
                 </CardContent>
+
+                {quizCompleted && (
+                    <Typography variant="body1" sx={{color: theme.palette.primary.main}}>Completed</Typography>
+                )}
             </CardActionArea>
-            {canDownload && (
-                <CardActions sx={{mt: "auto", mr: "auto", p: "0.5vw"}}>
+
+            {canDownload && canDelete && (
+                <CardActions sx={{ p: "0.5vw", display: 'flex', justifyContent: 'space-between'}}>
                     <Button onClick={handleDownload}> Download answers</Button>
                     <Button
                         onClick={handleDelete}
                         variant="outlined"
                         color="error"
-                        startIcon={<Delete />}
+                        startIcon={<Delete/>}
                     >
                         Delete Quiz
                     </Button>
                 </CardActions>
             )}
-            {/*todo: add a "Completed" text when the quiz was taken by the player, and make the card action disabled too when that happens*/}
         </Card>
     );
 }

@@ -40,7 +40,7 @@ const LoginPage = () => {
                 const role = Storage.getRoleFromToken();
     
                 if (role === "ADMIN") {
-                    navigate("/mock");
+                    navigate("/team");
                 } else {
                     navigate("/whiteboards");
                 }

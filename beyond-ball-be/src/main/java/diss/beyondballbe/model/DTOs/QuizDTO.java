@@ -17,7 +17,7 @@ public class QuizDTO {
     private String description;
     private Long estimatedDuration;
     private String author;
-    private List<QuizQuestionDTO> questions; // ✅ Nou
+    private List<QuizQuestionDTO> questions;
 
     public QuizDTO(Quiz quiz) {
         this.id = quiz.getId();

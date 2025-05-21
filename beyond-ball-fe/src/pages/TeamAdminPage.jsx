@@ -293,7 +293,10 @@ const TeamAdminPage = () => {
                                     justifyContent: "center",
                                     alignItems: "center",
                                     transition: "0.3s",
-                                    "&:hover": {boxShadow: "0 6px 18px rgba(0,0,0,0.5)"}
+                                    cursor: "pointer",
+                                    "&:hover": {
+                                        boxShadow: "0 6px 18px rgba(0,0,0,0.5)",
+                                    }
                                 }}>
 
                                 <Typography variant="h5" textAlign="center">＋<br/>New {filter==='PLAYER' ? 'Player' : 'Staff Member'}</Typography>
@@ -314,6 +317,7 @@ const TeamAdminPage = () => {
                                     justifyContent: "space-between",
                                     alignItems: "center",
                                     transition: "0.3s",
+                                    cursor: 'pointer',
                                     "&:hover": {boxShadow: "0 6px 18px rgba(0,0,0,0.8)"}
                                 }}>
 

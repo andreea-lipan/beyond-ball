@@ -1,6 +1,6 @@
 import {Box, Button, Paper, TextField, useTheme} from "@mui/material";
-import Storage from "../../utils/Storage";
-import SearchBar from "../../components/SearchBar.jsx";
+import Storage from "../../../utils/Storage.js";
+import SearchBar from "../../../components/SearchBar.jsx";
 
 export const TopBar = ({searchTerm, setSearchTerm, handleAddQuiz}) => {
     const theme = useTheme();

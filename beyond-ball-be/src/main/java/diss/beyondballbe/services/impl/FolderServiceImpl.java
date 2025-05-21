@@ -27,7 +27,7 @@ public class FolderServiceImpl implements FolderService {
 
     public Folder createFolder(FolderCreationRequest folderCreationRequest) {
         Folder parent = null;
-        if (folderCreationRequest.getParentFolderId() != null){
+        if (folderCreationRequest.getParentFolderId() != null) {
             parent = folderRepository.findById(folderCreationRequest.getParentFolderId()).orElse(null);
         }
 
@@ -37,7 +37,7 @@ public class FolderServiceImpl implements FolderService {
         folder.setName(folderCreationRequest.getName());
         folder.setTeam(team);
 
-        if(parent == null) {
+        if (parent == null) {
             folder.setIsRoot(true);
         }
 
