@@ -1,17 +1,18 @@
 import React, {useState, useEffect} from "react";
-import  {useNavigate} from "react-router";
-import Layout from "../../components/sidebar/Layout.jsx";
+import {useNavigate} from "react-router";
+import Layout from "../../../components/sidebar/Layout.jsx";
 import {Box, Typography} from "@mui/material";
 import {TopBar} from "./TopBar.jsx";
 import {QuizContainer} from "./QuizContainer.jsx";
-import {Popup} from "../../components/popup/Popup.jsx";
-import quizService from "../../APIs/QuizService.js";
-import {MessageType} from "../../components/popup/MessageType.js";
+import {Popup} from "../../../components/popup/Popup.jsx";
+import quizService from "../../../APIs/QuizService.js";
+import {MessageType} from "../../../components/popup/MessageType.js";
+import {QUIZ_CREATE_PAGE} from "../../../utils/UrlConstants.js";
 
 const QuizzesPage = () => {
-  const navigate = useNavigate();
-  const [page, setPage] = useState(0);
-  const quizzesPerPage = 3;
+    const navigate = useNavigate();
+    const [page, setPage] = useState(0);
+    const quizzesPerPage = 3;
 
     const [quizzes, setQuizzes] = useState([]);
     const [rawSearchTerm, setRawSearchTerm] = useState("");
@@ -31,34 +32,34 @@ const QuizzesPage = () => {
         return () => clearTimeout(delay); // Cleanup
     }, [rawSearchTerm]);
 
-  useEffect(() => {
-    fetchQuizzes();
-  }, []);
+    useEffect(() => {
+        fetchQuizzes();
+    }, []);
 
-  const fetchQuizzes = () => {
-    quizService.getQuizzes()
-      .then(response => {
-        setQuizzes(response.data);
-      })
-      .catch(error => {
-        console.log(error);
-        setIsVisible(true);
-        setMessage("Failed to fetch quizzes.");
-        setMessageType(MessageType.error);
-      });
-  };
+    const fetchQuizzes = () => {
+        quizService.getQuizzes()
+            .then(response => {
+                setQuizzes(response.data);
+            })
+            .catch(error => {
+                console.log(error);
+                setIsVisible(true);
+                setMessage("Failed to fetch quizzes.");
+                setMessageType(MessageType.error);
+            });
+    };
 
-  const handleDeleteQuiz = async (quizId) => {
-    try {
-      await quizService.deleteQuiz(quizId);
-      fetchQuizzes();
-    } catch (error) {
-      console.error(error);
-      setIsVisible(true);
-      setMessage("Failed to delete quiz.");
-      setMessageType(MessageType.error);
-    }
-  };
+    const handleDeleteQuiz = async (quizId) => {
+        try {
+            await quizService.deleteQuiz(quizId);
+            fetchQuizzes();
+        } catch (error) {
+            console.error(error);
+            setIsVisible(true);
+            setMessage("Failed to delete quiz.");
+            setMessageType(MessageType.error);
+        }
+    };
 
     const filteredQuizzes = quizzes.filter((quiz) =>
         quiz.title.toLowerCase().includes(searchTerm.toLowerCase())
@@ -75,9 +76,9 @@ const QuizzesPage = () => {
     const handleSearch = (e) => setRawSearchTerm(e.target.value);
 
 
-  const handleAddQuiz = () => {
-    navigate("/quizzes/create");
-  };
+    const handleAddQuiz = () => {
+        navigate(QUIZ_CREATE_PAGE);
+    };
 
     return (
         <Layout>
@@ -99,7 +100,8 @@ const QuizzesPage = () => {
                 flexDirection: 'column',
                 minHeight: 'calc(100vh - 143px)', // Account for header and title
             }}>
-                <TopBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} handleSearch={handleSearch} handleAddQuiz={handleAddQuiz}/>
+                <TopBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} handleSearch={handleSearch}
+                        handleAddQuiz={handleAddQuiz}/>
 
                 <QuizContainer
                     quizzes={currentQuizzes}

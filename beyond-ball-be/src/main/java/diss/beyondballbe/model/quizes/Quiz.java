@@ -15,7 +15,6 @@ import java.util.List;
 @Entity
 @Table(name = "quiz_table")
 public class Quiz {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "quiz_id")
@@ -31,7 +30,7 @@ public class Quiz {
     private Long estimatedDuration; // in minutes
 
     @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    private List<QuizQuestion> questions = new ArrayList<>(); // ✅ legat corect de QuizQuestion.quiz
+    private List<QuizQuestion> questions = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_account_id")

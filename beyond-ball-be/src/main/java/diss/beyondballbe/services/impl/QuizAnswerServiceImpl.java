@@ -10,7 +10,6 @@ import java.util.List;
 
 @Service
 public class QuizAnswerServiceImpl implements QuizAnswerService {
-
     private final QuizAnswerRepository repo;
 
     @Autowired
@@ -23,7 +22,6 @@ public class QuizAnswerServiceImpl implements QuizAnswerService {
         return repo.findByQuiz_Id(quizId);
     }
 
-    // ← implement saveAll(...)
     @Override
     public void saveAll(List<QuizAnswerEntity> answers) {
         repo.saveAll(answers);

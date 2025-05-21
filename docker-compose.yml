@@ -10,7 +10,9 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/my_database
       SPRING_DATASOURCE_USERNAME: my_user
       SPRING_DATASOURCE_PASSWORD: my_password
-      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_HIBERNATE_DDL_AUTO: create
+      MAIL_USERNAME: beyondball.noreplay@gmail.com
+      MAIL_PASSWORD: "znwz wpkk aoel dcvv"
     depends_on:
       - database
 

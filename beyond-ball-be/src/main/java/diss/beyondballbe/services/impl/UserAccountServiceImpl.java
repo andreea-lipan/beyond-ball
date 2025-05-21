@@ -10,6 +10,7 @@ import diss.beyondballbe.services.UserAccountService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.Optional;
 
 import java.util.List;
@@ -54,6 +55,7 @@ public class UserAccountServiceImpl implements UserAccountService {
         userAccount.setIsActive(active);
         userAccountRepository.save(userAccount);
     }
+
     @Override
     public Optional<UserAccount> findByUsername(String username) {
         return userAccountRepository.findUserByUsername(username);

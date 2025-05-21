@@ -37,11 +37,12 @@ export const QuizContainer = ({quizzes, handleNext, handlePrev, page, maxPage, o
                     quizzes.map((quiz, index) => {
 
                         return (
-                            <QuizCard quiz={quiz} index={index} onQuizDeleted={onQuizDeleted}/>
+                            <QuizCard quiz={quiz} index={index} onQuizDeleted={onQuizDeleted} />
                         );
                     })
                     :
-                    <Typography variant="h2" sx={{fontWeight:700}} gutterBottom> No Quizzes found. Create one, or ask someone to create one. </Typography>
+                    <Typography variant="h2" sx={{fontWeight: 700}} gutterBottom> No Quizzes found. Create one, or ask
+                        someone to create one. </Typography>
                 }
             </Box>
 

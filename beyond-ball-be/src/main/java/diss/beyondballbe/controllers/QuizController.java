@@ -3,6 +3,7 @@ package diss.beyondballbe.controllers;
 import diss.beyondballbe.model.DTOs.QuizDTO;
 import diss.beyondballbe.model.DTOs.QuizQuestionDTO;
 import diss.beyondballbe.model.accounts.UserAccount;
+import diss.beyondballbe.model.quizes.Quiz;
 import diss.beyondballbe.services.QuizService;
 
 import java.io.OutputStreamWriter;
@@ -18,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
+
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,25 +51,23 @@ public class QuizController {
     @Autowired
     private QuizQuestionService questionService;
     @Autowired
-    private QuizRepository quizRepository; 
-   
+    private QuizRepository quizRepository;
 
 
-    // ✅ GET - toți pot vedea quizurile
+    // GET - toți pot vedea quizurile
     @PreAuthorize("hasAnyRole('STAFF', 'PLAYER', 'ADMIN')")
     @GetMapping
     public ResponseEntity<?> getAllQuizzes() {
         return ResponseEntity.ok(quizService.getAllQuizzes());
     }
 
-    // ✅ POST - doar STAFF și ADMIN pot crea quizuri
+    // POST - doar STAFF și ADMIN pot crea quizuri
     @PreAuthorize("hasAnyRole('STAFF', 'ADMIN')")
     @PostMapping
     public ResponseEntity<?> createQuiz(@RequestBody QuizDTO quizDTO) {
         quizService.createQuiz(quizDTO);
         return ResponseEntity.ok().build();
     }
-
 
     // Pentru admin -> poate șterge quiz
     @PreAuthorize("hasRole('ADMIN')")
@@ -76,29 +76,32 @@ public class QuizController {
         quizService.deleteQuiz(quizId);
         return ResponseEntity.ok().build();
     }
-         @PreAuthorize("hasRole('PLAYER')")
+
+    @PreAuthorize("hasRole('PLAYER')")
     @PostMapping("/{quizId}/answers")
     public ResponseEntity<Void> submitQuizAnswers(
-        @PathVariable Long quizId,
-        @RequestBody List<QuizAnswerDTO> answerDTOs,
-        Principal principal
+            @PathVariable Long quizId,
+            @RequestBody List<QuizAnswerDTO> answerDTOs,
+            Principal principal
     ) {
         // 1) Load the Quiz entity (instead of `new Quiz(quizId)`)
-        var quizEntity = quizRepository.findById(quizId)
-            .orElseThrow(() -> new EntityNotFoundException("Quiz not found: " + quizId));
+        Quiz quizEntity = quizRepository.findById(quizId)
+                .orElseThrow(() -> new EntityNotFoundException("Quiz not found: " + quizId));
 
         // 2) Unwrap the Optional<UserAccount> instead of passing it in raw
         UserAccount user = userService.findByUsername(principal.getName())
-            .orElseThrow(() -> new UsernameNotFoundException("User not found: " + principal.getName()));
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + principal.getName()));
+
+        //todo verify if user hasnt already answered
 
         // 3) Map DTOs to entities
         List<QuizAnswerEntity> entities = answerDTOs.stream().map(dto -> {
             QuizAnswerEntity e = new QuizAnswerEntity();
-            e.setQuiz(quizEntity);                                   
-            e.setUser(user);                                         
+            e.setQuiz(quizEntity);
+            e.setUser(user);
             e.setQuestion(
-              questionService.getById(dto.getQuestionId())
-                .orElseThrow(() -> new EntityNotFoundException("Question not found: " + dto.getQuestionId()))
+                    questionService.getById(dto.getQuestionId())
+                            .orElseThrow(() -> new EntityNotFoundException("Question not found: " + dto.getQuestionId()))
             );
             e.setAnswerText(dto.getAnswerText());
             e.setSubmittedAt(Instant.now());
@@ -111,73 +114,70 @@ public class QuizController {
         return ResponseEntity.ok().build();
     }
 
-  // ── Download answers CSV ───────────────────────────────────────────────────
-@PreAuthorize("hasRole('ADMIN')")
-@GetMapping("/{quizId}/answers/download")
-public ResponseEntity<ByteArrayResource> downloadAnswers(@PathVariable Long quizId) throws Exception {
-    // 1) Load the quiz (DTO) to get the ordered list of questions
-    QuizDTO quizDto = quizService.getQuizById(quizId);
-    List<QuizQuestionDTO> questions = quizDto.getQuestions();
+    // ── Download answers CSV ───────────────────────────────────────────────────
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/{quizId}/answers/download")
+    public ResponseEntity<ByteArrayResource> downloadAnswers(@PathVariable Long quizId) throws Exception {
+        // 1) Load the quiz (DTO) to get the ordered list of questions
+        QuizDTO quizDto = quizService.getQuizById(quizId);
+        List<QuizQuestionDTO> questions = quizDto.getQuestions();
 
-    // 2) Fetch all persisted answers
-    List<QuizAnswerEntity> answers = answerService.findByQuizId(quizId);
+        // 2) Fetch all persisted answers
+        List<QuizAnswerEntity> answers = answerService.findByQuizId(quizId);
 
-    // 3) Group answers by username
-    Map<String, List<QuizAnswerEntity>> answersByUser = answers.stream()
-        .collect(Collectors.groupingBy(a -> a.getUser().getUsername()));
+        // 3) Group answers by username
+        Map<String, List<QuizAnswerEntity>> answersByUser = answers.stream()
+                .collect(Collectors.groupingBy(a -> a.getUser().getUsername()));
 
-    // 4) Build the CSV with a header row: Username + each question text
-    String[] header = Stream.concat(
-            Stream.of("Username"),
-            questions.stream().map(QuizQuestionDTO::getQuestion)
-        )
-        .toArray(String[]::new);
+        // 4) Build the CSV with a header row: Username + each question text
+        String[] header = Stream.concat(
+                        Stream.of("Username"),
+                        questions.stream().map(QuizQuestionDTO::getQuestion)
+                )
+                .toArray(String[]::new);
 
-    ByteArrayOutputStream out = new ByteArrayOutputStream();
-    CSVPrinter csv = new CSVPrinter(
-        new OutputStreamWriter(out, StandardCharsets.UTF_8),
-        CSVFormat.DEFAULT.withHeader(header)
-    );
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        CSVPrinter csv = new CSVPrinter(
+                new OutputStreamWriter(out, StandardCharsets.UTF_8),
+                CSVFormat.DEFAULT.withHeader(header)
+        );
 
-    // 5) For each user, emit one row: username + answers in question order
-    for (Map.Entry<String,List<QuizAnswerEntity>> entry : answersByUser.entrySet()) {
-        String username = entry.getKey();
-        List<QuizAnswerEntity> userAnswers = entry.getValue();
+        // 5) For each user, emit one row: username + answers in question order
+        for (Map.Entry<String, List<QuizAnswerEntity>> entry : answersByUser.entrySet()) {
+            String username = entry.getKey();
+            List<QuizAnswerEntity> userAnswers = entry.getValue();
 
-        // map questionId -> answerText
-        Map<Long, String> answerMap = userAnswers.stream()
-            .collect(Collectors.toMap(
-                a -> a.getQuestion().getId(),
-                QuizAnswerEntity::getAnswerText
-            ));
+            // map questionId -> answerText
+            Map<Long, String> answerMap = userAnswers.stream()
+                    .collect(Collectors.toMap(
+                            a -> a.getQuestion().getId(),
+                            QuizAnswerEntity::getAnswerText
+                    ));
 
-        // build row
-        List<String> row = new ArrayList<>();
-        row.add(username);
-        for (QuizQuestionDTO q : questions) {
-            row.add(answerMap.getOrDefault(q.getId(), ""));
+            // build row
+            List<String> row = new ArrayList<>();
+            row.add(username);
+            for (QuizQuestionDTO q : questions) {
+                row.add(answerMap.getOrDefault(q.getId(), ""));
+            }
+            csv.printRecord(row);
         }
-        csv.printRecord(row);
+
+        csv.flush();
+
+        // 6) Return as downloadable file
+        ByteArrayResource resource = new ByteArrayResource(out.toByteArray());
+        String filename = "quiz-" + quizId + "-responses.csv";
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + filename + "\"")
+                .contentLength(resource.contentLength())
+                .contentType(MediaType.parseMediaType("text/csv"))
+                .body(resource);
     }
 
-    csv.flush();
-
-    // 6) Return as downloadable file
-    ByteArrayResource resource = new ByteArrayResource(out.toByteArray());
-    String filename = "quiz-" + quizId + "-responses.csv";
-    return ResponseEntity.ok()
-        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + filename + "\"")
-        .contentLength(resource.contentLength())
-        .contentType(MediaType.parseMediaType("text/csv"))
-        .body(resource);
-}
-
-    
     @PreAuthorize("hasAnyRole('STAFF', 'PLAYER', 'ADMIN')")
-@GetMapping("/{quizId}")
-public ResponseEntity<QuizDTO> getQuizById(@PathVariable Long quizId) {
-    return ResponseEntity.ok(quizService.getQuizById(quizId));
-}
-
-
+    @GetMapping("/{quizId}")
+    public ResponseEntity<QuizDTO> getQuizById(@PathVariable Long quizId) {
+        return ResponseEntity.ok(quizService.getQuizById(quizId));
+    }
 }
