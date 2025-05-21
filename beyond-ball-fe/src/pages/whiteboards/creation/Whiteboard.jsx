@@ -20,9 +20,6 @@ export const Whiteboard = () => {
     const [color, setColor] = useState(COLORS[2]);
 
     const isMobile = false;
-    const [title, setTitle] = useState("");
-
-    const theme = useTheme();
 
     const {
         saveState,
@@ -41,7 +38,7 @@ export const Whiteboard = () => {
         stopTouchDrawing,
     } = useCanvasDrawing(mode, color, saveState, canvasRef, ctxRef);
 
-    const saveImage = () => {
+    const saveImage = (title) => {
         if (isVisible) return
         const canvas = canvasRef.current;
         canvas.toBlob((blob) => {
@@ -82,21 +79,23 @@ export const Whiteboard = () => {
                                state={clearModal}/>
             <ConfirmationModal handleConfirm={saveImage}
                                message={"Are you sure you want to save the plan? It cannot be edited afterwards."}
-                               state={saveModal}/>
-            <TextField sx={{
-                borderRadius:"16px",
-                margin: "0.5rem",
-                width: "50%",
-                justifyContent: "center",
-                backgroundColor:theme.palette.primary.main,
-                "& .MuiOutlinedInput-root": {
-                    borderRadius: '16px',
-                    boxShadow: "none",
-                },
-            }}
-               placeholder={"Board Title"}
-               value={title}
-               onChange={(e) => setTitle(e.target.value)}/>
+                               state={saveModal}
+                               forWhiteboard={true}
+            />
+            {/*<TextField sx={{*/}
+            {/*    borderRadius:"16px",*/}
+            {/*    margin: "0.5rem",*/}
+            {/*    width: "50%",*/}
+            {/*    justifyContent: "center",*/}
+            {/*    backgroundColor:theme.palette.primary.main,*/}
+            {/*    "& .MuiOutlinedInput-root": {*/}
+            {/*        borderRadius: '16px',*/}
+            {/*        boxShadow: "none",*/}
+            {/*    },*/}
+            {/*}}*/}
+            {/*   placeholder={"Board Title"}*/}
+            {/*   value={title}*/}
+            {/*   onChange={(e) => setTitle(e.target.value)}/>*/}
             <Box sx={{display: "flex", flexDirection: isMobile ? "row" : "column"}}>
                 <Toolbar
                     mode={mode}
@@ -114,7 +113,7 @@ export const Whiteboard = () => {
                     height={height}
                     width={width}
                     style={{
-                        borderRadius: "20px", boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)", touchAction: "none"
+                        borderRadius: "0 0 16px 16px", boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)", touchAction: "none"
                     }}
                     onMouseDown={mode === "free" ? startDrawing : drawShape}
                     onMouseMove={draw}
