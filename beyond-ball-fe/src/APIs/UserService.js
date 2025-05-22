@@ -15,14 +15,27 @@ const getTeamMembersForAdmin = (teamId) => {
     return RequestInstance.get(USER_ENDPOINTS.TEAM_MEMBERS(teamId)).then(response => response.data);
 }
 
+const getNoPlayers = (teamId) => {
+    return getTeamMembersForAdmin(teamId).then(res => {
+        const members = res.members.filter((member) => member.active === true && member.role === "PLAYER");
+        return members.length;
+    })
+}
+
 const changeActiveStatus = (memberId, active) => {
     return RequestInstance.post(USER_ENDPOINTS.CHANGE_ACTIVE_STATUS(memberId), {active: active});
+}
+
+const getUserById = (userId) => {
+    return RequestInstance.get(USER_ENDPOINTS.USER(userId)).then(response => response.data);
 }
 
 const UserService = {
     getTeamMembers,
     changeActiveStatus,
-    getTeamMembersForAdmin
+    getTeamMembersForAdmin,
+    getNoPlayers,
+    getUserById
 }
 
 export default UserService;

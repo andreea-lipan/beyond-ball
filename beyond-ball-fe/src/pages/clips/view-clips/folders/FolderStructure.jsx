@@ -17,8 +17,7 @@ const FolderStructure = ({setSelectedFolderId, folderTree}) => {
     // Set the first folder as selected when the component loads
     useEffect(() => {
         if (folderTree && folderTree.length > 0) {
-            const firstFolderId = folderTree[0].id;
-            setSelectedFolderId(firstFolderId);
+            setSelectedFolderId(folderTree[0].id);
         }
     }, []);
 

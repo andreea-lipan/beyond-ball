@@ -1,48 +1,18 @@
 import {Box, Typography, useTheme} from "@mui/material";
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {QuizCard} from "../quizzes/view/QuizCard.jsx";
+import QuizService from "../../APIs/QuizService.js";
 
 export const PlayerProfileContainer = ({player}) => {
     const theme = useTheme();
 
-    const currentQuizzes = [
-        {
-            id: 1,
-            title: "Basic Basketball Rules",
-            description: "Test your knowledge of fundamental basketball rules",
-            score: 85,
-            totalQuestions: 10,
-            completedAt: "2024-03-15T14:30:00",
-            timeSpent: "15 minutes"
-        },
-        {
-            id: 2,
-            title: "Defensive Strategies",
-            description: "Understanding different defensive formations and tactics",
-            score: 92,
-            totalQuestions: 8,
-            completedAt: "2024-03-14T16:45:00",
-            timeSpent: "12 minutes"
-        },
-        {
-            id: 3,
-            title: "Team Play Fundamentals",
-            description: "Quiz on team coordination and basic plays",
-            score: 78,
-            totalQuestions: 12,
-            completedAt: "2024-03-13T10:15:00",
-            timeSpent: "20 minutes"
-        },
-        {
-            id: 4,
-            title: "Team Play Fundamentals",
-            description: "Quiz on team coordination and basic plays",
-            score: 78,
-            totalQuestions: 12,
-            completedAt: "2024-03-13T10:15:00",
-            timeSpent: "20 minutes"
-        }
-    ];
+    const [quizzes, setQuizzes] = useState([]);
+
+    useEffect(() => {
+        QuizService.getCompletedQuizzesForPlayer(player?.id).then((quizzes) => {
+            setQuizzes(quizzes);
+        })
+    },[player])
 
     return (
         <>
@@ -106,8 +76,8 @@ export const PlayerProfileContainer = ({player}) => {
                         justifyContent: "center",
                     }}
                 >
-                    {currentQuizzes.length > 0 ?
-                        currentQuizzes.map((quiz, index) => {
+                    {quizzes.length > 0 ?
+                        quizzes.map((quiz, index) => {
 
                             return (
                                 <QuizCard viewType="profile" quiz={quiz} index={index} onQuizDeleted={() => {

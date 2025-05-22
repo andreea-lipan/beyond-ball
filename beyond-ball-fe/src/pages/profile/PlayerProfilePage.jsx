@@ -3,12 +3,26 @@ import {TestComponent} from "../../components/TestComponent.jsx";
 import {Box, Typography} from "@mui/material";
 import TeamTopBar from "../team/TeamTopBar.jsx";
 import TeamContainer from "../team/TeamContainer.jsx";
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {PlayerProfileContainer} from "./PlayerProfileContainer.jsx";
+import UserService from "../../APIs/UserService.js";
+import {useParams} from "react-router-dom";
+import Storage from "../../utils/Storage.js";
 
 const PlayerProfilePage = () => {
-    const userName = "Alex" + "'s";
-    const player = null;
+
+    const {id} = useParams();
+    const [player, setPlayer] = useState(null);
+
+    const userName = player?.name + "'s";
+
+    useEffect(() => {
+        UserService.getUserById(id).then((user) => {
+            setPlayer(user)
+            console.log("user", user)
+        })
+    }, []);
+
 
     return (
         <Layout>

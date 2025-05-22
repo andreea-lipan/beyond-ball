@@ -23,6 +23,11 @@ public class QuizAnswerServiceImpl implements QuizAnswerService {
     }
 
     @Override
+    public Boolean playerTookQuiz(Long quizId, Long playerId) {
+        return repo.existsByQuiz_IdAndUser_Id(quizId,playerId);
+    }
+
+    @Override
     public void saveAll(List<QuizAnswerEntity> answers) {
         repo.saveAll(answers);
     }

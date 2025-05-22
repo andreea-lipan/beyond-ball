@@ -1,7 +1,11 @@
 import {Avatar, Box, Card, Grid, Typography} from "@mui/material";
 import React from "react";
+import {useNavigate} from "react-router-dom";
+import {PROFILE_PAGE} from "../../utils/UrlConstants.js";
 
 const UserCard = ({user}) => {
+
+    const navigate = useNavigate();
 
     return(
         <Grid item xs={12} sm={6} md={4} lg={3} key={user.id}>
@@ -16,8 +20,10 @@ const UserCard = ({user}) => {
                 justifyContent: "center",
                 alignItems: "center",
                 transition: "0.3s",
-                "&:hover": { boxShadow: "0 6px 18px rgba(0,0,0,0.2)" }
-            }}>
+                "&:hover": { boxShadow: "0 6px 18px rgba(0,0,0,0.6)", cursor: "pointer" }
+            }}
+                onClick={() => navigate(PROFILE_PAGE(user.id))}
+            >
                 <Avatar
                     // src="https://upload.wikimedia.org/wikipedia/commons/b/b8/Lionel_Messi_20180626.jpg"
                     alt={user.name}

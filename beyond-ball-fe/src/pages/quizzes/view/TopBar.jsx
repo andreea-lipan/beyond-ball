@@ -1,11 +1,13 @@
-import {Box, Button, Paper, TextField, useTheme} from "@mui/material";
+import {Box, Button, Paper, TextField, Typography, useTheme} from "@mui/material";
 import Storage from "../../../utils/Storage.js";
 import SearchBar from "../../../components/SearchBar.jsx";
 
-export const TopBar = ({searchTerm, setSearchTerm, handleAddQuiz}) => {
+export const TopBar = ({searchTerm, setSearchTerm, handleAddQuiz, quizzes}) => {
     const theme = useTheme();
     const role = Storage.getRoleFromToken(); // Get role from token
     const showAddButton = role === "STAFF" || role === "ADMIN"; // Check permission
+    const completedQuizzes = quizzes.filter(quiz => quiz.completed).length;
+    const totalQuizzes = quizzes.length;
 
     return (
         <Box sx={{
@@ -27,7 +29,7 @@ export const TopBar = ({searchTerm, setSearchTerm, handleAddQuiz}) => {
 
                 <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm}/>
 
-                {showAddButton && (
+                {showAddButton === true?
                     <Button
                         variant="contained"
                         onClick={handleAddQuiz}
@@ -41,7 +43,11 @@ export const TopBar = ({searchTerm, setSearchTerm, handleAddQuiz}) => {
                     >
                         Create a new quiz
                     </Button>
-                )}
+                    :
+                    <Typography variant="body1" sx={{color: theme.palette.text.secondary}}>
+                        {completedQuizzes} / {totalQuizzes} quizzes completed
+                    </Typography>
+                }
             </Box>
         </Box>
     )
