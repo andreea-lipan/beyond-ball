@@ -15,17 +15,17 @@ import {
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SearchIcon from "@mui/icons-material/Search";
-import Layout from "../components/sidebar/Layout.jsx";
-import {useAuth} from "../components/AuthContext";
-import UserService from "../APIs/UserService.js";
-import Storage from "../utils/Storage.js";
-import AddMemberDialog from "./AddMemberDialog.jsx";
-import AuthService from "../APIs/AuthService.js";
-import MemberCredentialsDialog from "./MemberCredentialsDialog.jsx";
-import useModal from "../components/modals/useModal.js";
-import EmailService from "../APIs/EmailService.js";
-import {Popup} from "../components/popup/Popup.jsx";
-import {MessageType} from "../components/popup/MessageType.js";
+import Layout from "../../../components/sidebar/Layout.jsx";
+import {useAuth} from "../../../components/AuthContext.jsx";
+import UserService from "../../../APIs/UserService.js";
+import Storage from "../../../utils/Storage.js";
+import AddMemberDialog from "../add-member/AddMemberDialog.jsx";
+import AuthService from "../../../APIs/AuthService.js";
+import MemberCredentialsDialog from "../add-member/MemberCredentialsDialog.jsx";
+import useModal from "../../../components/modals/useModal.js";
+import EmailService from "../../../APIs/EmailService.js";
+import {Popup} from "../../../components/popup/Popup.jsx";
+import {MessageType} from "../../../components/popup/MessageType.js";
 
 
 const TeamAdminPage = () => {
