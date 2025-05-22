@@ -30,7 +30,7 @@ function getRandomInt(max) {
     return Math.floor(Math.random() * max);
 }
 
-export const QuizCard = ({quiz, index, onQuizDeleted}) => {
+export const QuizCard = ({viewType = "quizzesPage", quiz, index, onQuizDeleted}) => {
     const Icon = iconComponents[(index * getRandomInt(100)) % iconComponents.length];
     const role = Storage.getRoleFromToken();
     const canDownload = role === "STAFF" || role === "ADMIN";
@@ -71,7 +71,9 @@ export const QuizCard = ({quiz, index, onQuizDeleted}) => {
 
     return (
         <>
-            <ConfirmationModal state={confirmationModalState} handleConfirm={handleDelete} message={"Are you sure you want to delete the quiz?"}/>
+            <ConfirmationModal state={confirmationModalState} handleConfirm={handleDelete}
+                               message={"Are you sure you want to delete the quiz?"}/>
+
             <Card
                 key={quiz.id}
                 sx={{
@@ -94,7 +96,7 @@ export const QuizCard = ({quiz, index, onQuizDeleted}) => {
                             backgroundColor: "rgba(0, 0, 0, 0.08)",
                         },
                     }}
-                    disabled={canDownload || quizCompleted}
+                    disabled={canDownload || quizCompleted || viewType === "profile"}
                 >
                     {/* Icon in Top Left */}
                     <CardHeader
@@ -105,14 +107,15 @@ export const QuizCard = ({quiz, index, onQuizDeleted}) => {
                             </Typography>
                         }
                         subheader={
-                            <Box sx={{display: "flex", justifyContent: "space-between", marginX: "25px"}}>
-                                <Typography variant="subtitle2" gutterBottom>
-                                    <TimerIcon/> {quiz.estimatedDuration} min
-                                </Typography>
-                                <Typography variant="subtitle2" gutterBottom>
-                                    <QuestionsIcon/> {quiz.questions?.length} questions
-                                </Typography>
-                            </Box>
+                            (viewType === "profile" ? <></> :
+                                <Box sx={{display: "flex", justifyContent: "space-between", marginX: "25px"}}>
+                                    <Typography variant="subtitle2" gutterBottom>
+                                        <TimerIcon/> {quiz.estimatedDuration} min
+                                    </Typography>
+                                    <Typography variant="subtitle2" gutterBottom>
+                                        <QuestionsIcon/> {quiz.questions?.length} questions
+                                    </Typography>
+                                </Box>)
                         }
                         sx={{
                             minWidth: "300px"
@@ -144,7 +147,7 @@ export const QuizCard = ({quiz, index, onQuizDeleted}) => {
                 </CardActionArea>
 
                 {canDownload && canDelete && (
-                    <CardActions sx={{ p: "0.5vw", display: 'flex', justifyContent: 'space-between'}}>
+                    <CardActions sx={{p: "0.5vw", display: 'flex', justifyContent: 'space-between'}}>
                         <Button onClick={handleDownload}> Download answers</Button>
                         <Button
                             onClick={confirmationModalState.openModal}

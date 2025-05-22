@@ -141,8 +141,8 @@ const ClipsPage = () => {
             {/* Page Content */}
             <Box sx={{
                 width: {
-                    xs: '100%',
-                    sm: '90vw',
+                    // xs: '100%',
+                    sm: '80vw',
                     xl: '80vw',
                     xxl: '1900px',
                 },
