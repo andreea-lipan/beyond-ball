@@ -13,7 +13,7 @@ const VideoNotesContainer = ({ seekTo, getTimestamp, clipId}) => {
     useEffect(() => {
         fetchVideoNotes();
 
-        connect(clipId, "CLIP", handleWebSocketMessage)
+        connect(clipId, "NOTE", handleWebSocketMessage)
 
         return () => {
             disconnect();

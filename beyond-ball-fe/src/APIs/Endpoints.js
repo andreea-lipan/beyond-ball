@@ -65,10 +65,11 @@ export const USER_ENDPOINTS = {
 const SOCKET_URL = `${BASE_URL}/ws`
 export const SOCKET_ENDPOINTS = {
     BASE: `${SOCKET_URL}`,
-    CLIP: (clipId) => `/app/clips/${clipId}`,
-    CLIP_INC: (clipId) => `/topic/clips/${clipId}`,
-    WHITEBOARD: (whiteboardId) => `/app/whiteboards/${whiteboardId}`,
-    WHITEBOARD_INC: (whiteboardId) => `/topic/whiteboards/${whiteboardId}`,
+    CLIP: (teamId) => `/topic/${teamId}/clips`,
+    CLIP_NOTE: (clipId) => `/topic/clips/${clipId}`,
+    WHITEBOARD: (teamId) => `/topic/${teamId}/whiteboards`,
+    WHITEBOARD_COMMENT: (whiteboardId) => `/topic/whiteboards/${whiteboardId}`,
+    FOLDER: (teamId) => `/topic/${teamId}/folders`,
 }
 
 export const EMAIL_ENDPOINTS = {

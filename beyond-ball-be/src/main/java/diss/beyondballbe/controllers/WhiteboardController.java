@@ -6,6 +6,7 @@ import diss.beyondballbe.services.WhiteboardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,6 +21,8 @@ public class WhiteboardController {
     @Autowired
     private WhiteboardService whiteboardService;
 
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate;
 
     @PreAuthorize("hasAnyRole('STAFF', 'PLAYER', 'ADMIN')")
     @GetMapping
@@ -44,7 +47,12 @@ public class WhiteboardController {
             @RequestPart("data") String metadataJson
     ) {
         try {
-            return ResponseEntity.ok(whiteboardService.createWhiteboard(new WhiteboardCreationRequest(metadataJson), file));
+
+            WhiteboardResponse createdWhiteboard = whiteboardService.createWhiteboard(new WhiteboardCreationRequest(metadataJson), file);
+
+            messagingTemplate.convertAndSend("/topic/" + createdWhiteboard.getTeamId() + "/whiteboards", createdWhiteboard);
+
+            return ResponseEntity.ok(createdWhiteboard);
         } catch (Exception e) {
             return ResponseEntity.status(500).body("Error saving file: " + e.getMessage());
         }

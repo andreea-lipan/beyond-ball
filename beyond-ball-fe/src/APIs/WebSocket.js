@@ -7,13 +7,35 @@ let stompClient = null;
 
 export function connect(itemId, element, onMessage) {
 
-    const topic = element === "WHITEBOARD" ? SOCKET_ENDPOINTS.WHITEBOARD_INC(itemId) : SOCKET_ENDPOINTS.CLIP_INC(itemId);
+    let topic = "";
+
+    switch (element) {
+        case "WHITEBOARD":
+            topic = SOCKET_ENDPOINTS.WHITEBOARD(itemId);
+            break
+        case "CLIP":
+            topic = SOCKET_ENDPOINTS.CLIP(itemId);
+            break
+        case "COMMENT":
+            topic = SOCKET_ENDPOINTS.WHITEBOARD_COMMENT(itemId);
+            break
+        case "NOTE":
+            topic = SOCKET_ENDPOINTS.CLIP_NOTE(itemId);
+            break
+        case "FOLDER":
+            topic = SOCKET_ENDPOINTS.FOLDER(itemId);
+            break
+        default:
+            console.error("Invalid element type");
+        return;
+    }
+
     const token = Storage.getToken();
 
     stompClient = new Client({
         brokerURL: 'ws://localhost:8080/ws',
         connectHeaders: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,    //todo check out how to get token on backend
         },
         debug: function (str) {
             console.log('[STOMP DEBUG]', str);
@@ -37,41 +59,6 @@ export function connect(itemId, element, onMessage) {
     stompClient.activate();
 }
 
-
-// export function connect(itemId, element, onCommentReceived) {
-//     const socket = new SockJS(SOCKET_ENDPOINTS.BASE);
-//     console.log(socket)
-//     const topic = element === "WHITEBOARD" ? SOCKET_ENDPOINTS.WHITEBOARD_INC(itemId) : SOCKET_ENDPOINTS.CLIP_INC(itemId);
-//
-//     stompClient = new Client({
-//         webSocketFactory: () => socket,
-//         reconnectDelay: 5000,
-//         onConnect: () => {
-//             console.log("Connected to WebSocket");
-//
-//             // Subscribe to comments for the specific item
-//             stompClient.subscribe(topic, (message) => {
-//                 const comment = JSON.parse(message.body);
-//                 onCommentReceived(comment);
-//             });
-//         },
-//         onStompError: (frame) => {
-//             console.error("WebSocket error:", frame);
-//         },
-//     });
-//
-//     stompClient.activate();
-// }
-//
-// export function sendComment(itemId, comment, element) {
-//     if (stompClient && stompClient.connected) {
-//         stompClient.publish({
-//             destination: element === "WHITEBOARD"? SOCKET_ENDPOINTS.WHITEBOARD(itemId) : SOCKET_ENDPOINTS.CLIP(itemId),
-//             body: JSON.stringify(comment),
-//         });
-//     }
-// }
-//
 export function disconnect() {
     if (stompClient) {
         stompClient.deactivate();

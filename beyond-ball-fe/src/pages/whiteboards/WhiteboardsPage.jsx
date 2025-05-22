@@ -13,8 +13,10 @@ import Typography from '@mui/material/Typography';
 import CardActionArea from '@mui/material/CardActionArea';
 import {WHITEBOARD_CREATION_PAGE} from "../../utils/UrlConstants.js";
 import WhiteboardsTopBar from "./WhiteboardsTopBar.jsx";
+import {connect,disconnect} from "../../APIs/WebSocket.js";
 
 const WhiteboardsPage = () => {
+    const teamId = Storage.getTeamIdFromToken();
     const theme = useTheme();
     const [whiteboards, setWhiteboards] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
@@ -22,6 +24,20 @@ const WhiteboardsPage = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
+        fetchWhiteboards()
+        connect(teamId, "WHITEBOARD", handleWebSocketMessage)
+
+        return () => {
+            disconnect();
+        }
+    }, []);
+
+    const handleWebSocketMessage = (message) => {
+        setWhiteboards(prev=>[...prev, message])
+    }
+
+
+    const fetchWhiteboards = () => {
         whiteboardService.getWhiteboards()
             .then((response) => {
                 setWhiteboards(response);
@@ -29,7 +45,7 @@ const WhiteboardsPage = () => {
             .catch(() => {
                 setWhiteboards(mockWhiteboards);
             });
-    }, []);
+    }
 
 
     const filteredWhiteboards = whiteboards.filter((whiteboard) => {
