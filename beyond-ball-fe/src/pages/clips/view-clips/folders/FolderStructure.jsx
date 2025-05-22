@@ -5,6 +5,8 @@ import FolderItem from "./FolderItem.jsx";
 
 const FolderStructure = ({setSelectedFolderId, folderTree}) => {
 
+    const defaultSelected = folderTree && folderTree.length > 0 ? folderTree[0].id : undefined;
+
     const handleItemSelectionToggle = (event, itemId, isSelected) => {
         if (isSelected) {
             setSelectedFolderId(itemId);
@@ -15,9 +17,10 @@ const FolderStructure = ({setSelectedFolderId, folderTree}) => {
     // Set the first folder as selected when the component loads
     useEffect(() => {
         if (folderTree && folderTree.length > 0) {
-            setSelectedFolderId(folderTree[0].id);
+            const firstFolderId = folderTree[0].id;
+            setSelectedFolderId(firstFolderId);
         }
-    }, [folderTree, setSelectedFolderId]);
+    }, []);
 
     return (
         <>
@@ -28,7 +31,7 @@ const FolderStructure = ({setSelectedFolderId, folderTree}) => {
                 onItemSelectionToggle={handleItemSelectionToggle}
                 expansionTrigger="iconContainer"
                 // by default, the first folder is selected
-                defaultSelected={folderTree && folderTree.length > 0 ? folderTree[0].id : undefined}
+                defaultSelected={defaultSelected}
                 sx={{
                     '& .MuiTreeItem-content': {
                         borderRadius: '4px',
