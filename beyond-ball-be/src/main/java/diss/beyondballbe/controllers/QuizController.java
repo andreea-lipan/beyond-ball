@@ -57,9 +57,17 @@ public class QuizController {
     // GET - toți pot vedea quizurile
     @PreAuthorize("hasAnyRole('STAFF', 'PLAYER', 'ADMIN')")
     @GetMapping
-    public ResponseEntity<?> getAllQuizzes() {
-        return ResponseEntity.ok(quizService.getAllQuizzes());
+    public ResponseEntity<?> getAllQuizzes(Principal principal) {
+        return ResponseEntity.ok(quizService.getAllQuizzes(principal.getName()));
     }
+
+    @PreAuthorize("hasAnyRole('STAFF', 'PLAYER', 'ADMIN')")
+    @GetMapping("/player/{playerId}")
+    public ResponseEntity<?> getCompletedQuizzes(
+            @PathVariable Long playerId) {
+        return ResponseEntity.ok(quizService.getAllCompletedQuizzes(playerId));
+    }
+
 
     // POST - doar STAFF și ADMIN pot crea quizuri
     @PreAuthorize("hasAnyRole('STAFF', 'ADMIN')")

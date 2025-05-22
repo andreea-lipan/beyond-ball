@@ -18,6 +18,8 @@ public class QuizDTO {
     private Long estimatedDuration;
     private String author;
     private List<QuizQuestionDTO> questions;
+    private Boolean completed;
+    private Long numberOfPlayersQuizzed;
 
     public QuizDTO(Quiz quiz) {
         this.id = quiz.getId();

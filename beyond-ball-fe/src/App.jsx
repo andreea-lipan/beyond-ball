@@ -96,9 +96,9 @@ function App() {
                                 }
                             />
                             <Route
-                                path="/profile"
+                                path="/profile/:id"
                                 element={
-                                    ["PLAYER", "STAFF"].includes(role)
+                                    ["PLAYER", "STAFF", "ADMIN"].includes(role)
                                         ? (() => {
                                             sessionStorage.setItem("lastValidPath", "/profile");
                                             return <PlayerProfilePage/>;

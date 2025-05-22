@@ -8,6 +8,8 @@ import {Popup} from "../../../components/popup/Popup.jsx";
 import quizService from "../../../APIs/QuizService.js";
 import {MessageType} from "../../../components/popup/MessageType.js";
 import {QUIZ_CREATE_PAGE} from "../../../utils/UrlConstants.js";
+import UserService from "../../../APIs/UserService.js";
+import Storage from "../../../utils/Storage.js"
 
 const QuizzesPage = () => {
     const navigate = useNavigate();
@@ -22,6 +24,9 @@ const QuizzesPage = () => {
     const [message, setMessage] = useState("");
     const [messageType, setMessageType] = useState("");
 
+    const [noPlayers, setNoPlayers] = useState(false);
+    const teamId = Storage.getTeamIdFromToken();
+
     // Debounce search term
     useEffect(() => {
         const delay = setTimeout(() => {
@@ -34,6 +39,7 @@ const QuizzesPage = () => {
 
     useEffect(() => {
         fetchQuizzes();
+        UserService.getNoPlayers(teamId).then(res=>setNoPlayers(res));
     }, []);
 
     const fetchQuizzes = () => {
@@ -63,7 +69,7 @@ const QuizzesPage = () => {
 
     const filteredQuizzes = quizzes.filter((quiz) =>
         quiz.title.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    ).sort((a, b) => a.completed - b.completed);
 
     const maxPage = Math.ceil(filteredQuizzes.length / quizzesPerPage);
     const currentQuizzes = filteredQuizzes.slice(
@@ -101,7 +107,7 @@ const QuizzesPage = () => {
                 minHeight: 'calc(100vh - 143px)', // Account for header and title
             }}>
                 <TopBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} handleSearch={handleSearch}
-                        handleAddQuiz={handleAddQuiz}/>
+                        handleAddQuiz={handleAddQuiz} quizzes={quizzes}/>
 
                 <QuizContainer
                     quizzes={currentQuizzes}
@@ -110,6 +116,7 @@ const QuizzesPage = () => {
                     page={page}
                     maxPage={maxPage}
                     onQuizDeleted={handleDeleteQuiz}
+                    noPlayers={noPlayers}
                 />
 
             </Box>

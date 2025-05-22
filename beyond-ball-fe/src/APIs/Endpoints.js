@@ -51,6 +51,7 @@ export const FOLDER_ENDPOINTS = {
 const QUIZ_URL = `${BASE_URL}/quizzes`;
 export const QUIZ_ENDPOINTS = {
     QUIZZES: `${QUIZ_URL}`,
+    COMPLETED: (playerId) => `${QUIZ_URL}/player/${playerId}`,
 };
 
 const USER_URL = `${BASE_URL}/users`
@@ -60,6 +61,7 @@ export const USER_ENDPOINTS = {
     USERS: `${USER_URL}`,
     CHANGE_ACTIVE_STATUS: (userId) => `${USER_URL}/accounts/${userId}/active`,
     UPLOAD_PLAYERS: (teamId) => `${USER_URL}/teams/${teamId}/players/upload`,
+    USER: (userId) => `${USER_URL}/${userId}`,
 }
 
 const SOCKET_URL = `${BASE_URL}/ws`

@@ -93,7 +93,11 @@ const ClipsPage = () => {
     };
 
     const handleFolderWebSocketMessage = (message) => {
-        setFolderTree(prevTree => insertNode(prevTree, message));
+        if(message.parentFolderId === null) {
+            setFolderTree(prev=>[...prev, message]);
+        } else {
+            setFolderTree(prevTree => insertNode(prevTree, message));
+        }
     }
 
     const fetchClips = () => {

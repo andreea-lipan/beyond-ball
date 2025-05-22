@@ -5,7 +5,7 @@ export const WHITEBOARD_DETAILS = (id) => `/whiteboards/${id}`
 
 // TEAM
 export const TEAM_PAGE = "/team"
-export const PROFILE_PAGE = "/profile"
+export const PROFILE_PAGE = (id) => `/profile/${id}`
 
 // CLIPS
 export const CLIPS_PAGE = "/clips"

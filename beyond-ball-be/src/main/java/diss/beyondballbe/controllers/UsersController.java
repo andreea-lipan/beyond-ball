@@ -1,6 +1,7 @@
 package diss.beyondballbe.controllers;
 
 import diss.beyondballbe.model.DTOs.ChangeActiveStatusDTO;
+import diss.beyondballbe.model.DTOs.UserAccountDTO;
 import diss.beyondballbe.model.accounts.UserAccount;
 import diss.beyondballbe.services.PlayerUploadService;
 import diss.beyondballbe.services.UserAccountService;
@@ -34,6 +35,17 @@ public class UsersController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+    @PreAuthorize("hasAnyRole('STAFF', 'PLAYER', 'ADMIN')")
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getAccountById(@PathVariable Long id) {
+        try {
+            UserAccountDTO userAccountDTO = new UserAccountDTO(userAccountService.getAccountById(id));
+            return ResponseEntity.ok(userAccountDTO);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     // Example secured method with team and role check
     @PreAuthorize("@authValidator.belongsToTeam(#teamId) and hasAnyRole('STAFF', 'PLAYER', 'ADMIN')")
     @GetMapping("/teams/{teamId}/members")

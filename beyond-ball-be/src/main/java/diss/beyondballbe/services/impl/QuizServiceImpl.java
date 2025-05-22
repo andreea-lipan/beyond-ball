@@ -2,15 +2,22 @@ package diss.beyondballbe.services.impl;
 
 import diss.beyondballbe.model.DTOs.QuizDTO;
 import diss.beyondballbe.model.DTOs.QuizQuestionDTO;
+import diss.beyondballbe.model.DTOs.TeamMembersDTO;
+import diss.beyondballbe.model.DTOs.UserAccountDTO;
+import diss.beyondballbe.model.accounts.UserAccount;
+import diss.beyondballbe.model.accounts.UserRole;
 import diss.beyondballbe.model.quizes.Quiz;
 import diss.beyondballbe.model.quizes.QuizQuestion;
 import diss.beyondballbe.model.quizes.QuizQuestionType;
 import diss.beyondballbe.persistence.QuizRepository;
 import diss.beyondballbe.persistence.UserAccountRepository;
 import diss.beyondballbe.security.AuthValidator;
+import diss.beyondballbe.services.QuizAnswerService;
 import diss.beyondballbe.services.QuizService;
+import diss.beyondballbe.services.UserAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -23,18 +30,59 @@ public class QuizServiceImpl implements QuizService {
     private QuizRepository quizRepository;
 
     @Autowired
-    private UserAccountRepository userAccountRepository;
+    private UserAccountService userAccountService;
 
     @Autowired
     private AuthValidator authValidator;
 
+    @Autowired
+    private QuizAnswerService answerService;
+
 
     @Override
-    public List<QuizDTO> getAllQuizzes() {
+    public List<QuizDTO> getAllQuizzes(String username) {
+
+        UserAccount user = userAccountService.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
+
+        boolean isPlayer = user.getRole().equals(UserRole.PLAYER);
+
         return quizRepository.findAll().stream()
                 .filter(quiz -> authValidator.belongsToTeam(quiz.getAuthor().getTeam().getId()))
+                .map(quiz -> {
+                    QuizDTO quizDTO = new QuizDTO(quiz);
+                    if(isPlayer) {
+                        quizDTO.setCompleted(playerTookQuiz(quiz, user));
+                    } else {
+                        TeamMembersDTO teamMembersDTO = userAccountService.getTeamMembers(user.getTeam().getId());
+                        quizDTO.setNumberOfPlayersQuizzed(countPlayersTookQuiz(quiz, teamMembersDTO));
+                    }
+                    return quizDTO;
+                })
+                .toList();
+    }
+
+    @Override
+    public List<QuizDTO> getAllCompletedQuizzes(Long playerId) {
+        return quizRepository.findAll().stream()
+                .filter(quiz -> authValidator.belongsToTeam(quiz.getAuthor().getTeam().getId()))
+                .filter(quiz -> answerService.playerTookQuiz(quiz.getId(), playerId))
                 .map(QuizDTO::new)
                 .toList();
+    }
+
+    private Boolean playerTookQuiz(Quiz quiz, UserAccount player) {
+        return answerService.playerTookQuiz(quiz.getId(), player.getId());
+    }
+
+    private Long countPlayersTookQuiz(Quiz quiz, TeamMembersDTO teamMembersDTO) {
+        Long count = 0L;
+        for (UserAccountDTO member : teamMembersDTO.getMembers()) {
+            if (answerService.playerTookQuiz(quiz.getId(), member.getId())) {
+                count++;
+            }
+        }
+        return count;
     }
 
 
@@ -47,7 +95,7 @@ public class QuizServiceImpl implements QuizService {
 
         var authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
-        var user = userAccountRepository.findUserByUsername(username)
+        var user = userAccountService.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         quiz.setAuthor(user);

@@ -5,6 +5,10 @@ const getQuizzes = () => {
   return RequestInstance.get(QUIZ_ENDPOINTS.QUIZZES);
 };
 
+const getCompletedQuizzesForPlayer = (playerId) => {
+  return RequestInstance.get(QUIZ_ENDPOINTS.COMPLETED(playerId)).then(res => res.data );
+}
+
 const createQuiz = (quizData) => {
   return RequestInstance.post(QUIZ_ENDPOINTS.QUIZZES, quizData);
 };
@@ -33,7 +37,8 @@ const QuizService = {
   deleteQuiz,
   getQuizById, // ✅ adăugat aici
   downloadAnswers,
-  submitAnswers
+  submitAnswers,
+  getCompletedQuizzesForPlayer,
 };
 
 export default QuizService;

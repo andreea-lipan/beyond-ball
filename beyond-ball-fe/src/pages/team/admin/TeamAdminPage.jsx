@@ -26,6 +26,8 @@ import useModal from "../../../components/modals/useModal.js";
 import EmailService from "../../../APIs/EmailService.js";
 import {Popup} from "../../../components/popup/Popup.jsx";
 import {MessageType} from "../../../components/popup/MessageType.js";
+import {useNavigate} from "react-router-dom";
+import {PROFILE_PAGE} from "../../../utils/UrlConstants.js";
 
 
 const TeamAdminPage = () => {
@@ -33,6 +35,7 @@ const TeamAdminPage = () => {
     const teamId = Storage.getTeamIdFromToken(); // or useAuth().teamId;
     const [team, setTeam] = useState([]);
     const theme = useTheme();
+    const navigate = useNavigate();
 
     const addMemberModal = useModal();
     const credentialsModal = useModal();
@@ -318,7 +321,7 @@ const TeamAdminPage = () => {
                                     alignItems: "center",
                                     transition: "0.3s",
                                     cursor: 'pointer',
-                                    "&:hover": {boxShadow: "0 6px 18px rgba(0,0,0,0.8)"}
+                                    "&:hover": {boxShadow: "0 6px 18px rgba(0,0,0,0.6)"}
                                 }}>
 
                                     {/*<Box sx={{*/}
@@ -327,17 +330,19 @@ const TeamAdminPage = () => {
                                     {/*    alignItems: "center",*/}
                                     {/*    justifyContent: 'center'*/}
                                     {/*}}>*/}
-                                    <Avatar alt={member.name} sx={{width: 56, height: 56, mb: 1}}/>
+                                    <Avatar alt={member.name} sx={{width: 56, height: 56, mb: 1}} onClick={() => navigate(PROFILE_PAGE(member.id))}/>
 
                                     {/* Name */}
                                     <Typography variant="h2"
+                                                onClick={() => navigate(PROFILE_PAGE(member.id))}
                                                 sx={{padding: '0.2em 0 0.4em 0'}}>{member.name}</Typography>
                                     {/*</Box>*/}
 
 
                                     {/* Stats */}
                                     <Box>
-                                        <Box sx={{
+                                        <Box onClick={() => navigate(PROFILE_PAGE(member.id))}
+                                            sx={{
                                             display: 'flex',
                                             justifyContent: 'space-between'
                                         }}>

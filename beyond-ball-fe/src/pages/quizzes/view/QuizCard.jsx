@@ -30,12 +30,12 @@ function getRandomInt(max) {
     return Math.floor(Math.random() * max);
 }
 
-export const QuizCard = ({viewType = "quizzesPage", quiz, index, onQuizDeleted}) => {
+export const QuizCard = ({viewType = "quizzesPage", quiz, index, onQuizDeleted, noPlayers}) => {
     const Icon = iconComponents[(index * getRandomInt(100)) % iconComponents.length];
     const role = Storage.getRoleFromToken();
     const canDownload = role === "STAFF" || role === "ADMIN";
     const canDelete = role === "STAFF" || role === "ADMIN";
-    const quizCompleted = false; //todo
+    const quizCompleted = quiz.completed;
     const navigate = useNavigate();
     const theme = useTheme();
 
@@ -82,6 +82,7 @@ export const QuizCard = ({viewType = "quizzesPage", quiz, index, onQuizDeleted})
                     borderRadius: "20px",
                     display: "flex",
                     flexDirection: "column",
+                    backgroundColor: quizCompleted ? theme.palette.background.completed : "",
                 }}
             >
                 <CardActionArea
@@ -148,7 +149,7 @@ export const QuizCard = ({viewType = "quizzesPage", quiz, index, onQuizDeleted})
 
                 {canDownload && canDelete && (
                     <CardActions sx={{p: "0.5vw", display: 'flex', justifyContent: 'space-between'}}>
-                        <Button onClick={handleDownload}> Download answers</Button>
+                        <Button onClick={handleDownload}> Download answers ({quiz.numberOfPlayersQuizzed} / {noPlayers})</Button>
                         <Button
                             onClick={confirmationModalState.openModal}
                             variant="outlined"
