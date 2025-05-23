@@ -68,11 +68,11 @@ export const PlayerProfileContainer = ({player, uploadAvatar, avatar}) => {
                             alignItems: 'flex-end',
                             paddingLeft: '10px'
                         }}>
-                            <Typography variant="body1">{'Forward'}</Typography>
-                            <Typography variant="body1">{'Romanian'}</Typography>
-                            <Typography variant="body1">{'1995-06-15'}</Typography>
-                            <Typography variant="body1">{'180.5'}</Typography>
-                            <Typography variant="body1">{'75'}</Typography>
+                            <Typography variant="body1">{player?.playerStats?.position || 'N/A'}</Typography>
+                            <Typography variant="body1">{player?.playerStats?.nationality || 'N/A'}</Typography>
+                            <Typography variant="body1">{player?.playerStats?.dateOfBirth || 'N/A'}</Typography>
+                            <Typography variant="body1">{player?.playerStats?.height || 'N/A'}</Typography>
+                            <Typography variant="body1">{player?.playerStats?.weight || 'N/A'}</Typography>
                         </Box>
                     </Box>
                 </Box>
@@ -86,7 +86,7 @@ export const PlayerProfileContainer = ({player, uploadAvatar, avatar}) => {
                     m: 1
                 }}>
                     <Typography variant="h1" sx={{fontWeight: 500, color: theme.palette.text.primary}}> Goals </Typography>
-                    <Typography variant="h1" sx={{color: theme.palette.text.primary, p : 1}}> 3 </Typography>
+                    <Typography variant="h1" sx={{color: theme.palette.text.primary, p : 1}}> {player?.playerStats?.goals || 'N/A'} </Typography>
                 </Box>
 
                 {/* Player Assists */}
@@ -98,7 +98,7 @@ export const PlayerProfileContainer = ({player, uploadAvatar, avatar}) => {
                     m: 1
                 }}>
                     <Typography variant="h1" sx={{fontWeight: 500, color: theme.palette.text.primary}}> Assists </Typography>
-                    <Typography variant="h1" sx={{color: theme.palette.text.primary, p : 1 }}> 10 </Typography>
+                    <Typography variant="h1" sx={{color: theme.palette.text.primary, p : 1 }}> {player?.playerStats?.assists || 'N/A'} </Typography>
                 </Box>
             </Box>
 

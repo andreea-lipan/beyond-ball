@@ -22,7 +22,7 @@ const PlayerProfilePage = () => {
             setPlayer(user)
             fetchAvatar(user.profilePictureUrl);
         })
-    }, []);
+    }, [id]);
 
 
     const uploadAvatar = (file) => {

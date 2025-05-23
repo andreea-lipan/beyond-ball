@@ -66,11 +66,11 @@ const UserCard = ({user}) => {
                         alignItems: 'flex-end',
                         paddingLeft: '10px'
                     }}>
-                        <Typography variant="subtitle1">{user?.position || 'N/A'}</Typography>
+                        <Typography variant="subtitle1">{user.playerStats?.position || 'N/A'}</Typography>
                         {user.role === "PLAYER" &&
                             <>
-                                <Typography variant="subtitle1">{user?.goals || 'N/A'}</Typography>
-                                <Typography variant="subtitle1">{user?.assists || 'N/A'}</Typography>
+                                <Typography variant="subtitle1">{user.playerStats?.goals || 'N/A'}</Typography>
+                                <Typography variant="subtitle1">{user.playerStats?.assists || 'N/A'}</Typography>
                             </>
                         }
                     </Box>
