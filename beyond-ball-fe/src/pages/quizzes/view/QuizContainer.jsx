@@ -41,7 +41,7 @@ export const QuizContainer = ({quizzes, handleNext, handlePrev, page, maxPage, o
                         );
                     })
                     :
-                    <Typography variant="h2" sx={{fontWeight: 700}} gutterBottom> No Quizzes found. Create one, or ask
+                    <Typography variant="h2"> No Quizzes found. Create one, or ask
                         someone to create one. </Typography>
                 }
             </Box>

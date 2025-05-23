@@ -21,11 +21,13 @@ const UserCard = ({user}) => {
     return(
         <Grid item xs={12} sm={6} md={4} lg={3} key={user.id}>
             <Card sx={{
+                width: '200px',
                 backgroundColor: user.active ? "#ffffff" : "#e0e0e0",
                 borderRadius: "16px",
                 boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
                 padding: "16px",
                 height: "100%",
+                minHeight: "250px",
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "center",

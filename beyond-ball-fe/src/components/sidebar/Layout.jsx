@@ -50,7 +50,7 @@ const Layout = ({children}) => {
         {text:"Whiteboards", url:WHITEBOARDS_PAGE, show:true, icon:<WhiteboardIcon color={BtnsColour}/>},
         {text:"Team", url:TEAM_PAGE, show:true, icon:<TeamIcon color={BtnsColour}/>},
         {text:"Profile", url:PROFILE_PAGE(userId), show:userRole === "PLAYER", icon:<ProfileIcon color={BtnsColour}/>},
-        {text:"Clips", url:CLIPS_PAGE, show:true, icon:<ClipsIcon color={BtnsColour}/>},
+        {text:"Clips", url:CLIPS_PAGE, show:userRole === "STAFF", icon:<ClipsIcon color={BtnsColour}/>},
         {text:"Quizzes", url:QUIZZES_PAGE, show:true, icon:<QuizzesIcon color={BtnsColour}/>},
     ]
 
