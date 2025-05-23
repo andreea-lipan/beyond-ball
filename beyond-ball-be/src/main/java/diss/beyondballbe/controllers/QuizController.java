@@ -40,7 +40,7 @@ import jakarta.persistence.EntityNotFoundException;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/quizzes")
+@RequestMapping("/api/quizzes")
 public class QuizController {
     @Autowired
     private QuizAnswerService answerService;

@@ -33,7 +33,8 @@ export function connect(itemId, element, onMessage) {
     const token = Storage.getToken();
 
     stompClient = new Client({
-        brokerURL: 'ws://localhost:8080/ws',
+        // brokerURL: `${import.meta.env.VITE_WS_API_URL}`, // frontend makes requests to the same origin it was loaded from
+        brokerURL: `ws://${import.meta.env.VITE_API_URL}:8080/ws`, // frontend makes requests to the same origin it was loaded from
         connectHeaders: {
             Authorization: `Bearer ${token}`,    //todo check out how to get token on backend
         },

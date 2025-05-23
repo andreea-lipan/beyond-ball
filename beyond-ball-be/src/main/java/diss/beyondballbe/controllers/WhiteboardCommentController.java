@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/whiteboard-comments")
+@RequestMapping("/api/whiteboard-comments")
 public class WhiteboardCommentController {
 
     @Autowired

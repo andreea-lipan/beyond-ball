@@ -15,7 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/clips")
+@RequestMapping("/api/clips")
 public class ClipController {
 
     @Autowired

@@ -15,7 +15,7 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/whiteboards")
+@RequestMapping("/api/whiteboards")
 public class WhiteboardController {
 
     @Autowired

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/folders")
+@RequestMapping("/api/folders")
 public class FolderController {
 
     @Autowired

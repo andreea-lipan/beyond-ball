@@ -1,7 +1,8 @@
 // all endpoints from the BE should be written here
 // use these variable, no hardcoded values in the code
 
-const BASE_URL = "http://localhost:8080"
+// const BASE_URL = "http://beyondball.tantrum.org/api"
+const BASE_URL = `http://${import.meta.env.VITE_API_URL}:8080/api`
 
 const AUTH_URL = `${BASE_URL}/auth`
 export const AUTH_ENDPOINTS = {
