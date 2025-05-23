@@ -80,13 +80,13 @@ const AdminUserCard = ({ member, handleResendEmail, handleToggleActive }) => {
                             alignItems: 'flex-end',
                             paddingLeft: '10px'
                         }}>
-                            <Typography variant="subtitle1">{member?.position || 'N/A'}</Typography>
+                            <Typography variant="subtitle1">{member.playerStats?.position || 'N/A'}</Typography>
                             {member.role === "PLAYER" &&
                                 <>
                                     <Typography
-                                        variant="subtitle1">{member?.goals || 'N/A'}</Typography>
+                                        variant="subtitle1">{member.playerStats?.goals || 'N/A'}</Typography>
                                     <Typography
-                                        variant="subtitle1">{member?.assists || 'N/A'}</Typography>
+                                        variant="subtitle1">{member.playerStats?.assists || 'N/A'}</Typography>
                                 </>
                             }
                         </Box>
