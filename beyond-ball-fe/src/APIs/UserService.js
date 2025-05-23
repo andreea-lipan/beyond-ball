@@ -1,6 +1,6 @@
-import {RequestInstance} from "./RequestInstance.js";
-import {USER_ENDPOINTS} from "./Endpoints.js";
-import {FileRequestInstance} from "./RequestInstance.js";
+import {FileRequestInstance, RequestInstance} from "./RequestInstance.js";
+import {USER_ENDPOINTS, WHITEBOARD_ENDPOINTS} from "./Endpoints.js";
+import Storage from "../utils/Storage.js";
 
 const getTeamMembers = (teamId) => {
     return getTeamMembersForAdmin(teamId).then(res => {
@@ -9,6 +9,21 @@ const getTeamMembers = (teamId) => {
             ...res,
             members
         }
+    })
+}
+
+const uploadAvatar = (file) => {
+    const userId = Storage.getUserIdFromToken();
+    const formData = new FormData();
+    formData.append("file", file);
+
+    return FileRequestInstance.put(USER_ENDPOINTS.USER(userId), formData).then((response) => response.data);
+}
+
+const getAvatarImage = (filename) => {
+    return RequestInstance.get(USER_ENDPOINTS.AVATAR_IMAGE(filename), {responseType: "blob"}).then((blob) => {
+        const imageBlob = blob.data;
+        return URL.createObjectURL(imageBlob);
     })
 }
 
@@ -45,7 +60,9 @@ const UserService = {
     getTeamMembersForAdmin,
     uploadPlayersExcel,
     getNoPlayers,
-    getUserById
+    getUserById,
+    uploadAvatar,
+    getAvatarImage,
 }
 
 export default UserService;

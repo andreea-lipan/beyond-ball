@@ -2,10 +2,13 @@ package diss.beyondballbe.controllers;
 
 import diss.beyondballbe.model.DTOs.ChangeActiveStatusDTO;
 import diss.beyondballbe.model.DTOs.UserAccountDTO;
+import diss.beyondballbe.model.DTOs.WhiteboardCreationRequest;
+import diss.beyondballbe.model.DTOs.WhiteboardResponse;
 import diss.beyondballbe.model.accounts.UserAccount;
 import diss.beyondballbe.services.PlayerUploadService;
 import diss.beyondballbe.services.UserAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -35,6 +38,20 @@ public class UsersController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    @PreAuthorize("hasAnyRole('STAFF', 'PLAYER', 'ADMIN')")
+    @PutMapping(path = "/{id}" ,consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<?> uploadPicture(
+            @RequestPart("file") MultipartFile file,
+            @PathVariable Long id
+    ) {
+        try {
+            return ResponseEntity.ok(new UserAccountDTO(userAccountService.uploadProfilePicture(file, id)));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Error saving file: " + e.getMessage());
+        }
+    }
+
     @PreAuthorize("hasAnyRole('STAFF', 'PLAYER', 'ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity<?> getAccountById(@PathVariable Long id) {

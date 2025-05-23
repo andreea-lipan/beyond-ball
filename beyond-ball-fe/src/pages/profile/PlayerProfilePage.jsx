@@ -13,15 +13,31 @@ const PlayerProfilePage = () => {
 
     const {id} = useParams();
     const [player, setPlayer] = useState(null);
+    const [avatar, setAvatar] = useState(null);
 
     const userName = player?.name + "'s";
 
     useEffect(() => {
         UserService.getUserById(id).then((user) => {
             setPlayer(user)
-            console.log("user", user)
+            fetchAvatar(user.profilePictureUrl);
         })
     }, []);
+
+
+    const uploadAvatar = (file) => {
+        UserService.uploadAvatar(file).then((res) => {
+            fetchAvatar(res.profilePictureUrl);
+        })
+    }
+
+    const fetchAvatar = (url) => {
+        UserService.getAvatarImage(url).then((res) => {
+            setAvatar(res);
+        }).catch((err) => {
+
+        })
+    }
 
 
     return (
@@ -41,7 +57,7 @@ const PlayerProfilePage = () => {
                 flexDirection: 'column',
                 minHeight: 'calc(100vh - 143px)', // Account for header and title
             }}>
-                <PlayerProfileContainer player={player}/>
+                <PlayerProfileContainer player={player} uploadAvatar={uploadAvatar} avatar={avatar}/>
             </Box>
         </Layout>
     )

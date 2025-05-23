@@ -1,11 +1,22 @@
 import {Avatar, Box, Card, Grid, Typography} from "@mui/material";
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {PROFILE_PAGE} from "../../utils/UrlConstants.js";
+import UserService from "../../APIs/UserService.js";
 
 const UserCard = ({user}) => {
 
     const navigate = useNavigate();
+
+    const [avatar, setAvatar] = useState(null);
+
+    useEffect(() => {
+        UserService.getAvatarImage(user.profilePictureUrl).then((res) => {
+            setAvatar(res);
+        }).catch((err) => {
+            setAvatar(null);
+        })
+    },[user])
 
     return(
         <Grid item xs={12} sm={6} md={4} lg={3} key={user.id}>
@@ -25,7 +36,7 @@ const UserCard = ({user}) => {
                 onClick={() => navigate(PROFILE_PAGE(user.id))}
             >
                 <Avatar
-                    // src="https://upload.wikimedia.org/wikipedia/commons/b/b8/Lionel_Messi_20180626.jpg"
+                    src={avatar}
                     alt={user.name}
                     sx={{ width: 80, height: 80, mb: 1 }}
                 />
