@@ -61,6 +61,7 @@ export const USER_ENDPOINTS = {
     USERS: `${USER_URL}`,
     CHANGE_ACTIVE_STATUS: (userId) => `${USER_URL}/accounts/${userId}/active`,
     USER: (userId) => `${USER_URL}/${userId}`,
+    AVATAR_IMAGE: (filename) => `${BASE_URL}${filename}`,
 }
 
 const SOCKET_URL = `${BASE_URL}/ws`

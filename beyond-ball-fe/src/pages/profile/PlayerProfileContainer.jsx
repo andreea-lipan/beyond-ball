@@ -1,21 +1,27 @@
-import {Box, Typography, useTheme} from "@mui/material";
+import {Box, Button, Typography, useTheme} from "@mui/material";
 import React, {useEffect, useState} from "react";
 import {QuizCard} from "../quizzes/view/QuizCard.jsx";
 import QuizService from "../../APIs/QuizService.js";
+import useModal from "../../components/modals/useModal.js";
+import {UploadAvatarModal} from "./UploadAvatarModal.jsx";
 
-export const PlayerProfileContainer = ({player}) => {
+export const PlayerProfileContainer = ({player, uploadAvatar, avatar}) => {
     const theme = useTheme();
+
+    const uploadModal = useModal();
 
     const [quizzes, setQuizzes] = useState([]);
 
     useEffect(() => {
-        QuizService.getCompletedQuizzesForPlayer(player?.id).then((quizzes) => {
+        player && QuizService.getCompletedQuizzesForPlayer(player?.id).then((quizzes) => {
             setQuizzes(quizzes);
         })
     },[player])
 
     return (
         <>
+            <UploadAvatarModal state={uploadModal} handleConfirm={uploadAvatar} />
+
             {/* Player Information */}
             <Box sx={{
                 padding: "24px 5px 24px 5px",
@@ -32,7 +38,8 @@ export const PlayerProfileContainer = ({player}) => {
                     flex: 1,
                     m: 1
                 }}>
-                    PlAyEr HEaD
+                    <img className="avatar" src={avatar} alt={"avatar"} />
+                    <Button onClick={uploadModal.openModal} variant={"contained"}>Upload Avatar</Button>
                 </Box>
 
                 {/* Player Base Information */}
