@@ -74,20 +74,17 @@ export const CreateQuiz = () => {
         }
     };
 
-    const handleCopyQuiz = () => {
-        let quizContent = `Quiz Title: ${title}\nDescription: ${description}\n\n`;
-        questions.forEach((q, index) => {
-            quizContent += `Q${index + 1}: ${q.text}\n`;
-            if (q.type === "SCALA") {
-                quizContent += `Answer 1: ${q.option1}   |   Answer 5: ${q.option5}\n\n`;
-            } else if (q.type === "PARAGRAPH") {
-                quizContent += `Answer: [Open text]\n\n`;
-            }
-        });
+    const handleDuplicateQuestion = (index) => {
+        const questionToDuplicate = questions[index];
+        const duplicatedQuestion = { ...questionToDuplicate }; // shallow clone is enough for this case
 
-        navigator.clipboard.writeText(quizContent)
-            .then(() => setCopySuccess(true))
-            .catch((err) => console.error("Failed to copy quiz: ", err));
+        const updatedQuestions = [
+            ...questions.slice(0, index + 1),
+            duplicatedQuestion,
+            ...questions.slice(index + 1)
+        ];
+
+        setQuestions(updatedQuestions);
     };
 
     const handleCloseSnackbar = () => setCopySuccess(false);
@@ -177,6 +174,9 @@ export const CreateQuiz = () => {
                             <IconButton onClick={() => handleDeleteQuestion(index)} sx={{mt: 1}}>
                                 <Delete/>
                             </IconButton>
+                            <IconButton onClick={() => handleDuplicateQuestion(index)} sx={{mt: 1}}>
+                                <ContentCopy/>
+                            </IconButton>
                         </Box>
                     ))}
 
@@ -186,13 +186,6 @@ export const CreateQuiz = () => {
                         </Button>
                         <Button variant="outlined" onClick={() => handleAddQuestion("PARAGRAPH")}>
                             Paragraph
-                        </Button>
-                        <Button
-                            variant="outlined"
-                            startIcon={<ContentCopy/>}
-                            onClick={handleCopyQuiz}
-                        >
-                            Copy Quiz
                         </Button>
                     </Box>
 
