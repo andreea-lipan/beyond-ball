@@ -32,6 +32,6 @@ public class UserAccountDTO {
         this.role = userAccount.getRole();
         this.email = userAccount.getEmail();
         this.active = userAccount.getIsActive();
-        this.profilePictureUrl ="/uploads/" + userAccount.getTeam().getId() + "/profile/" + userAccount.getProfilePictureUrl();
+        this.profilePictureUrl ="/uploads/" + userAccount.getTeam().getId() + "/profile/" + id.toString() + "/" + userAccount.getProfilePictureUrl();
     }
 }
