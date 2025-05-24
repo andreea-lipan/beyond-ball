@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/video-notes")
+@RequestMapping("/api/video-notes")
 public class VideoNoteController {
 
     @Autowired

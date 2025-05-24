@@ -1,9 +1,11 @@
-import {Box, Button, Modal, Typography, useTheme} from "@mui/material";
+import {Box, Button, Modal, TextField, Typography, useTheme} from "@mui/material";
 import React from "react";
 
-export const ConfirmationModal = ({ state, handleConfirm, message, confirmButtonText="Yes, I'm sure!", declineButtonText="No." }) => {
+export const ConfirmationModal = ({ state, handleConfirm, message, confirmButtonText="Yes, I'm sure!", declineButtonText="No.", forWhiteboard=false }) => {
 
     const theme = useTheme();
+
+    const [title, setTitle] = React.useState("");
 
     const modalStyle = {
         position: 'absolute',
@@ -24,11 +26,27 @@ export const ConfirmationModal = ({ state, handleConfirm, message, confirmButton
                     {message}
                 </Typography>
 
+                {forWhiteboard && <TextField
+                    sx={{
+                        borderRadius: "16px",
+                        width: "100%",
+                        justifyContent: "center",
+                        backgroundColor: theme.palette.background.secondary,
+                        "& .MuiOutlinedInput-root": {
+                            borderRadius: '16px',
+                            boxShadow: "none",
+                        }
+                    }}
+                    placeholder={"Give it a Title!"}
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                />}
+
                 <Box mt={4} display="flex" justifyContent="space-between">
                     <Button
                         variant="contained"
                         onClick={() => {
-                            handleConfirm();
+                            handleConfirm(title);
                             state.closeModal();
                         }}
                     >

@@ -14,7 +14,7 @@ import java.util.Map;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
 public class AuthController {
 
     @Autowired

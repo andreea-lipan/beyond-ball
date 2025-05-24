@@ -11,7 +11,6 @@ import {
     styled, Tooltip,
     useTheme
 } from "@mui/material";
-import {useState} from "react";
 import MuiDrawer from '@mui/material/Drawer';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import {useNavigate} from "react-router-dom";
@@ -44,14 +43,16 @@ const Layout = ({children}) => {
     const theme = useTheme()
     const BtnsColour = theme.palette.secondary.dark
 
-    const buttonsList = [
-        {text:"Whiteboards", url:WHITEBOARDS_PAGE, icon:<WhiteboardIcon color={BtnsColour}/>},
-        {text:"Team", url:TEAM_PAGE, icon:<TeamIcon color={BtnsColour}/>},
-        {text:"Profile", url:PROFILE_PAGE, icon:<ProfileIcon color={BtnsColour}/>},
-        {text:"Clips", url:CLIPS_PAGE, icon:<ClipsIcon color={BtnsColour}/>},
-        {text:"Quizzes", url:QUIZZES_PAGE, icon:<QuizzesIcon color={BtnsColour}/>},
-    ]
+    const userRole = Storage.getRoleFromToken();
+    const userId = Storage.getUserIdFromToken();
 
+    const buttonsList = [
+        {text:"Whiteboards", url:WHITEBOARDS_PAGE, show:true, icon:<WhiteboardIcon color={BtnsColour}/>},
+        {text:"Team", url:TEAM_PAGE, show:true, icon:<TeamIcon color={BtnsColour}/>},
+        {text:"Profile", url:PROFILE_PAGE(userId), show:userRole === "PLAYER", icon:<ProfileIcon color={BtnsColour}/>},
+        {text:"Clips", url:CLIPS_PAGE, show:userRole === "STAFF", icon:<ClipsIcon color={BtnsColour}/>},
+        {text:"Quizzes", url:QUIZZES_PAGE, show:true, icon:<QuizzesIcon color={BtnsColour}/>},
+    ]
 
     return (
         <Box sx={{display: 'flex'}}>
@@ -86,7 +87,8 @@ const Layout = ({children}) => {
 
                 {/* ALL sidebar options */}
                 <List>
-                    {buttonsList.map(({text, url, icon}) => (
+                    {buttonsList.map(({text, url,show, icon}) => (
+                        show ?
                         <ListItem key={text} disablePadding
                                   sx={[{display: 'block'},
                                       {":hover": {
@@ -116,6 +118,8 @@ const Layout = ({children}) => {
                                 />
                             </ListItemButton>
                         </ListItem>
+                            :
+                        <></>
                     ))}
 
                     {/* Logout Button */}

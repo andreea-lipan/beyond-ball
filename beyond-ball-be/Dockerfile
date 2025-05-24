@@ -1,13 +1,21 @@
-# BUILD
+# Build stage (shared)
 FROM maven:3.8-openjdk-17 AS build
-RUN mkdir -p /beyond-ball-app
-WORKDIR /beyond-ball-app
-COPY pom.xml /beyond-ball-app
-COPY src /beyond-ball-app/src
+WORKDIR /app
+COPY pom.xml .
+COPY src ./src
 RUN mvn clean package -DskipTests
 
-# RUN
-FROM openjdk:17
-COPY --from=build /beyond-ball-app/target/*.jar app.jar
+# Development stage
+FROM maven:3.8-openjdk-17 AS dev
+WORKDIR /app
+COPY . .
+EXPOSE 8080
+CMD ["mvn", "spring-boot:run"]
+
+# Production stage
+FROM openjdk:17-jdk-slim AS prod
+COPY --from=build /app/target/*.jar app.jar
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]
+
+# docker buildx build --platform linux/amd64 --target prod -t katie493/beyond-ball-be:latest --push .

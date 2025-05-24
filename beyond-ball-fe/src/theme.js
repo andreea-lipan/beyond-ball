@@ -18,7 +18,8 @@ export function theme() {
         },
         background: {
             main: "#DAD7CD",
-            secondary: "#FFFFFF"
+            secondary: "#FFFFFF",
+            completed: "#dcdcdc",
         },
         error: {
             main: "#FB9595",

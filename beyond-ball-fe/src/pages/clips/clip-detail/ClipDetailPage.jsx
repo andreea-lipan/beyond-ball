@@ -58,7 +58,7 @@ const ClipDetailPage = () => {
                     alignItems: 'center',
                     justifyContent: 'center',
                     margin: 'auto',
-                    height:'80vh'
+                    height:'70vh'
                 }}>
                     <VideoPlayer videoUrl={filename} videoRef={videoRef} />
                     <VideoNotesContainer seekTo={seekTo} getTimestamp={getTimestamp} clipId={id}/>
@@ -71,7 +71,7 @@ const ClipDetailPage = () => {
 const VideoPlayer = ({ videoUrl, videoRef }) => {
     return (
         <Box sx={{
-            height:'80vh'
+            height:'70vh'
         }}>
             <video ref={videoRef} controls>
                 <source src={videoUrl} type="video/mp4" />

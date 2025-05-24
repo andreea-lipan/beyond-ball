@@ -2,7 +2,7 @@ import {Box, IconButton, Typography} from "@mui/material";
 import {ArrowBackIos, ArrowForwardIos} from "@mui/icons-material";
 import {QuizCard} from "./QuizCard.jsx";
 
-export const QuizContainer = ({quizzes, handleNext, handlePrev, page, maxPage}) => {
+export const QuizContainer = ({quizzes, handleNext, handlePrev, page, maxPage, onQuizDeleted, noPlayers}) => {
 
     return (
         <Box
@@ -37,11 +37,12 @@ export const QuizContainer = ({quizzes, handleNext, handlePrev, page, maxPage}) 
                     quizzes.map((quiz, index) => {
 
                         return (
-                            <QuizCard quiz={quiz} index={index} />
+                            <QuizCard quiz={quiz} index={index} onQuizDeleted={onQuizDeleted} noPlayers={noPlayers}/>
                         );
                     })
                     :
-                    <Typography variant="h2" sx={{fontWeight:700}} gutterBottom> No Quizzes found. Create one, or ask someone to create one. </Typography>
+                    <Typography variant="h2"> No Quizzes found. Create one, or ask
+                        someone to create one. </Typography>
                 }
             </Box>
 

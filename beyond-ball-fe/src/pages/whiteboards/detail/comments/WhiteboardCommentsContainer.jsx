@@ -16,7 +16,7 @@ const WhiteboardCommentsContainer = ({ whiteboardId }) => {
     useEffect(() => {
         fetchComments();
 
-        connect(whiteboardId, "WHITEBOARD", handleWebSocketMessage)
+        connect(whiteboardId, "COMMENT", handleWebSocketMessage)
 
         return () => {
             disconnect();

@@ -16,6 +16,7 @@ public class UserAccountDTO {
     private PlayerStats playerStats;
     private Boolean active;
     private UserRole role;
+    private String profilePictureUrl;
 
     public UserAccountDTO(UserAccount userAccount) {
 
@@ -31,5 +32,6 @@ public class UserAccountDTO {
         this.role = userAccount.getRole();
         this.email = userAccount.getEmail();
         this.active = userAccount.getIsActive();
+        this.profilePictureUrl ="/uploads/" + userAccount.getTeam().getId() + "/profile/" + id.toString() + "/" + userAccount.getProfilePictureUrl();
     }
 }
