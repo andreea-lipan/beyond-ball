@@ -14,6 +14,7 @@ import CardActionArea from '@mui/material/CardActionArea';
 import {WHITEBOARD_CREATION_PAGE} from "../../../utils/UrlConstants.js";
 import WhiteboardsTopBar from "./WhiteboardsTopBar.jsx";
 import {connect,disconnect} from "../../../APIs/WebSocket.js";
+import emptyWhiteboard from "../../../assets/emptyWhiteboard.png"
 
 const WhiteboardsPage = () => {
     const teamId = Storage.getTeamIdFromToken();
@@ -106,7 +107,7 @@ const WhiteboardsPage = () => {
                         }}>
                             <CardMedia sx={{objectFit: "contain", scale: '95%'}}
                                        component="img"
-                                       image="src/assets/emptyWhiteboard.png"
+                                       image={emptyWhiteboard}
                             />
                             <CardContent sx={{padding: '0.5em'}}>
                                 <Typography variant="body1">
