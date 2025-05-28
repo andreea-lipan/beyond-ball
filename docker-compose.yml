@@ -1,9 +1,12 @@
 version: '3.8'
+name: beyond-ball
 
 services:
   backend:
+    container_name: beyond-ball-be
     build:
       context: ./beyond-ball-be
+      target: dev
     ports:
       - "8080:8080"
     environment:
@@ -11,20 +14,24 @@ services:
       SPRING_DATASOURCE_USERNAME: my_user
       SPRING_DATASOURCE_PASSWORD: my_password
       SPRING_JPA_HIBERNATE_DDL_AUTO: create
+      MAIL_USERNAME: beyondball.noreplay@gmail.com
+      MAIL_PASSWORD: "znwz wpkk aoel dcvv"
     depends_on:
       - database
 
   frontend:
+    container_name: beyond-ball-fe
     build:
       context: ./beyond-ball-fe
+      target: dev
     ports:
       - "3000:3000"
     depends_on:
       - backend
 
   database:
+    container_name: beyond-ball-db
     image: postgres:15
-    container_name: postgres_db
     restart: always
     ports:
       - "5432:5432"

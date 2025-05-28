@@ -10,8 +10,16 @@ import diss.beyondballbe.services.UserAccountService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Optional;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class UserAccountServiceImpl implements UserAccountService {
@@ -53,4 +61,26 @@ public class UserAccountServiceImpl implements UserAccountService {
         userAccount.setIsActive(active);
         userAccountRepository.save(userAccount);
     }
+
+    @Override
+    public Optional<UserAccount> findByUsername(String username) {
+        return userAccountRepository.findUserByUsername(username);
+    }
+
+    @Override
+    public UserAccount uploadProfilePicture(MultipartFile file, Long id) throws IOException {
+        UserAccount user = getAccountById(id);
+
+        String teamId = user.getTeam().getId().toString();
+
+        String filename = id + "_" + file.getOriginalFilename();
+        Path savePath = Paths.get("uploads", teamId, "profile", user.getId().toString(), filename);
+
+        Files.createDirectories(savePath.getParent());
+        Files.write(savePath, file.getBytes());
+
+        user.setProfilePictureUrl(filename);
+        return userAccountRepository.save(user);
+    }
 }
+    

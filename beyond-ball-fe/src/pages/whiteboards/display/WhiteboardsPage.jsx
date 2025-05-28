@@ -1,20 +1,23 @@
-import Layout from "../../components/sidebar/Layout.jsx";
+import Layout from "../../../components/sidebar/Layout.jsx";
 import React, {useEffect, useState} from "react";
-import whiteboardService from "../../APIs/WhiteboardService.js";
+import whiteboardService from "../../../APIs/WhiteboardService.js";
 import {Box, useTheme} from "@mui/material";
-import {WhiteboardListItem} from "./display/WhiteboardListItem.jsx";
-import {mockWhiteboards} from "../../utils/whiteboard.js";
-import Storage from "../../utils/Storage.js";
+import {WhiteboardListItem} from "./WhiteboardListItem.jsx";
+import {mockWhiteboards} from "../../../utils/whiteboard.js";
+import Storage from "../../../utils/Storage.js";
 import {useNavigate} from "react-router-dom";
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import CardActionArea from '@mui/material/CardActionArea';
-import {WHITEBOARD_CREATION_PAGE} from "../../utils/UrlConstants.js";
+import {WHITEBOARD_CREATION_PAGE} from "../../../utils/UrlConstants.js";
 import WhiteboardsTopBar from "./WhiteboardsTopBar.jsx";
+import {connect,disconnect} from "../../../APIs/WebSocket.js";
+import emptyWhiteboard from "../../../assets/emptyWhiteboard.png"
 
 const WhiteboardsPage = () => {
+    const teamId = Storage.getTeamIdFromToken();
     const theme = useTheme();
     const [whiteboards, setWhiteboards] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
@@ -22,6 +25,20 @@ const WhiteboardsPage = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
+        fetchWhiteboards()
+        connect(teamId, "WHITEBOARD", handleWebSocketMessage)
+
+        return () => {
+            disconnect();
+        }
+    }, []);
+
+    const handleWebSocketMessage = (message) => {
+        setWhiteboards(prev=>[...prev, message])
+    }
+
+
+    const fetchWhiteboards = () => {
         whiteboardService.getWhiteboards()
             .then((response) => {
                 setWhiteboards(response);
@@ -29,7 +46,7 @@ const WhiteboardsPage = () => {
             .catch(() => {
                 setWhiteboards(mockWhiteboards);
             });
-    }, []);
+    }
 
 
     const filteredWhiteboards = whiteboards.filter((whiteboard) => {
@@ -50,8 +67,8 @@ const WhiteboardsPage = () => {
 
             <Box sx={{
                 width: {
-                    xs: '100%',
-                    sm: '90vw',
+                    // xs: '100%',
+                    sm: '80vw',
                     xl: '80vw',
                     xxl: '1900px',
                 },
@@ -90,7 +107,7 @@ const WhiteboardsPage = () => {
                         }}>
                             <CardMedia sx={{objectFit: "contain", scale: '95%'}}
                                        component="img"
-                                       image="src/assets/emptyWhiteboard.png"
+                                       image={emptyWhiteboard}
                             />
                             <CardContent sx={{padding: '0.5em'}}>
                                 <Typography variant="body1">

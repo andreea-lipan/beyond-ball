@@ -15,17 +15,19 @@ import {
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SearchIcon from "@mui/icons-material/Search";
-import Layout from "../components/sidebar/Layout.jsx";
-import {useAuth} from "../components/AuthContext";
-import UserService from "../APIs/UserService.js";
-import Storage from "../utils/Storage.js";
-import AddMemberDialog from "./AddMemberDialog.jsx";
-import AuthService from "../APIs/AuthService.js";
-import MemberCredentialsDialog from "./MemberCredentialsDialog.jsx";
-import useModal from "../components/modals/useModal.js";
-import EmailService from "../APIs/EmailService.js";
-import {Popup} from "../components/popup/Popup.jsx";
-import {MessageType} from "../components/popup/MessageType.js";
+import Layout from "../../../components/sidebar/Layout.jsx";
+import {useAuth} from "../../../components/AuthContext.jsx";
+import UserService from "../../../APIs/UserService.js";
+import Storage from "../../../utils/Storage.js";
+import AddMemberDialog from "../add-member/AddMemberDialog.jsx";
+import AuthService from "../../../APIs/AuthService.js";
+import MemberCredentialsDialog from "../add-member/MemberCredentialsDialog.jsx";
+import useModal from "../../../components/modals/useModal.js";
+import EmailService from "../../../APIs/EmailService.js";
+import {Popup} from "../../../components/popup/Popup.jsx";
+import {MessageType} from "../../../components/popup/MessageType.js";
+import {PROFILE_PAGE} from "../../../utils/UrlConstants.js";
+import AdminUserCard from "./AdminUserCard.jsx";
 
 
 const TeamAdminPage = () => {
@@ -42,7 +44,6 @@ const TeamAdminPage = () => {
     const [filter, setFilter] = useState("PLAYER");
     const [credentials, setCredentials] = useState({username: "", password: ""});
 
-    const [popupOpen, setPopupOpen] = useState(false);
     const [popupMessage, setPopupMessage] = useState("");
     const [popupType, setPopupType] = useState("")
     const [showPopup, setShowPopup] = useState(false)
@@ -155,7 +156,6 @@ const TeamAdminPage = () => {
         }
     };
 
-
     const handleFilterChange = (event, newFilter) => {
         if (newFilter) setFilter(newFilter);
     };
@@ -173,13 +173,13 @@ const TeamAdminPage = () => {
             await UserService.uploadPlayersExcel(teamId, file);
             setPopupMessage("Player data uploaded successfully.");
             setPopupType(MessageType.success);
-            setPopupOpen(true);
+            setShowPopup(true);
             fetchTeamData();
         } catch (err) {
             console.error("Upload failed:", err);
             setPopupMessage("Upload failed. " + (err?.response?.data || "Please try again."));
             setPopupType(MessageType.error);
-            setPopupOpen(true);
+            setShowPopup(true);
         }
         finally {
             // Reset file input so selecting the same file again triggers onChange
@@ -195,6 +195,12 @@ const TeamAdminPage = () => {
 
     return (
         <Layout>
+            <Popup
+                message={popupMessage}
+                messageType={popupType}
+                isVisible={showPopup}
+                setIsVisible={setShowPopup}
+            />
             <Typography variant="h1" align="center" sx={{mt: 3, mb: 3}}>
                 Manage your team
             </Typography>
@@ -293,7 +299,10 @@ const TeamAdminPage = () => {
                                     justifyContent: "center",
                                     alignItems: "center",
                                     transition: "0.3s",
-                                    "&:hover": {boxShadow: "0 6px 18px rgba(0,0,0,0.5)"}
+                                    cursor: "pointer",
+                                    "&:hover": {
+                                        boxShadow: "0 6px 18px rgba(0,0,0,0.5)",
+                                    }
                                 }}>
 
                                 <Typography variant="h5" textAlign="center">＋<br/>New {filter==='PLAYER' ? 'Player' : 'Staff Member'}</Typography>
@@ -301,93 +310,7 @@ const TeamAdminPage = () => {
                         </Grid>
 
                         {filteredTeam.map((member) => (
-                            <Grid item xs={12} sm={6} md={4} lg={3} key={member.id}>
-                                <Card sx={{
-                                    width: '200px',
-                                    backgroundColor: member.active ? "#FFFFFF" : "#e0e0e0",
-                                    borderRadius: "16px",
-                                    boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
-                                    padding: "16px",
-                                    height: "100%",
-                                    display: "flex",
-                                    flexDirection: "column",
-                                    justifyContent: "space-between",
-                                    alignItems: "center",
-                                    transition: "0.3s",
-                                    "&:hover": {boxShadow: "0 6px 18px rgba(0,0,0,0.8)"}
-                                }}>
-
-                                    {/*<Box sx={{*/}
-                                    {/*    display: 'flex',*/}
-                                    {/*    flexDirection: "column",*/}
-                                    {/*    alignItems: "center",*/}
-                                    {/*    justifyContent: 'center'*/}
-                                    {/*}}>*/}
-                                    <Avatar alt={member.name} sx={{width: 56, height: 56, mb: 1}}/>
-
-                                    {/* Name */}
-                                    <Typography variant="h2"
-                                                sx={{padding: '0.2em 0 0.4em 0'}}>{member.name}</Typography>
-                                    {/*</Box>*/}
-
-
-                                    {/* Stats */}
-                                    <Box>
-                                        <Box sx={{
-                                            display: 'flex',
-                                            justifyContent: 'space-between'
-                                        }}>
-                                            <Box sx={{
-                                                display: 'flex',
-                                                flexDirection: 'column',
-                                                alignItems: 'flex-start',
-                                                paddingRight: '10px'
-                                            }}>
-                                                <Typography variant="subtitle1">Position:</Typography>
-                                                {member.role === "PLAYER" &&
-                                                    <>
-                                                        <Typography variant="subtitle1">Goals:</Typography>
-                                                        <Typography variant="subtitle1">Assists:</Typography>
-                                                    </>
-                                                }
-                                            </Box>
-                                            <Box sx={{
-                                                display: 'flex',
-                                                flexDirection: 'column',
-                                                alignItems: 'flex-end',
-                                                paddingLeft: '10px'
-                                            }}>
-                                                <Typography variant="subtitle1">{member.playerStats?.position || 'N/A'}</Typography>
-                                                {member.role === "PLAYER" &&
-                                                    <>
-                                                        <Typography
-                                                            variant="subtitle1">{member.playerStats?.goals ?? 'N/A'}</Typography>
-                                                        <Typography
-                                                            variant="subtitle1">{member.playerStats?.assists ?? 'N/A'}</Typography>
-                                                    </>
-                                                }
-                                            </Box>
-
-                                        </Box>
-                                        <Box>
-                                            <Button
-                                                variant="outlined"
-                                                size="small"
-                                                onClick={() => handleResendEmail(member)}
-                                                sx={{ mt: 1, color: theme.palette.secondary.main, borderColor: theme.palette.secondary.main }}
-                                            >
-                                                Resend Email
-                                            </Button>
-                                        </Box>
-                                        {/* Archive */}
-                                        <IconButton onClick={() => handleToggleActive(member.id)} color="secondary"
-                                                    title="Set Inactive">
-                                            <DeleteIcon/>
-                                        </IconButton>
-                                    </Box>
-
-                                </Card>
-                            </Grid>
+                            <AdminUserCard member={member} handleResendEmail={handleResendEmail} handleToggleActive={handleToggleActive} />
                         ))}
                     </Grid>
                 </Box>
@@ -398,16 +321,6 @@ const TeamAdminPage = () => {
 
             {/* Show added players credentials */}
             <MemberCredentialsDialog state={credentialsModal} credentials={credentials}/>
-
-            {popupOpen && (
-        <Popup
-          isVisible={popupOpen}
-          setIsVisible={setPopupOpen}
-          message={popupMessage}
-          messageType={popupType}
-          duration={popupType === MessageType.success ? 100 : 3000}
-        />
-      )}
         </Layout>
     );
 };

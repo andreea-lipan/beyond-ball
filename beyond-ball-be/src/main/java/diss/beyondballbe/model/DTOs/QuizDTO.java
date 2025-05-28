@@ -1,12 +1,12 @@
 package diss.beyondballbe.model.DTOs;
 
 import diss.beyondballbe.model.quizes.Quiz;
-import diss.beyondballbe.model.quizes.QuizQuestion;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @AllArgsConstructor
@@ -16,15 +16,22 @@ public class QuizDTO {
     private String title;
     private String description;
     private Long estimatedDuration;
-    private List<QuizQuestion> questions;
     private String author;
+    private List<QuizQuestionDTO> questions;
+    private Boolean completed;
+    private Long numberOfPlayersQuizzed;
 
-    public QuizDTO(Quiz quiz){
+    public QuizDTO(Quiz quiz) {
         this.id = quiz.getId();
         this.title = quiz.getTitle();
         this.description = quiz.getDescription();
         this.estimatedDuration = quiz.getEstimatedDuration();
-        this.questions = quiz.getQuestions();
         this.author = quiz.getAuthor().getUsername();
+
+        if (quiz.getQuestions() != null) {
+            this.questions = quiz.getQuestions().stream()
+                .map(QuizQuestionDTO::new)
+                .collect(Collectors.toList());
+        }
     }
 }

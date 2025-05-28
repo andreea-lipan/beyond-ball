@@ -31,6 +31,8 @@ public class UserAccount {
     @Column
     private String email;
 
+    private String profilePictureUrl;
+
     private Boolean isActive = true;
 
     @ManyToOne(fetch = FetchType.EAGER)

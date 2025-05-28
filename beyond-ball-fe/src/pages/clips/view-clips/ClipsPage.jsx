@@ -14,12 +14,15 @@ import {AddClipModal} from "./modals/AddClipModal.jsx";
 import ClipsPageFolderView from "./ClipsPageFolderView.jsx";
 import ClipsPageClipsView from "./ClipsPageClipsView.jsx";
 import ClipsPageTopBar from "./ClipsPageTopBar.jsx";
+import Storage from "../../../utils/Storage.js";
+import {connect, disconnect} from "../../../APIs/WebSocket.js";
 
 const ClipsPage = () => {
     const theme = useTheme();
 
+    const teamId = Storage.getTeamIdFromToken();
     const [folderTree, setFolderTree] = useState([]);
-    const [selectedFolderId, setSelectedFolderId] = useState(null);
+    const [selectedFolderId, setSelectedFolderId] = useState( null);
     const addFolderModal = useModal(false);
 
     const [clips, setClips] = useState([]);
@@ -27,26 +30,88 @@ const ClipsPage = () => {
     const addClipModal = useModal(false);
 
     const filteredClips = clips.filter((clip) => {
-        return clip.title.toLowerCase().includes(searchTerm.toLowerCase());
+        return clip.folderId===selectedFolderId && clip.title.toLowerCase().includes(searchTerm.toLowerCase());
     });
 
     useEffect(() => {
-        if(!setSelectedFolderId) return
+        fetchFolderTree();
         fetchClips();
-    }, [selectedFolderId]);
+
+        connect(teamId, "CLIP", handleWebSocketMessage)
+
+        return () => {
+            disconnect();
+        }
+    }, []);
+
+    const handleWebSocketMessage = (message) => {
+        if(message?.parentFolderId !== undefined) {
+            handleFolderWebSocketMessage(message);
+        } else {
+            handleClipWebSocketMessage(message);
+        }
+    }
+
+    const handleClipWebSocketMessage = (message) => {
+        setClips(prev=>[...prev, message])
+    }
+
+    const insertNode = (tree, newNode) => {
+        const queue = [...tree];
+        const nodeToInsert = { ...newNode };
+        delete nodeToInsert.parentFolderId;
+
+        while (queue.length) {
+            const current = queue.shift();
+            if (current.id === newNode.parentFolderId) {
+                const updated = {
+                    ...current,
+                    subfolders: [...(current.subfolders || []), nodeToInsert]
+                };
+                return updateTreeWithNewNode(tree, updated);
+            }
+
+            if (current.subfolders?.length) {
+                queue.push(...current.subfolders);
+            }
+        }
+
+        return tree;
+    };
+
+    const updateTreeWithNewNode = (tree, updatedNode) => {
+        return tree.map(node => {
+            if (node.id === updatedNode.id) return updatedNode;
+            if (node.subfolders?.length) {
+                return {
+                    ...node,
+                    subfolders: updateTreeWithNewNode(node.subfolders, updatedNode)
+                };
+            }
+            return node;
+        });
+    };
+
+    const handleFolderWebSocketMessage = (message) => {
+        if(message.parentFolderId === null) {
+            setFolderTree(prev=>[...prev, message]);
+        } else {
+            setFolderTree(prevTree => insertNode(prevTree, message));
+        }
+    }
 
     const fetchClips = () => {
-        ClipService.getClipsByFolder(selectedFolderId).then((response) => {
+        ClipService.getAllClips().then((response) => {
             setClips(response);
         })
     }
 
     const createFolder = (folderName) => {
-        FolderService.createFolder(folderName,selectedFolderId).then(fetchFolderTree)
+        FolderService.createFolder(folderName,selectedFolderId)
     }
 
     const uploadClip = (file, title) => {
-        ClipService.uploadClip(file,title,selectedFolderId).then(fetchClips)
+        ClipService.uploadClip(file,title,selectedFolderId)
     };
 
     const fetchFolderTree = () => {
@@ -59,11 +124,6 @@ const ClipsPage = () => {
                 // todo show error
             });
     }
-
-    useEffect(() => {
-        fetchFolderTree();
-    }, []);
-
 
     return (
         <Layout>
@@ -85,8 +145,8 @@ const ClipsPage = () => {
             {/* Page Content */}
             <Box sx={{
                 width: {
-                    xs: '100%',
-                    sm: '90vw',
+                    // xs: '100%',
+                    sm: '80vw',
                     xl: '80vw',
                     xxl: '1900px',
                 },

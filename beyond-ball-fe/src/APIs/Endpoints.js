@@ -1,7 +1,8 @@
 // all endpoints from the BE should be written here
 // use these variable, no hardcoded values in the code
 
-const BASE_URL = "http://localhost:8080"
+// const BASE_URL = "http://beyondball.tantrum.org/api"
+const BASE_URL = `http://${import.meta.env.VITE_API_URL}:8080/api`
 
 const AUTH_URL = `${BASE_URL}/auth`
 export const AUTH_ENDPOINTS = {
@@ -51,6 +52,7 @@ export const FOLDER_ENDPOINTS = {
 const QUIZ_URL = `${BASE_URL}/quizzes`;
 export const QUIZ_ENDPOINTS = {
     QUIZZES: `${QUIZ_URL}`,
+    COMPLETED: (playerId) => `${QUIZ_URL}/player/${playerId}`,
 };
 
 const USER_URL = `${BASE_URL}/users`
@@ -60,15 +62,18 @@ export const USER_ENDPOINTS = {
     USERS: `${USER_URL}`,
     CHANGE_ACTIVE_STATUS: (userId) => `${USER_URL}/accounts/${userId}/active`,
     UPLOAD_PLAYERS: (teamId) => `${USER_URL}/teams/${teamId}/players/upload`,
+    USER: (userId) => `${USER_URL}/${userId}`,
+    AVATAR_IMAGE: (filename) => `${BASE_URL}${filename}`,
 }
 
 const SOCKET_URL = `${BASE_URL}/ws`
 export const SOCKET_ENDPOINTS = {
     BASE: `${SOCKET_URL}`,
-    CLIP: (clipId) => `/app/clips/${clipId}`,
-    CLIP_INC: (clipId) => `/topic/clips/${clipId}`,
-    WHITEBOARD: (whiteboardId) => `/app/whiteboards/${whiteboardId}`,
-    WHITEBOARD_INC: (whiteboardId) => `/topic/whiteboards/${whiteboardId}`,
+    CLIP: (teamId) => `/topic/${teamId}/clips`,
+    CLIP_NOTE: (clipId) => `/topic/clips/${clipId}`,
+    WHITEBOARD: (teamId) => `/topic/${teamId}/whiteboards`,
+    WHITEBOARD_COMMENT: (whiteboardId) => `/topic/whiteboards/${whiteboardId}`,
+    FOLDER: (teamId) => `/topic/${teamId}/folders`,
 }
 
 export const EMAIL_ENDPOINTS = {

@@ -1,5 +1,5 @@
-import Layout from "../../components/sidebar/Layout.jsx";
-import {Whiteboard} from "./creation/Whiteboard.jsx";
+import Layout from "../../../components/sidebar/Layout.jsx";
+import {Whiteboard} from "./Whiteboard.jsx";
 import React from "react";
 
 const WhiteboardCreationPage = () => {

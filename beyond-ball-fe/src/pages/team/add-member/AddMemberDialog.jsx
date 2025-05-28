@@ -7,7 +7,7 @@ import {
     Typography, useTheme
 } from "@mui/material";
 import React, {useState} from "react";
-import {Popup} from "../components/popup/Popup";
+import {Popup} from "../../../components/popup/Popup.jsx";
 
 const AddMemberDialog = ({addMember, state, role}) => {
     const theme = useTheme();

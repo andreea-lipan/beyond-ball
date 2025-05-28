@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 public class WhiteboardResponse {
     private String id;
     private String title;
+    private String teamId;
     private LocalDateTime creationDate;
     private String imageUrl;
     private String author;
@@ -26,5 +27,6 @@ public class WhiteboardResponse {
         this.creationDate = whiteboard.getCreationDate();
         this.imageUrl = "/uploads/" + teamId + "/whiteboards/" + whiteboard.getImageUrl();
         this.author = whiteboard.getAuthor().getUsername();
+        this.teamId = teamId;
     }
 }
