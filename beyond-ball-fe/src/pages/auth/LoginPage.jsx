@@ -5,24 +5,27 @@ import {
     TextField,
     Typography,
     Button,
-    Box,
+    Box, InputAdornment, IconButton,
 } from "@mui/material";
 import { Global } from "@emotion/react";
 import backgroundImage from "../../assets/background_01.jpg";
-import { useState } from "react";
+import React, { useState } from "react";
 import authService from "../../APIs/AuthService.js";
 import { useNavigate } from "react-router-dom";
 import Storage from "../../utils/Storage.js";
 import { Popup } from "../../components/popup/Popup.jsx";
 import { MessageType } from "../../components/popup/MessageType.js";
 import { useAuth } from "../../components/AuthContext.jsx";
-
+import SendIcon from "@mui/icons-material/Send";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 const LoginPage = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [popupOpen, setPopupOpen] = useState(false);
     const [popupMessage, setPopupMessage] = useState("");
     const [popupType, setPopupType] = useState(MessageType.info);
+    const [showPassword, setShowPassword] = useState(false)
+    const [capsLockOn, setCapsLockOn] = useState(false)
     const navigate = useNavigate();
     const { refreshAuth } = useAuth();
 
@@ -60,6 +63,13 @@ const LoginPage = () => {
         }
     }
 
+    const checkCaps = (e) => {
+        e.getModifierState("CapsLock")?
+            setCapsLockOn(true)
+            :
+            setCapsLockOn(false)
+    }
+
     return (
         <>
             <CssBaseline />
@@ -92,10 +102,10 @@ const LoginPage = () => {
                         gap: 2,
                     }}
                 >
-                    <Typography variant="h6" sx={{ fontWeight: "light", mb: 1 }}>
+                    <Typography variant="h5" sx={{ fontWeight: "light", mb: 1 }}>
                         Welcome to
                     </Typography>
-                    <Typography variant="h5" sx={{ fontWeight: "bold", mb: 2 }}>
+                    <Typography variant="h4" sx={{ fontWeight: "bold", mb: 2, pb:3 }}>
                         BeyondBall
                     </Typography>
 
@@ -105,6 +115,7 @@ const LoginPage = () => {
                         label="Username"
                         variant="outlined"
                         value={username}
+                        onKeyDownCapture={checkCaps}
                         onChange={(e) => setUsername(e.target.value)}
                         sx={{ mb: 2 }}
                     />
@@ -112,13 +123,33 @@ const LoginPage = () => {
                         onKeyDown={handleKeyDown}
                         fullWidth
                         label="Password"
-                        type="password"
+                        type={showPassword? "text" : "password"}
                         variant="outlined"
                         value={password}
+                        onKeyDownCapture={checkCaps}
                         onChange={(e) => setPassword(e.target.value)}
                         sx={{ mb: 2 }}
+                        slotProps={{
+                            input:{
+                                endAdornment: (
+                                    <InputAdornment position="end">
+                                        <IconButton
+                                            onClick={() => setShowPassword(!showPassword)}>
+                                            {showPassword? <VisibilityOff/> : <Visibility/> }
+                                        </IconButton>
+                                    </InputAdornment>
+                                ),
+                            }
+                        }}
                     />
-
+                    <Typography visibility={capsLockOn ? "visible" : "hidden"}
+                        variant="subtitle1"
+                        sx = {{
+                            height: "10px"
+                        }}
+                    >
+                        Caps Lock is turned on!
+                    </Typography>
                     <Button
                         variant="contained"
                         fullWidth

@@ -2,31 +2,35 @@ import {Box, Button, Tooltip, useTheme} from "@mui/material";
 import {AddFolderIcon} from "../../../components/icons/clips/AddFolderIcon.jsx";
 import FolderStructure from "./folders/FolderStructure.jsx";
 import React from "react";
+import Storage from "../../../utils/Storage.js";
 
 const ClipsPageFolderView = ({addFolderModal, folderTree, setSelectedFolderId}) => {
     const theme = useTheme();
+    const isPlayer = Storage.getRoleFromToken() === "PLAYER"
 
     return (
         <>
-            <Box sx={{
-                height: '30px',
-                display:'flex',
-                alignItems: 'flex-end',
-                flexDirection: 'column',
-                paddingRight: '2em'
-            }}>
-                <Tooltip title="Create a new folder" placement="top">
-                    <Button
-                        onClick={addFolderModal.openModal}
-                        sx={{
-                            minWidth: 'auto',
-                            padding: 0,
-                        }}
-                    >
-                        <AddFolderIcon color={theme.palette.secondary.dark}/>
-                    </Button>
-                </Tooltip>
-            </Box>
+            {!isPlayer &&
+                <Box sx={{
+                    height: '30px',
+                    display: 'flex',
+                    alignItems: 'flex-end',
+                    flexDirection: 'column',
+                    paddingRight: '2em'
+                }}>
+                    <Tooltip title="Create a new folder" placement="top">
+                        <Button
+                            onClick={addFolderModal.openModal}
+                            sx={{
+                                minWidth: 'auto',
+                                padding: 0,
+                            }}
+                        >
+                            <AddFolderIcon color={theme.palette.secondary.dark}/>
+                        </Button>
+                    </Tooltip>
+                </Box>
+            }
             <Box sx={{
                 padding: "20px 0 20px 0",
                 overflowX: 'auto',

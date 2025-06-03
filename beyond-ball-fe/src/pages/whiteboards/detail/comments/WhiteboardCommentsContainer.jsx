@@ -51,8 +51,8 @@ const WhiteboardCommentsContainer = ({ whiteboardId }) => {
     }
 
     const sortFn = (a, b) => {
-        const aTimestamp = a.timestamp;
-        const bTimestamp = b.timestamp;
+        const aTimestamp = a.postedDate;
+        const bTimestamp = b.postedDate;
 
         if (aTimestamp < bTimestamp) {
             return -1;

@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,4 +36,6 @@ public class Quiz {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_account_id")
     private UserAccount author;
+
+    private LocalDateTime creationDate;
 }

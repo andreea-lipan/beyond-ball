@@ -150,14 +150,16 @@ export const QuizCard = ({viewType = "quizzesPage", quiz, index, onQuizDeleted, 
                 {canDownload && canDelete && (
                     <CardActions sx={{p: "0.5vw", display: 'flex', justifyContent: 'space-between'}}>
                         <Button onClick={handleDownload}> Download answers ({quiz.numberOfPlayersQuizzed} / {noPlayers})</Button>
-                        <Button
-                            onClick={confirmationModalState.openModal}
-                            variant="outlined"
-                            color="error"
-                            startIcon={<Delete/>}
-                        >
-                            Delete Quiz
-                        </Button>
+                        {quiz.numberOfPlayersQuizzed === 0 &&
+                            <Button
+                                onClick={confirmationModalState.openModal}
+                                variant="outlined"
+                                color="error"
+                                startIcon={<Delete/>}
+                            >
+                                Delete Quiz
+                            </Button>
+                        }
                     </CardActions>
                 )}
             </Card>

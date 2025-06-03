@@ -4,11 +4,14 @@ import {useEffect, useState} from "react";
 import VideoNotesList from "./VideoNotesList.jsx";
 import VideoNoteService from "../../../../APIs/VideoNoteService.js";
 import {connect,disconnect} from "../../../../APIs/WebSocket.js";
+import Storage from "../../../../utils/Storage.js";
 
 const VideoNotesContainer = ({ seekTo, getTimestamp, clipId}) => {
     const [addingComment, setAddingComment] = useState(false);
     const [videoNotes, setVideoNotes] = useState([]);
     const theme = useTheme();
+    const isPlayer = Storage.getRoleFromToken() === "PLAYER"
+
 
     useEffect(() => {
         fetchVideoNotes();
@@ -117,10 +120,11 @@ const VideoNotesContainer = ({ seekTo, getTimestamp, clipId}) => {
                     padding: '0 24px'
                 }}>
                     <Typography variant="h2">Notes</Typography>
-                    <Button variant='contained' onClick={() => setAddingComment(true)}>
-                        {/*<AddCircleIcon sx={{color: theme.palette.secondary.main}}/>*/}
-                        Add new note
-                    </Button>
+                    {!isPlayer &&
+                        <Button variant='contained' onClick={() => setAddingComment(true)}>
+                            Add new note
+                        </Button>
+                    }
                 </Toolbar>
             </AppBar>
 

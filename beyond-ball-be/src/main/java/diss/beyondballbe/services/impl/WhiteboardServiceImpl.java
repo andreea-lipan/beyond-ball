@@ -54,7 +54,7 @@ public class WhiteboardServiceImpl implements WhiteboardService {
         String id = UUID.randomUUID().toString();
 
         String filename = id + "_" + file.getOriginalFilename() + ".png";
-        Path savePath = Paths.get("uploads", teamId, "whiteboards", filename); // this resolves to /app/uploads/teamId/whiteboards in Docker
+        Path savePath = Paths.get("uploads", teamId, "whiteboards", filename);
 
         Files.createDirectories(savePath.getParent());
         Files.write(savePath, file.getBytes());

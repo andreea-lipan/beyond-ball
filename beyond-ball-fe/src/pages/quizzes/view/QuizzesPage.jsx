@@ -30,6 +30,7 @@ const QuizzesPage = () => {
     // Debounce search term
     useEffect(() => {
         const delay = setTimeout(() => {
+            setPage(0);
             setSearchTerm(rawSearchTerm);
             setPage(0); // Reset page when search term changes
         }, 300); // Delay in ms
@@ -67,9 +68,17 @@ const QuizzesPage = () => {
         }
     };
 
+    const sortFn = (a, b) => {
+        if(a.completed === b.completed) {
+            return a.creationDate < b.creationDate? 1 : -1;
+        } else {
+            return a.completed - b.completed;
+        }
+    }
+
     const filteredQuizzes = quizzes.filter((quiz) =>
         quiz.title.toLowerCase().includes(searchTerm.toLowerCase())
-    ).sort((a, b) => a.completed - b.completed);
+    ).sort(sortFn);
 
     const maxPage = Math.ceil(filteredQuizzes.length / quizzesPerPage);
     const currentQuizzes = filteredQuizzes.slice(
@@ -79,7 +88,13 @@ const QuizzesPage = () => {
 
     const handlePrev = () => setPage((prev) => Math.max(prev - 1, 0));
     const handleNext = () => setPage((prev) => Math.min(prev + 1, maxPage - 1));
-    const handleSearch = (e) => setRawSearchTerm(e.target.value);
+    const handleSearch = (e) => {
+        setRawSearchTerm(e.target.value);
+    }
+    const setSearchAndReset = (term) => {
+        setSearchTerm(term);
+        setPage(0);
+    }
 
 
     const handleAddQuiz = () => {
@@ -106,7 +121,7 @@ const QuizzesPage = () => {
                 flexDirection: 'column',
                 minHeight: 'calc(100vh - 143px)', // Account for header and title
             }}>
-                <TopBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} handleSearch={handleSearch}
+                <TopBar searchTerm={searchTerm} setSearchTerm={setSearchAndReset} handleSearch={handleSearch}
                         handleAddQuiz={handleAddQuiz} quizzes={quizzes}/>
 
                 <QuizContainer

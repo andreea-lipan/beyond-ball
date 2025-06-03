@@ -49,12 +49,16 @@ const WhiteboardsPage = () => {
     }
 
 
+    const sortFn = (a,b) => {
+        return a.creationDate < b.creationDate? 1 : -1
+    }
+
     const filteredWhiteboards = whiteboards.filter((whiteboard) => {
         return filter.toLowerCase() === "title" ?
             whiteboard.title.toLowerCase().includes(searchTerm.toLowerCase())
             :
             whiteboard.author.toLowerCase().includes(searchTerm.toLowerCase())
-    })
+    }).sort(sortFn)
 
 
     return (

@@ -20,6 +20,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -92,6 +93,7 @@ public class QuizServiceImpl implements QuizService {
         quiz.setTitle(quizDTO.getTitle());
         quiz.setDescription(quizDTO.getDescription());
         quiz.setEstimatedDuration(quizDTO.getEstimatedDuration());
+        quiz.setCreationDate(LocalDateTime.now());
 
         var authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
@@ -125,6 +127,9 @@ public class QuizServiceImpl implements QuizService {
     public void deleteQuiz(Long quizId) {
         if (!quizRepository.existsById(quizId)) {
             throw new RuntimeException("Quiz not found with id: " + quizId);
+        }
+        if(!answerService.findByQuizId(quizId).isEmpty()) {
+            throw new RuntimeException("Can't delete already taken quizzes");
         }
         quizRepository.deleteById(quizId);
     }
